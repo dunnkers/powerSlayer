@@ -201,45 +201,41 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
     private static class Requirements {
         List<Item> items = new ArrayList<Item>();
-        List<Finisher> finishers = new ArrayList<Finisher>();
-        List<Starter> starters = new ArrayList<Starter>();
+        Finisher finisher = Finisher();
+        Starter starter = Starter();
         List<Equipment> equipments = new ArrayList<Equipment>();
         CombatStyle style = null;
 
-        private Requirements(Item[] itemArray, Finisher[] finisherArray, Starter[] starterArray, Equipment[] equipmentArray, CombatStyle style) {
+        private Requirements(Item[] itemArray, Finisher finisher, Starter starter, Equipment[] equipmentArray, CombatStyle style) {
             this.items.addAll(Arrays.asList(itemArray));
-            this.finishers.addAll(Arrays.asList(finisherArray));
-            this.starters.addAll(Arrays.asList(starterArray));
+            this.finisher = finisher;
+            this.starter = starter;
             this.equipments.addAll(Arrays.asList(equipmentArray));
             this.style = style;
         }
 
-        private Requirements(Item[] itemArray, Finisher[] finisherArray, Starter[] starterArray, Equipment[] equipmentArray) {
-            this(itemArray, finisherArray, starterArray, equipmentArray, null);
+        private Requirements(Item[] itemArray, Finisher finisher, Starter starter, Equipment[] equipmentArray) {
+            this(itemArray, finisher, starter, equipmentArray, null);
         }
 
-        private Requirements(Item[] itemArray, Finisher[] finisherArray, Starter[] starterArray) {
-            this(itemArray, finisherArray, starterArray, null, null);
-        }
-
-        private Requirements(Item[] itemArray, Finisher[] finisherArray) {
-            this(itemArray, finisherArray, null, null, null);
+        private Requirements(Item[] itemArray, Finisher finisher, Starter starter) {
+            this(itemArray, finisher, starter, null, null);
         }
 
         private Requirements(Item[] itemArray, Finisher finisher) {
-            this(itemArray, new Finisher[]{finisher}, null, null, null);
+            this(itemArray, finisher, null, null, null);
         }
 
         private Requirements(Item item, Finisher finisher) {
-            this(new Item[]{item}, new Finisher[]{finisher}, null, null, null);
+            this(new Item[]{item}, finisher, null, null, null);
         }
 
-        private Requirements(Item[] itemArray, Starter[] starterArray) {
-            this(itemArray, null, starterArray, null, null);
+        private Requirements(Item[] itemArray, Starter starter) {
+            this(itemArray, null, starter, null, null);
         }
 
         private Requirements(Item item, Starter starter) {
-            this(new Item[]{item}, null, new Starter[]{starter}, null, null);
+            this(new Item[]{item}, null, starter, null, null);
         }
 
         private Requirements(CombatStyle style) {
@@ -272,16 +268,12 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
             return itemArray;
         }
 
-        Finisher[] getFinisher() {
-            Finisher[] finisherArray = null;
-            this.finishers.toArray(finisherArray);
-            return finisherArray;
+        Finisher getFinisher() {
+            return this.finisher;
         }
 
-        Starter[] getStarter() {
-            Starter[] starterArray = null;
-            this.starters.toArray(starterArray);
-            return starterArray;
+        Starter getStarter() {
+            return this.starter;
         }
 
         Equipment[] getEquipment() {
@@ -642,47 +634,43 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         return false;
     }
 
-    private boolean use(Starter[] starts, RSNPC monster) {
-        for (Starter start : starts) {
-            for (String s : start.getNames()) {
-                for (RSItem inventItem : inventory.getItems()) {
-                    if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (inventory.selectItem(inventItem.getID())) {
-                            if (monster != null) {
-                                if (!monster.isOnScreen()) {
-                                    camera.turnTo(monster);
-                                }
-                                if (monster.isOnScreen()) {
-                                    return monster.doAction("Use");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    private boolean use(Starter start, RSNPC monster) {
+		for (String s : start.getNames()) {
+			for (RSItem inventItem : inventory.getItems()) {
+				if (s.equalsIgnoreCase(inventItem.getName())) {
+					if (inventory.selectItem(inventItem.getID())) {
+						if (monster != null) {
+							if (!monster.isOnScreen()) {
+								camera.turnTo(monster);
+							}
+							if (monster.isOnScreen()) {
+								return monster.doAction("Use");
+							}
+						}
+					}
+				}
+			}
+		}
         return false;
     }
 
-    private boolean use(Finisher[] finishers, RSNPC monster) {
-        for (Finisher finisher : finishers) {
-            for (String s : finisher.getNames()) {
-                for (RSItem inventItem : inventory.getItems()) {
-                    if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (inventory.selectItem(inventItem.getID())) {
-                            if (monster != null) {
-                                if (!monster.isOnScreen()) {
-                                    camera.turnTo(monster);
-                                }
-                                if (monster.isOnScreen()) {
-                                    return monster.doAction("Use");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    private boolean use(Finisher finisher, RSNPC monster) {
+		for (String s : finisher.getNames()) {
+			for (RSItem inventItem : inventory.getItems()) {
+				if (s.equalsIgnoreCase(inventItem.getName())) {
+					if (inventory.selectItem(inventItem.getID())) {
+						if (monster != null) {
+							if (!monster.isOnScreen()) {
+								camera.turnTo(monster);
+							}
+							if (monster.isOnScreen()) {
+								return monster.doAction("Use");
+							}
+						}
+					}
+				}
+			}
+		}
         return false;
     }
 
