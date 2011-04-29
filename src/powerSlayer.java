@@ -5,17 +5,23 @@ import org.rsbot.script.wrappers.RSItem;
 import org.rsbot.script.wrappers.RSNPC;
 import org.rsbot.script.wrappers.RSTile;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 0.1, description = "Slayer bot.")
-public class powerSlayer extends Script implements PaintListener {
+public class powerSlayer extends Script implements PaintListener, MouseListener {
     private Task currentTask;
     private int weaponSpecUsage = -1;
     private List<String> pickup = new ArrayList<String>();
     private RSNPC currentMonster;
+    private int tab = 1;
 
     private enum SlayerMaster {
         MAZCHNA("Mazchna", new RSTile(0, 0), 20),
@@ -685,7 +691,50 @@ public class powerSlayer extends Script implements PaintListener {
         return 0;
     }
 
-    public void onRepaint(Graphics g1) {
-
+    private Image getImage(String url) {
+        try {
+            return ImageIO.read(new URL(url));
+        } catch(IOException e) {
+            return null;
+        }
     }
+
+    private final Image closed = getImage("http://img860.imageshack.us/img860/5299/closedr.png");
+	private final Image tabOne = getImage("http://img692.imageshack.us/img692/2836/gentab.png");
+    private final Image tabTwo = getImage("http://img687.imageshack.us/img687/5461/exptab.png");
+	private final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
+	private final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
+	private final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
+
+    public void onRepaint(Graphics g1) {
+        Graphics2D g = (Graphics2D)g1;
+        if(tab == 3){
+			g.drawImage(closed, 161, 293, null);
+		}else{
+			g.drawImage(tab == 1? tabOne: tabTwo, -1, 293, null);
+		}
+    }
+
+    public void mouseClicked(MouseEvent e) {
+        if(hideRect.contains(e.getPoint())){
+             tab = 3;
+        }else if(tabOneRect.contains(e.getPoint())){
+             tab = 1;
+        }else if(tabTwoRect.contains(e.getPoint())){
+             tab = 2;
+        }
+    }
+
+    public void mousePressed(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    public void mouseExited(MouseEvent e) {
+    }
+
 }
