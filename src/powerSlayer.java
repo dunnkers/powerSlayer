@@ -18,6 +18,7 @@ import java.util.List;
 @ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 0.1, description = "Slayer bot.")
 public class powerSlayer extends Script implements PaintListener, MouseListener {
     private Task currentTask;
+    private SlayerMaster slayerMaster;
     private int weaponSpecUsage = -1;
     private List<String> pickup = new ArrayList<String>();
     private RSNPC currentMonster;
@@ -201,8 +202,8 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
     private static class Requirements {
         List<Item> items = new ArrayList<Item>();
-        Finisher finisher = Finisher();
-        Starter starter = Starter();
+        Finisher finisher;
+        Starter starter;
         List<Equipment> equipments = new ArrayList<Equipment>();
         CombatStyle style = null;
 
@@ -278,7 +279,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
         Equipment[] getEquipment() {
             Equipment[] equipmentArray = null;
-            this.finishers.toArray(equipmentArray);
+            this.equipments.toArray(equipmentArray);
             return equipmentArray;
         }
 
@@ -673,6 +674,35 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 		}
         return false;
     }
+    
+    // A mix of teleporting and walking/running to travel
+    // to certain slayer masters, tasks, and banks
+    private class Travel {
+		
+		private boolean travelToMaster(SlayerMaster master) {
+			// TODO add walking/teleporting code, as well as hard coded
+			// paths for each master that isn't on the web
+			return true;
+		}
+		
+		private boolean travelToMonster(Task task) {
+			// TODO add walking/teleporting code as well as hard coded
+			// paths for monsters that aren't on the web
+			return walking.getWebPath(task.monster.getLocation().getTile()).traverse();
+		}
+		
+		// TODO Travels to a bank. The default will be Lumbridge castle bank
+		// by using the home teleport spell (must not be in combat to cast).
+		private boolean travelToBank() {
+			return true;
+		}
+
+		// TODO check inventory to see if you have the runes
+		// to cast a certain magic spell (for teleportation spells)
+		private boolean hasRunes(int spell) {
+			return true;
+		}
+	}
 
     @Override
     public int loop() {
