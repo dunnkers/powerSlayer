@@ -432,7 +432,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     }
 
     private static enum Style {
-        MEELE,
+        MELEE,
         MAGIC,
         RANGE;
     }
