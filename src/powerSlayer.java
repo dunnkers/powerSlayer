@@ -1,6 +1,7 @@
 import org.rsbot.event.listeners.PaintListener;
 import org.rsbot.script.Script;
 import org.rsbot.script.ScriptManifest;
+import org.rsbot.script.wrappers.RSArea;
 import org.rsbot.script.wrappers.RSItem;
 import org.rsbot.script.wrappers.RSNPC;
 import org.rsbot.script.wrappers.RSTile;
@@ -18,6 +19,7 @@ import java.util.List;
 @ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 0.1, description = "Slayer bot.")
 public class powerSlayer extends Script implements PaintListener, MouseListener {
     private Task currentTask;
+    private SlayerMaster slayerMaster;
     private int weaponSpecUsage = -1;
     private List<String> pickup = new ArrayList<String>();
     private RSNPC currentMonster;
@@ -201,45 +203,41 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
     private static class Requirements {
         List<Item> items = new ArrayList<Item>();
-        List<Finisher> finishers = new ArrayList<Finisher>();
-        List<Starter> starters = new ArrayList<Starter>();
+        Finisher finisher;
+        Starter starter;
         List<Equipment> equipments = new ArrayList<Equipment>();
         CombatStyle style = null;
 
-        private Requirements(Item[] itemArray, Finisher[] finisherArray, Starter[] starterArray, Equipment[] equipmentArray, CombatStyle style) {
+        private Requirements(Item[] itemArray, Finisher finisher, Starter starter, Equipment[] equipmentArray, CombatStyle style) {
             this.items.addAll(Arrays.asList(itemArray));
-            this.finishers.addAll(Arrays.asList(finisherArray));
-            this.starters.addAll(Arrays.asList(starterArray));
+            this.finisher = finisher;
+            this.starter = starter;
             this.equipments.addAll(Arrays.asList(equipmentArray));
             this.style = style;
         }
 
-        private Requirements(Item[] itemArray, Finisher[] finisherArray, Starter[] starterArray, Equipment[] equipmentArray) {
-            this(itemArray, finisherArray, starterArray, equipmentArray, null);
+        private Requirements(Item[] itemArray, Finisher finisher, Starter starter, Equipment[] equipmentArray) {
+            this(itemArray, finisher, starter, equipmentArray, null);
         }
 
-        private Requirements(Item[] itemArray, Finisher[] finisherArray, Starter[] starterArray) {
-            this(itemArray, finisherArray, starterArray, null, null);
-        }
-
-        private Requirements(Item[] itemArray, Finisher[] finisherArray) {
-            this(itemArray, finisherArray, null, null, null);
+        private Requirements(Item[] itemArray, Finisher finisher, Starter starter) {
+            this(itemArray, finisher, starter, null, null);
         }
 
         private Requirements(Item[] itemArray, Finisher finisher) {
-            this(itemArray, new Finisher[]{finisher}, null, null, null);
+            this(itemArray, finisher, null, null, null);
         }
 
         private Requirements(Item item, Finisher finisher) {
-            this(new Item[]{item}, new Finisher[]{finisher}, null, null, null);
+            this(new Item[]{item}, finisher, null, null, null);
         }
 
-        private Requirements(Item[] itemArray, Starter[] starterArray) {
-            this(itemArray, null, starterArray, null, null);
+        private Requirements(Item[] itemArray, Starter starter) {
+            this(itemArray, null, starter, null, null);
         }
 
         private Requirements(Item item, Starter starter) {
-            this(new Item[]{item}, null, new Starter[]{starter}, null, null);
+            this(new Item[]{item}, null, starter, null, null);
         }
 
         private Requirements(CombatStyle style) {
@@ -272,21 +270,17 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
             return itemArray;
         }
 
-        Finisher[] getFinisher() {
-            Finisher[] finisherArray = null;
-            this.finishers.toArray(finisherArray);
-            return finisherArray;
+        Finisher getFinisher() {
+            return this.finisher;
         }
 
-        Starter[] getStarter() {
-            Starter[] starterArray = null;
-            this.starters.toArray(starterArray);
-            return starterArray;
+        Starter getStarter() {
+            return this.starter;
         }
 
         Equipment[] getEquipment() {
             Equipment[] equipmentArray = null;
-            this.finishers.toArray(equipmentArray);
+            this.equipments.toArray(equipmentArray);
             return equipmentArray;
         }
 
@@ -432,7 +426,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     }
 
     private static enum Style {
-        MEELE,
+        MELEE,
         MAGIC,
         RANGE;
     }
@@ -642,19 +636,17 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         return false;
     }
 
-    private boolean use(Starter[] starts, RSNPC monster) {
-        for (Starter start : starts) {
-            for (String s : start.getNames()) {
-                for (RSItem inventItem : inventory.getItems()) {
-                    if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (inventory.selectItem(inventItem.getID())) {
-                            if (monster != null) {
-                                if (!monster.isOnScreen()) {
-                                    camera.turnTo(monster);
-                                }
-                                if (monster.isOnScreen()) {
-                                    return monster.doAction("Use");
-                                }
+    private boolean use(Starter start, RSNPC monster) {
+        for (String s : start.getNames()) {
+            for (RSItem inventItem : inventory.getItems()) {
+                if (s.equalsIgnoreCase(inventItem.getName())) {
+                    if (inventory.selectItem(inventItem.getID())) {
+                        if (monster != null) {
+                            if (!monster.isOnScreen()) {
+                                camera.turnTo(monster);
+                            }
+                            if (monster.isOnScreen()) {
+                                return monster.doAction("Use");
                             }
                         }
                     }
@@ -664,19 +656,17 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         return false;
     }
 
-    private boolean use(Finisher[] finishers, RSNPC monster) {
-        for (Finisher finisher : finishers) {
-            for (String s : finisher.getNames()) {
-                for (RSItem inventItem : inventory.getItems()) {
-                    if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (inventory.selectItem(inventItem.getID())) {
-                            if (monster != null) {
-                                if (!monster.isOnScreen()) {
-                                    camera.turnTo(monster);
-                                }
-                                if (monster.isOnScreen()) {
-                                    return monster.doAction("Use");
-                                }
+    private boolean use(Finisher finisher, RSNPC monster) {
+        for (String s : finisher.getNames()) {
+            for (RSItem inventItem : inventory.getItems()) {
+                if (s.equalsIgnoreCase(inventItem.getName())) {
+                    if (inventory.selectItem(inventItem.getID())) {
+                        if (monster != null) {
+                            if (!monster.isOnScreen()) {
+                                camera.turnTo(monster);
+                            }
+                            if (monster.isOnScreen()) {
+                                return monster.doAction("Use");
                             }
                         }
                     }
@@ -684,6 +674,96 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
             }
         }
         return false;
+    }
+
+    // A mix of teleporting and walking/running to travel
+    // to certain slayer masters, tasks, and banks
+    private class Travel {
+
+        private boolean travelToMaster(SlayerMaster master) {
+            // TODO add walking/teleporting code, as well as hard coded
+            // paths for each master that isn't on the web
+            return true;
+        }
+
+        private boolean travelToMonster(Task task) {
+            // TODO add walking/teleporting code as well as hard coded
+            // paths for monsters that aren't on the web
+            return walking.getWebPath(task.monster.getLocation().getTile()).traverse();
+        }
+
+        // TODO Travels to a bank. The default will be Lumbridge castle bank
+        // by using the home teleport spell (must not be in combat to cast).
+        private boolean travelToBank() {
+            return true;
+        }
+
+        // TODO check inventory to see if you have the runes
+        // to cast a certain magic spell (for teleportation spells)
+        private boolean hasRunes(int spell) {
+            return true;
+        }
+    }
+
+    private static enum Bank {
+        VARROCK_EAST(new RSArea(new RSTile(3258, 3424), new RSTile(3249, 3415)), 0),
+        VARROCK_WEST(new RSArea(new RSTile(3195, 3447), new RSTile(3178, 3431)), 0),
+        SEERS(new RSArea(new RSTile(2731, 3495), new RSTile(2719, 3487)), 0),
+        EAST_FALADOR(new RSArea(new RSTile(3022, 3359), new RSTile(3007, 3351)), 0),
+        WEST_FALADOR(new RSArea(new RSTile(2949, 3374), new RSTile(2941, 3365)), 0),
+        DRAYNOR(new RSArea(new RSTile(3098, 3247), new RSTile(3087, 3238)), 0),
+        NORTH_ARDOUGNE(new RSArea(new RSTile(2622, 3337), new RSTile(2611, 3328)), 0),
+        SOUTH_ARDOUGNE(new RSArea(new RSTile(2660, 3288), new RSTile(2648, 3279)), 0),
+        YANNILLE(new RSArea(new RSTile(2617, 3098), new RSTile(2607, 3087)), 0),
+        EDGEVILLE(new RSArea(new RSTile(3099, 3500), new RSTile(3089, 3487)), 0),
+        AL_KHARID(new RSArea(new RSTile(3273, 3174), new RSTile(3263, 3160)), 0),
+        GRAND_EXCHANGE(new RSArea(new RSTile(3171, 3494), new RSTile(3159, 3485)), 0);
+        //TODO add a lot more banks.
+
+        private RSArea area;
+        private int plane;
+
+        private Bank(RSArea area, int plane) {
+            this.area = area;
+            this.plane = plane;
+        }
+
+        private RSArea getRSArea() {
+            return this.area;
+        }
+
+        private boolean containsTile(RSTile tile) {
+            return this.area.contains(tile);
+        }
+    }
+
+    private Bank getNearestBank() {
+        //TODO Add a method to remove all banks that a player can not reach.
+        int[] distance = new int[Bank.values().length];
+        int i = 0;
+        for (Bank b : Bank.values()) {
+            distance[i] = calc.distanceTo(b.getRSArea().getCentralTile());
+            i++;
+        }
+        int min = min(distance);
+        return Bank.values()[getArrayIndex(distance, min)];
+    }
+
+    public int getArrayIndex(int[] array, int num){
+        for (int i : array){
+            if (i == num){
+                return(i);
+            }
+        }
+        return -1; //Find a suitable alternative
+    }
+
+    private int min(int[] a) {
+        int res = Integer.MAX_VALUE;
+        for (int i = 0; i < a.length; i++) {
+            res = Math.min(a[i], res);
+        }
+        return res;
     }
 
     @Override
@@ -694,34 +774,34 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private Image getImage(String url) {
         try {
             return ImageIO.read(new URL(url));
-        } catch(IOException e) {
+        } catch (IOException e) {
             return null;
         }
     }
 
     private final Image closed = getImage("http://img860.imageshack.us/img860/5299/closedr.png");
-	private final Image tabOne = getImage("http://img692.imageshack.us/img692/2836/gentab.png");
+    private final Image tabOne = getImage("http://img692.imageshack.us/img692/2836/gentab.png");
     private final Image tabTwo = getImage("http://img687.imageshack.us/img687/5461/exptab.png");
-	private final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
-	private final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
-	private final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
+    private final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
+    private final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
+    private final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
 
     public void onRepaint(Graphics g1) {
-        Graphics2D g = (Graphics2D)g1;
-        if(tab == 3){
-			g.drawImage(closed, 161, 293, null);
-		}else{
-			g.drawImage(tab == 1? tabOne: tabTwo, -1, 293, null);
-		}
+        Graphics2D g = (Graphics2D) g1;
+        if (tab == 3) {
+            g.drawImage(closed, 161, 293, null);
+        } else {
+            g.drawImage(tab == 1 ? tabOne : tabTwo, -1, 293, null);
+        }
     }
 
     public void mouseClicked(MouseEvent e) {
-        if(hideRect.contains(e.getPoint())){
-             tab = 3;
-        }else if(tabOneRect.contains(e.getPoint())){
-             tab = 1;
-        }else if(tabTwoRect.contains(e.getPoint())){
-             tab = 2;
+        if (hideRect.contains(e.getPoint())) {
+            tab = 3;
+        } else if (tabOneRect.contains(e.getPoint())) {
+            tab = 1;
+        } else if (tabTwoRect.contains(e.getPoint())) {
+            tab = 2;
         }
     }
 
