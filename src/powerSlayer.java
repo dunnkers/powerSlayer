@@ -733,7 +733,11 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
             return true;
         }
 
+		// Makes sure the player has the required Magic level, and then
+		// checks to make sure all of the required items are available
         private boolean canCast(Teleport t) {
+			if(skills.getRealLevel(Skills.MAGIC) < t.magicLevel)
+				return false;
             for(Item i : t.getItems()) {
 				switch(i.getType()) {
 					case Item.NOT_EQUIPED:
