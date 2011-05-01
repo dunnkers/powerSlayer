@@ -25,6 +25,9 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private List<String> pickup = new ArrayList<String>();
     private RSNPC currentMonster;
     private int tab = 1;
+    private final static int CANT_EQUIP = 1;
+    private final static int COULD_BE_EQUIPED = 2;
+    private final static int NEEDS_TO_BE_EQUIPED = 3;
 
     private enum SlayerMaster {
         MAZCHNA("Mazchna", new RSTile(0, 0), 20),
@@ -293,22 +296,32 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private static class Item {
         private String[] names;
         private int amount;
+        private int type;
 
-        private Item(String[] names, int amount) {
+        public int NOT_EQUIPED = 1;
+        public int COULD_BE_EQUIPED = 2;
+        public int NEEDS_TO_BE_EQUIPED = 3;
+
+        private Item(int type, String[] names, int amount) {
             this.names = names;
             this.amount = amount;
+            this.type = type;
         }
 
         private Item(String[] names) {
-            this(names, 1);
+            this(1, names, 1);
         }
 
         private Item(String name) {
-            this(new String[]{name}, 1);
+            this(1, new String[]{name}, 1);
+        }
+
+        private Item(int type, String name) {
+            this(type, new String[]{name}, 1);
         }
 
         private Item(String name, int amount) {
-            this(new String[]{name}, amount);
+            this(1, new String[]{name}, amount);
         }
 
         private int getAmount() {
@@ -747,8 +760,11 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private enum Teleport {
         //TODO link these to a teleporting method.
         LUMBRIDGE(new Location(new RSTile(0, 0), 0)),
-        VARROCK_RUNES(new Location(new RSTile(0, 0), 0), new Item[]{new Item(new String[]{"Fire runes", "Fire staff", "Lava staff"}, 1), new Item(new String[]{"Law runes", "Law staff"}, 1), new Item("Air runes", 3)}),
-        VARROCK_TAB(new Location(new RSTile(0, 0), 0), new Item[]{new Item("Varrock teleport")});
+        VARROCK_SPELL_1(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Fire staff"), new Item("Law rune"), new Item("Air runes", 3)}), // Sadly i think this is the only i can think of to 'cleanly' include staffs
+        VARROCK_SPELL_2(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Lava staff"), new Item("Law rune"), new Item("Air runes", 3)}), // If anyone has any other ways fix this.
+        VARROCK_SPELL_3(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Fire rune"), new Item("Law rune"), new Item("Air staff", 3)}),
+        VARROCK_TAB(new Location(new RSTile(0, 0), 0), new Item[]{new Item("Varrock teleport")}), // This has the value of CANT_EQUIP so you would only check inventory
+        ROD_DUEL_AREA(new Location(new RSTile(0, 0), 0), new Item(COULD_BE_EQUIPED, "Ring of dueling")); //For this you would check both inventory and equipment.
         private Item[] items;
         private Location loc;
 
@@ -757,8 +773,12 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
             this.items = items;
         }
 
+        private Teleport(Location loc, Item item) {
+            this(loc, new Item[]{item});
+        }
+
         private Teleport(Location loc) {
-            this(loc, null);
+            this(loc, (Item) null);
         }
     }
 
@@ -830,9 +850,9 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
     }
 
-    private final Image closed = getImage("http://img860.imageshack.us/img860/5299/closedr.png");
-    private final Image tabOne = getImage("http://img692.imageshack.us/img692/2836/gentab.png");
-    private final Image tabTwo = getImage("http://img863.imageshack.us/img863/5461/exptab.png");
+    private final Image closed = getImage("http://img88.imageshack.us/img88/4408/closedc.png");
+    private final Image tabOne = getImage("http://img18.imageshack.us/img18/2836/gentab.png");
+    private final Image tabTwo = getImage("http://img6.imageshack.us/img6/5461/exptab.png");
     private final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
     private final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
     private final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
