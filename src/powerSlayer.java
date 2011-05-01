@@ -30,6 +30,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private final static int NEEDS_TO_BE_EQUIPED = 3;
 
     private enum SlayerMaster {
+        //TODO Add other slayer masters + locations
         MAZCHNA("Mazchna", new RSTile(0, 0), 20),
         TURAEL("Turael", new RSTile(0, 0), 3);
         private RSTile location;
@@ -78,6 +79,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     }
 
     private static enum Monsters {
+        //TODO Add locations
         ABBERANT_SPECTRE("Aberrant Spectre", new Location(new RSTile(0, 0), 0), new Requirements(new Equipment(new String[]{"Slayer helmet", "Nosepeg"}, org.rsbot.script.methods.Equipment.HELMET))),
         ABYSSAL_DEMON("Abyssal Demon", new Location(new RSTile(0, 0), 0)),
         AQUANITE("Aquanite", new Location(new RSTile(0, 0), 0)),
@@ -103,7 +105,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         CROCODILE("Crocodile", new Location(new RSTile(0, 0), 0), new Requirements(new Item[]{new Item(new String[]{"Waterskin (1)", "Waterskin (2)", "Waterskin (3)", "Waterskin (4)"}), new Item(new String[]{"Ice coolers"})}, new Finisher(new String[]{"Rock hammer"}))),
         DRAGANNOTH("Dragannoth", new Location(new RSTile(0, 0), 0)),
         DARK_BEAST("Dark beast", new Location(new RSTile(0, 0), 0)),
-        //Moruner Armour...
+        //TODO Moruner Armour...
         DESERT_LIZARD("Desert lizard", new Location(new RSTile(0, 0), 0), new Requirements(new Item(new String[]{"Waterskin (1)", "Waterskin (2)", "Waterskin (3)", "Waterskin (4)"}))),
         DOG("Guard dog", new Location(new RSTile(0, 0), 0)),
         DUST_DEVIL("Dust devil", new Location(new RSTile(0, 0), 0), new Requirements(new Equipment(new String[]{"Slayer helmet", "Facemask"}, org.rsbot.script.methods.Equipment.HELMET))),
@@ -138,19 +140,19 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         MITHRIL_DRAGON("Mithril dragon", new Location(new RSTile(0, 0), 0), new Requirements(new Equipment(new String[]{"Dragonfire shield", "Anti-dragon shield"}, org.rsbot.script.methods.Equipment.SHIELD))),
         MINOTAUR("Minotaur", new Location(new RSTile(0, 0), 0)),
         MOGRE("Mogre", new Location(new RSTile(0, 0), 0)),
-        //Need to complete a 'mini quest'
+        //TODO get requirments
         MOLANISK("Molanisk", new Location(new RSTile(0, 0), 0), new Requirements(new Item(new String[]{"Slayer bell"}), new Starter(new String[]{"Slayer bell"}))),
         MONKEY("Monkey", new Location(new RSTile(0, 0), 0), new Requirements(new CombatStyle(Style.RANGE))),
         MOSS_GIANT("Moss giant", new Location(new RSTile(0, 0), 0)),
         MUTATED_ZYGOMITE("Mutated zygomite", new Location(new RSTile(0, 0), 0), new Requirements(new Item(new String[]{"Fungicide spray"}), new Finisher(new String[]{"Fungicide spray"}))),
         NECHRYAEL("Nechryael", new Location(new RSTile(0, 0), 0)),
-        //Needs nosepeg for walking past spectres...
+        //TODO Needs nosepeg for walking past spectres...
         OGRE("Ogre", new Location(new RSTile(0, 0), 0)),
         OTHERWORLDLY_BEINGS("Otherworldly beings", new Location(new RSTile(0, 0), 0)),
         PYREFIEND("Pyrefiend", new Location(new RSTile(0, 0), 0)),
         ROCK_SLUG("Rock slug", new Location(new RSTile(0, 0), 0), new Requirements(new Item(new String[]{"Bag of salt"}), new Finisher(new String[]{"Bag of salt"}))),
         SCABARITES(" ", new Location(new RSTile(0, 0), 0)),
-        //Need more infomation...
+        //TODO find the best scabarites
         SCORPION("Scorpion", new Location(new RSTile(0, 0), 0)),
         SEA_SNAKE("Sea snake hatchlings", new Location(new RSTile(0, 0), 0), new Requirements(new Item(new String[]{"Antipoison (1)", "Antipoison (2)", "Antipoison (3)", "Antipoison (4)"}))),
         SHADE("Shade", new Location(new RSTile(0, 0), 0)),
@@ -327,10 +329,10 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         private int getAmount() {
             return this.amount;
         }
-        
+
         private int getType() {
-			return this.type;
-		}
+            return this.type;
+        }
 
         private String[] getNames() {
             return this.names;
@@ -516,6 +518,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         return -1;
     }
 
+    //TODO 90% of these need rewriting
     private boolean isInInvent(Item items) {
         for (RSItem item : inventory.getItems()) {
             for (String name : items.getNames()) {
@@ -537,7 +540,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
         return false;
     }
-    
+
     private boolean isEquiped(Item item) {
         for (RSItem i : equipment.getItems()) {
             for (String name : item.getNames()) {
@@ -733,29 +736,30 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
             return true;
         }
 
-		// Makes sure the player has the required Magic level, and then
-		// checks to make sure all of the required items are available
+        // Makes sure the player has the required Magic level, and then
+        // checks to make sure all of the required items are available
         private boolean canCast(Teleport t) {
-			if(skills.getRealLevel(Skills.MAGIC) < t.magicLevel)
-				return false;
-            for(Item i : t.getItems()) {
-				switch(i.getType()) {
-					case Item.NOT_EQUIPED:
-						if(!isInInvent(i))
-							return false;
-						break;
-					case Item.COULD_BE_EQUIPED:
-						if(!isInInvent(i) && !isEquiped(i))
-							return false;
-						break;
-					case Item.NEEDS_TO_BE_EQUIPED:
-						if(!isEquiped(i))
-							return false;
-						break;
-					default: return false; // Item doesn't have a type: error!
-				}
-			}
-			return true;
+            if (skills.getRealLevel(Skills.MAGIC) < t.magicLevel)
+                return false;
+            for (Item i : t.getItems()) {
+                switch (i.getType()) {
+                    case Item.NOT_EQUIPED:
+                        if (!isInInvent(i))
+                            return false;
+                        break;
+                    case Item.COULD_BE_EQUIPED:
+                        if (!isInInvent(i) && !isEquiped(i))
+                            return false;
+                        break;
+                    case Item.NEEDS_TO_BE_EQUIPED:
+                        if (!isEquiped(i))
+                            return false;
+                        break;
+                    default:
+                        return false; // Item doesn't have a type: error!
+                }
+            }
+            return true;
         }
     }
 
@@ -789,14 +793,15 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         private boolean containsTile(RSTile tile) {
             return this.area.contains(tile);
         }
+
     }
 
     private enum Teleport {
         //TODO link these to a teleporting method.
         LUMBRIDGE(new Location(new RSTile(0, 0), 0)),
-        VARROCK_SPELL_1(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Fire staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // Sadly i think this is the only i can think of to 'cleanly' include staffs
-        VARROCK_SPELL_2(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Lava staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // If anyone has any other ways fix this.
-        VARROCK_SPELL_3(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Fire rune"), new Item("Law rune"), new Item("Air staff")}, 25),
+        VARROCK_SPELL_1(new Location(new RSTile(0, 0), 0), new Item[]{new Item(NEEDS_TO_BE_EQUIPED, "Fire staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // Sadly i think this is the only i can think of to 'cleanly' include staffs
+        VARROCK_SPELL_2(new Location(new RSTile(0, 0), 0), new Item[]{new Item(NEEDS_TO_BE_EQUIPED, "Lava staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // If anyone has any other ways fix this.
+        VARROCK_SPELL_3(new Location(new RSTile(0, 0), 0), new Item[]{new Item(NEEDS_TO_BE_EQUIPED, "Fire rune"), new Item("Law rune"), new Item("Air staff")}, 25),
         VARROCK_TAB(new Location(new RSTile(0, 0), 0), new Item[]{new Item("Varrock teleport")}), // This has the value of CANT_EQUIP so you would only check inventory
         ROD_DUEL_AREA(new Location(new RSTile(0, 0), 0), new Item(COULD_BE_EQUIPED, "Ring of dueling")); //For this you would check both inventory and equipment.
         private Item[] items;
@@ -808,7 +813,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
             this.items = items;
             this.magicLevel = magicLevel;
         }
-        
+
         private Teleport(Location loc, Item[] items) {
             this(loc, items, 1);
         }
@@ -816,7 +821,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         private Teleport(Location loc, Item item, int magicLevel) {
             this(loc, new Item[]{item}, magicLevel);
         }
-        
+
         private Teleport(Location loc, Item item) {
             this(loc, new Item[]{item}, 1);
         }
@@ -824,20 +829,20 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         private Teleport(Location loc) {
             this(loc, (Item) null, 1);
         }
-        
+
         private Location getLocation() {
-			return this.loc;
-		}
-		
-		private Item[] getItems() {
-			return this.items;
-		}
+            return this.loc;
+        }
+
+        private Item[] getItems() {
+            return this.items;
+        }
     }
 
     private Bank getNearestBank() {
         /*
          *TODO Add a method to remove all banks that a player can not reach.
-         *     Use the walking class to return a 'real' distance.
+         *TODO Use the web to return a 'real' distance.
          */
         int[] distance = new int[Bank.values().length];
         int i = 0;
@@ -850,6 +855,15 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
             return null;
         }
         return Bank.values()[getArrayIndex(distance, min)];
+    }
+
+    private boolean isInBank(RSTile tile) {
+        for (Bank b : Bank.values()) {
+            if (b.containsTile(tile)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getArrayIndex(int[] array, int num) {
@@ -909,6 +923,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
     private final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
 
+    //TODO Alot more...
     public void onRepaint(Graphics g1) {
         Graphics2D g = (Graphics2D) g1;
         if (tab == 1) {
@@ -960,6 +975,37 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     }
 
     public void mouseExited(MouseEvent e) {
+    }
+
+    /*
+     * Would everyone agree this is a good way to structure the loop?
+     * To find which loop was needed we could create a list of states and loop through them,
+     * and return the loop() method on the basis of the activeCondition()
+     *
+     * Like how randoms are structured.
+     */
+    public abstract class State {
+        public abstract int loop();
+
+        public abstract boolean activeCondition();
+    }
+
+    public class Banking extends State {
+
+        @Override
+        public int loop() {
+            if (isInBank(getMyPlayer().getLocation())) {
+                //TODO create a banking loop
+            }else{
+                //TODO walking
+            }
+            return 0;
+        }
+
+        @Override
+        public boolean activeCondition() {
+            return !isFullyEquiped(currentTask.getRequirements());
+        }
     }
 
 }
