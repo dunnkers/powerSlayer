@@ -1,6 +1,8 @@
 import org.rsbot.event.listeners.PaintListener;
 import org.rsbot.script.Script;
 import org.rsbot.script.ScriptManifest;
+import org.rsbot.script.methods.Skills;
+import org.rsbot.script.wrappers.RSArea;
 import org.rsbot.script.wrappers.RSItem;
 import org.rsbot.script.wrappers.RSNPC;
 import org.rsbot.script.wrappers.RSTile;
@@ -478,7 +480,13 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
     private int specialUsage() {
         int[] amountUsage = {10, 25, 33, 35, 45, 50, 55, 60, 80, 85, 100};
-        String[][] weapons = {{"Rune thrownaxe", "Rod of ivandis"}, {"Dragon Dagger", "Dragon dagger (p)", "Dragon dagger (p+)", "Dragon dagger (p++)", "Dragon Mace", "Dragon Spear", "Dragon longsword", "Rune claws"}, {"Dragon Halberd"}, {"Magic Longbow"}, {"Magic Composite Bow"}, {"Dragon Claws", "Abyssal Whip", "Granite Maul", "Darklight", "Barrelchest Anchor", "Armadyl Godsword"}, {"Magic Shortbow"}, {"Dragon Scimitar", "Dragon 2H Sword", "Zamorak Godsword", "Korasi's sword"}, {"Dorgeshuun Crossbow", "Bone Dagger", "Bone Dagger (p+)", "Bone Dagger (p++)"}, {"Brine Sabre"}, {"Bandos Godsword", "Dragon Battleaxe", "Dragon Hatchet", "Seercull Bow", "Excalibur", "Enhanced excalibur", "Ancient Mace", "Saradomin sword"}};
+        String[][] weapons = {{"Rune thrownaxe", "Rod of ivandis"},
+                {"Dragon Dagger", "Dragon dagger (p)", "Dragon dagger (p+)", "Dragon dagger (p++)", "Dragon Mace", "Dragon Spear", "Dragon longsword", "Rune claws"},
+                {"Dragon Halberd"}, {"Magic Longbow"}, {"Magic Composite Bow"},
+                {"Dragon Claws", "Abyssal Whip", "Granite Maul", "Darklight", "Barrelchest Anchor", "Armadyl Godsword"},
+                {"Magic Shortbow"}, {"Dragon Scimitar", "Dragon 2H Sword", "Zamorak Godsword", "Korasi's sword"},
+                {"Dorgeshuun Crossbow", "Bone Dagger", "Bone Dagger (p+)", "Bone Dagger (p++)"},
+                {"Brine Sabre"}, {"Bandos Godsword", "Dragon Battleaxe", "Dragon Hatchet", "Seercull Bow", "Excalibur", "Enhanced excalibur", "Ancient Mace", "Saradomin sword"}};
         String str = equipment.getItem(org.rsbot.script.methods.Equipment.WEAPON).getName();
         str = str.substring(str.indexOf(">") + 1);
         for (int i = 0; i < weapons.length; i++) {
@@ -636,73 +644,158 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     }
 
     private boolean use(Starter start, RSNPC monster) {
-		for (String s : start.getNames()) {
-			for (RSItem inventItem : inventory.getItems()) {
-				if (s.equalsIgnoreCase(inventItem.getName())) {
-					if (inventory.selectItem(inventItem.getID())) {
-						if (monster != null) {
-							if (!monster.isOnScreen()) {
-								camera.turnTo(monster);
-							}
-							if (monster.isOnScreen()) {
-								return monster.doAction("Use");
-							}
-						}
-					}
-				}
-			}
-		}
+        for (String s : start.getNames()) {
+            for (RSItem inventItem : inventory.getItems()) {
+                if (s.equalsIgnoreCase(inventItem.getName())) {
+                    if (inventory.selectItem(inventItem.getID())) {
+                        if (monster != null) {
+                            if (!monster.isOnScreen()) {
+                                camera.turnTo(monster);
+                            }
+                            if (monster.isOnScreen()) {
+                                return monster.doAction("Use");
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
     private boolean use(Finisher finisher, RSNPC monster) {
-		for (String s : finisher.getNames()) {
-			for (RSItem inventItem : inventory.getItems()) {
-				if (s.equalsIgnoreCase(inventItem.getName())) {
-					if (inventory.selectItem(inventItem.getID())) {
-						if (monster != null) {
-							if (!monster.isOnScreen()) {
-								camera.turnTo(monster);
-							}
-							if (monster.isOnScreen()) {
-								return monster.doAction("Use");
-							}
-						}
-					}
-				}
-			}
-		}
+        for (String s : finisher.getNames()) {
+            for (RSItem inventItem : inventory.getItems()) {
+                if (s.equalsIgnoreCase(inventItem.getName())) {
+                    if (inventory.selectItem(inventItem.getID())) {
+                        if (monster != null) {
+                            if (!monster.isOnScreen()) {
+                                camera.turnTo(monster);
+                            }
+                            if (monster.isOnScreen()) {
+                                return monster.doAction("Use");
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
-    
+
     // A mix of teleporting and walking/running to travel
     // to certain slayer masters, tasks, and banks
     private class Travel {
-		
-		private boolean travelToMaster(SlayerMaster master) {
-			// TODO add walking/teleporting code, as well as hard coded
-			// paths for each master that isn't on the web
-			return true;
-		}
-		
-		private boolean travelToMonster(Task task) {
-			// TODO add walking/teleporting code as well as hard coded
-			// paths for monsters that aren't on the web
-			return walking.getWebPath(task.monster.getLocation().getTile()).traverse();
-		}
-		
-		// TODO Travels to a bank. The default will be Lumbridge castle bank
-		// by using the home teleport spell (must not be in combat to cast).
-		private boolean travelToBank() {
-			return true;
-		}
 
-		// TODO check inventory to see if you have the runes
-		// to cast a certain magic spell (for teleportation spells)
-		private boolean hasRunes(int spell) {
-			return true;
-		}
-	}
+        private boolean travelToMaster(SlayerMaster master) {
+            // TODO add walking/teleporting code, as well as hard coded
+            // paths for each master that isn't on the web
+            return true;
+        }
+
+        private boolean travelToMonster(Task task) {
+            // TODO add walking/teleporting code as well as hard coded
+            // paths for monsters that aren't on the web
+            return walking.getWebPath(task.monster.getLocation().getTile()).traverse();
+        }
+
+        // TODO Travels to a bank. The default will be Lumbridge castle bank
+        // by using the home teleport spell (must not be in combat to cast).
+        private boolean travelToBank() {
+            return true;
+        }
+
+        // TODO check inventory to see if you have the runes
+        // to cast a certain magic spell (for teleportation spells)
+        private boolean hasRunes(int spell) {
+            return true;
+        }
+    }
+
+    private static enum Bank {
+        VARROCK_EAST(new RSArea(new RSTile(3258, 3424), new RSTile(3249, 3415)), 0),
+        VARROCK_WEST(new RSArea(new RSTile(3195, 3447), new RSTile(3178, 3431)), 0),
+        SEERS(new RSArea(new RSTile(2731, 3495), new RSTile(2719, 3487)), 0),
+        EAST_FALADOR(new RSArea(new RSTile(3022, 3359), new RSTile(3007, 3351)), 0),
+        WEST_FALADOR(new RSArea(new RSTile(2949, 3374), new RSTile(2941, 3365)), 0),
+        DRAYNOR(new RSArea(new RSTile(3098, 3247), new RSTile(3087, 3238)), 0),
+        NORTH_ARDOUGNE(new RSArea(new RSTile(2622, 3337), new RSTile(2611, 3328)), 0),
+        SOUTH_ARDOUGNE(new RSArea(new RSTile(2660, 3288), new RSTile(2648, 3279)), 0),
+        YANNILLE(new RSArea(new RSTile(2617, 3098), new RSTile(2607, 3087)), 0),
+        EDGEVILLE(new RSArea(new RSTile(3099, 3500), new RSTile(3089, 3487)), 0),
+        AL_KHARID(new RSArea(new RSTile(3273, 3174), new RSTile(3263, 3160)), 0),
+        GRAND_EXCHANGE(new RSArea(new RSTile(3171, 3494), new RSTile(3159, 3485)), 0);
+        //TODO add a lot more banks.
+
+        private RSArea area;
+        private int plane;
+
+        private Bank(RSArea area, int plane) {
+            this.area = area;
+            this.plane = plane;
+        }
+
+        private RSArea getRSArea() {
+            return this.area;
+        }
+
+        private boolean containsTile(RSTile tile) {
+            return this.area.contains(tile);
+        }
+    }
+
+    private enum Teleport {
+        //TODO link these to a teleporting method.
+        LUMBRIDGE(new Location(new RSTile(0, 0), 0)),
+        VARROCK_RUNES(new Location(new RSTile(0, 0), 0), new Item[]{new Item(new String[]{"Fire runes", "Fire staff", "Lava staff"}, 1), new Item(new String[]{"Law runes", "Law staff"}, 1), new Item("Air runes", 3)}),
+        VARROCK_TAB(new Location(new RSTile(0, 0), 0), new Item[]{new Item("Varrock teleport")});
+        private Item[] items;
+        private Location loc;
+
+        private Teleport(Location loc, Item[] items) {
+            this.loc = loc;
+            this.items = items;
+        }
+
+        private Teleport(Location loc) {
+            this(loc, null);
+        }
+    }
+
+    private Bank getNearestBank() {
+        /*
+         *TODO Add a method to remove all banks that a player can not reach.
+         *     Use the walking class to return a 'real' distance.
+         */
+        int[] distance = new int[Bank.values().length];
+        int i = 0;
+        for (Bank b : Bank.values()) {
+            distance[i] = calc.distanceTo(b.getRSArea().getCentralTile());
+            i++;
+        }
+        int min = min(distance);
+        if (min == -1) {
+            return null;
+        }
+        return Bank.values()[getArrayIndex(distance, min)];
+    }
+
+    public int getArrayIndex(int[] array, int num) {
+        for (int i : array) {
+            if (i == num) {
+                return (i);
+            }
+        }
+        return -1; //Find a suitable alternative
+    }
+
+    private int min(int[] a) {
+        int res = Integer.MAX_VALUE;
+        for (int i = 0; i < a.length; i++) {
+            res = Math.min(a[i], res);
+        }
+        return res;
+    }
 
     @Override
     public int loop() {
@@ -712,34 +805,76 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private Image getImage(String url) {
         try {
             return ImageIO.read(new URL(url));
-        } catch(IOException e) {
+        } catch (IOException e) {
             return null;
         }
     }
 
+    private enum Skill {
+        SLAYER(Skills.SLAYER, "Slayer", 0),
+        ATTACK(Skills.ATTACK, "Attack", 1),
+        STRENGTH(Skills.STRENGTH, "Strength", 2),
+        DEFENCE(Skills.DEFENSE, "Defence", 3),
+        CONSTITUTION(Skills.CONSTITUTION, "Constitution", 4),
+        RANGE(Skills.RANGE, "Range", 5),
+        MAGIC(Skills.MAGIC, "Magic", 6);
+
+        int skillID;
+        String skillName;
+        int index;
+
+        private Skill(int skillID, String skillName, int index) {
+            this.skillID = skillID;
+            this.skillName = skillName;
+            this.index = index;
+        }
+    }
+
     private final Image closed = getImage("http://img860.imageshack.us/img860/5299/closedr.png");
-	private final Image tabOne = getImage("http://img692.imageshack.us/img692/2836/gentab.png");
-    private final Image tabTwo = getImage("http://img687.imageshack.us/img687/5461/exptab.png");
-	private final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
-	private final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
-	private final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
+    private final Image tabOne = getImage("http://img692.imageshack.us/img692/2836/gentab.png");
+    private final Image tabTwo = getImage("http://img863.imageshack.us/img863/5461/exptab.png");
+    private final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
+    private final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
+    private final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
 
     public void onRepaint(Graphics g1) {
-        Graphics2D g = (Graphics2D)g1;
-        if(tab == 3){
-			g.drawImage(closed, 161, 293, null);
-		}else{
-			g.drawImage(tab == 1? tabOne: tabTwo, -1, 293, null);
-		}
+        Graphics2D g = (Graphics2D) g1;
+        if (tab == 1) {
+            g.drawImage(tabOne, -1, 293, null);
+        } else if (tab == 2) {
+            g.drawImage(tabTwo, -1, 293, null);
+            drawSkillBars(g);
+        } else {
+            g.drawImage(closed, 162, 293, null);
+        }
     }
 
     public void mouseClicked(MouseEvent e) {
-        if(hideRect.contains(e.getPoint())){
-             tab = 3;
-        }else if(tabOneRect.contains(e.getPoint())){
-             tab = 1;
-        }else if(tabTwoRect.contains(e.getPoint())){
-             tab = 2;
+        if (hideRect.contains(e.getPoint())) {
+            tab = 3;
+        } else if (tabOneRect.contains(e.getPoint())) {
+            tab = 1;
+        } else if (tabTwoRect.contains(e.getPoint())) {
+            tab = 2;
+        }
+    }
+
+
+    private void drawSkillBars(Graphics g) {
+        for (Skill s : Skill.values()) {
+            int x = s.index <= 3 ? 20 : 180;
+            int y = s.index <= 3 ? 390 + (s.index * 20) : 390 + ((s.index - 3) * 20);
+            g.setColor(new Color(153, 153, 153));
+            g.drawRect(x, y, 150, 15);
+            g.setColor(new Color(0, 0, 0, 80));
+            g.fillRect(x, y, (int) (skills.getPercentToNextLevel(s.skillID) * 1.5), 15);
+            g.setColor(new Color(90, 15, 15));
+            g.setFont(new Font("Serif", 0, 12));
+            g.drawString(s.skillName + ": " + skills.getPercentToNextLevel(s.skillID)
+                    + "% to level " + (skills.getRealLevel(s.skillID) + 1), x + 4, y + 12);
+            g.setColor(new Color(255, 255, 255, 90));
+            g.drawString(s.skillName + ": " + skills.getPercentToNextLevel(s.skillID)
+                    + "% to level " + (skills.getRealLevel(s.skillID) + 1), x + 5, y + 13);
         }
     }
 
