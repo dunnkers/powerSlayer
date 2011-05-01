@@ -1,3 +1,9 @@
-Location editing: Add correct RSTile's for locations. 
-Paint: Make a paint. (Debauchery - Makes pretty pictures)
-GUI: Of course... 
+Locations (We will need to come to a agreement as some monsters have multiple locations).
+Walking (Currently being worked on by jkeech)
+Slayer masters (There is currently only two included)
+Universal fighter (Needs to cater for starters and finishers)
+Options/GUI (A Jframe or paint? Decide on a list of options...)
+Anti-ban (Is it really needed? or could it be included in the fighter)
+Banking (Many things are needed for this, also other banks need to be added)
+Paint (Currently being worked on by Debauchery)
+Drops (We need a system to find drops and options to include drops)
