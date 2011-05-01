@@ -1,2 +1,11 @@
+.project
+.svn
 .idea
+/*.class
+/*.diff
+/*.iml
+/*.ipr
+/*.iws
+/*.jar
+/*.patch
 /*.iml
