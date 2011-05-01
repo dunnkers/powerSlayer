@@ -25,9 +25,6 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private List<String> pickup = new ArrayList<String>();
     private RSNPC currentMonster;
     private int tab = 1;
-    private final static int CANT_EQUIP = 1;
-    private final static int COULD_BE_EQUIPED = 2;
-    private final static int NEEDS_TO_BE_EQUIPED = 3;
 
     private enum SlayerMaster {
         MAZCHNA("Mazchna", new RSTile(0, 0), 20),
@@ -520,7 +517,8 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         for (RSItem item : inventory.getItems()) {
             for (String name : items.getNames()) {
                 if (item.getName().equalsIgnoreCase(name)) {
-                    return true;
+                    if(inventory.getCount(true, item.getID()) >= items.amount)     // Make sure you not only have the item, but also enough of the item
+	                    return true;
                 }
             }
         }
@@ -716,22 +714,53 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private class Travel {
 
         private boolean travelToMaster(SlayerMaster master) {
-            // TODO add walking/teleporting code, as well as hard coded
-            // paths for each master that isn't on the web
-            return true;
+            if(shouldTeleport(master.getLocation()))
+		        return castTeleport(getBestTeleport(master.getLocation()));
+	        else
+                return walking.getWebPath(master.getLocation()).traverse();
         }
 
         private boolean travelToMonster(Task task) {
-            // TODO add walking/teleporting code as well as hard coded
-            // paths for monsters that aren't on the web
-            return walking.getWebPath(task.monster.getLocation().getTile()).traverse();
+            if(shouldTeleport(task.monster.getLocation().getTile()))
+		        return castTeleport(getBestTeleport(task.monster.getLocation().getTile()));
+	        else
+                return walking.getWebPath(task.monster.getLocation().getTile()).traverse();
         }
 
-        // TODO Travels to a bank. The default will be Lumbridge castle bank
-        // by using the home teleport spell (must not be in combat to cast).
+	    // The default will be the closest bank to the player
+	    private boolean travelToBank() {
+		    return travelToBank(getNearestBank());
+	    }
+
         private boolean travelToBank(Bank bank) {
-            return true;
+	        if(shouldTeleport(bank.getRSArea().getCentralTile()))
+		        return castTeleport(getBestTeleport(bank.getRSArea().getCentralTile()));
+	        else
+		        return walking.getWebPath(bank.getRSArea().getCentralTile()).traverse();
         }
+
+	    // TODO cast a teleport
+	    private boolean castTeleport(Teleport t) {
+		    return true;
+	    }
+
+	    private boolean shouldTeleport(RSTile dest) {
+		    return calc.distanceTo(dest) > calc.distanceBetween(getBestTeleport(dest).getLocation().getTile(), dest);
+	    }
+
+	    private Teleport getBestTeleport(RSTile dest) {
+		    Teleport best = null;
+		    double dist = 0;
+		    for(Teleport t : Teleport.values()) {
+				if(canCast(t)) {
+					if(best == null || calc.distanceBetween(t.getLocation().getTile(), dest) < dist) {
+						best = t;
+						dist = calc.distanceBetween(t.getLocation().getTile(), dest);
+					}
+			    }
+		    }
+		    return best;
+	    }
 
 		// Makes sure the player has the required Magic level, and then
 		// checks to make sure all of the required items are available
@@ -794,11 +823,11 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private enum Teleport {
         //TODO link these to a teleporting method.
         LUMBRIDGE(new Location(new RSTile(0, 0), 0)),
-        VARROCK_SPELL_1(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Fire staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // Sadly i think this is the only i can think of to 'cleanly' include staffs
-        VARROCK_SPELL_2(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Lava staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // If anyone has any other ways fix this.
-        VARROCK_SPELL_3(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Fire rune"), new Item("Law rune"), new Item("Air staff")}, 25),
+        VARROCK_SPELL_1(new Location(new RSTile(0, 0), 0), new Item[]{new Item( Item.NEEDS_TO_BE_EQUIPED, "Fire staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // Sadly i think this is the only i can think of to 'cleanly' include staffs
+        VARROCK_SPELL_2(new Location(new RSTile(0, 0), 0), new Item[]{new Item( Item.NEEDS_TO_BE_EQUIPED, "Lava staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // If anyone has any other ways fix this.
+        VARROCK_SPELL_3(new Location(new RSTile(0, 0), 0), new Item[]{new Item( Item.NEEDS_TO_BE_EQUIPED, "Fire rune"), new Item("Law rune"), new Item("Air staff")}, 25),
         VARROCK_TAB(new Location(new RSTile(0, 0), 0), new Item[]{new Item("Varrock teleport")}), // This has the value of CANT_EQUIP so you would only check inventory
-        ROD_DUEL_AREA(new Location(new RSTile(0, 0), 0), new Item(COULD_BE_EQUIPED, "Ring of dueling")); //For this you would check both inventory and equipment.
+        ROD_DUEL_AREA(new Location(new RSTile(0, 0), 0), new Item(Item.COULD_BE_EQUIPED, "Ring of dueling")); //For this you would check both inventory and equipment.
         private Item[] items;
         private Location loc;
         private int magicLevel;
