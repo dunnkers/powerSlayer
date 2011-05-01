@@ -298,9 +298,9 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         private int amount;
         private int type;
 
-        public int NOT_EQUIPED = 1;
-        public int COULD_BE_EQUIPED = 2;
-        public int NEEDS_TO_BE_EQUIPED = 3;
+        public final static int NOT_EQUIPED = 1;
+        public final static int COULD_BE_EQUIPED = 2;
+        public final static int NEEDS_TO_BE_EQUIPED = 3;
 
         private Item(int type, String[] names, int amount) {
             this.names = names;
@@ -327,6 +327,10 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         private int getAmount() {
             return this.amount;
         }
+        
+        private int getType() {
+			return this.type;
+		}
 
         private String[] getNames() {
             return this.names;
@@ -533,6 +537,17 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
         return false;
     }
+    
+    private boolean isEquiped(Item item) {
+        for (RSItem i : equipment.getItems()) {
+            for (String name : item.getNames()) {
+                if (i.getName().equalsIgnoreCase(name)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     private boolean isInInvent(Equipment equip) {
         for (RSItem item : inventory.getItems()) {
@@ -714,14 +729,29 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
         // TODO Travels to a bank. The default will be Lumbridge castle bank
         // by using the home teleport spell (must not be in combat to cast).
-        private boolean travelToBank() {
+        private boolean travelToBank(Bank bank) {
             return true;
         }
 
-        // TODO check inventory to see if you have the runes
-        // to cast a certain magic spell (for teleportation spells)
-        private boolean hasRunes(int spell) {
-            return true;
+        private boolean canCast(Teleport t) {
+            for(Item i : t.getItems()) {
+				switch(i.getType()) {
+					case Item.NOT_EQUIPED:
+						if(!isInInvent(i))
+							return false;
+						break;
+					case Item.COULD_BE_EQUIPED:
+						if(!isInInvent(i) && !isEquiped(i))
+							return false;
+						break;
+					case Item.NEEDS_TO_BE_EQUIPED:
+						if(!isEquiped(i))
+							return false;
+						break;
+					default: return false; // Item doesn't have a type: error!
+				}
+			}
+			return true;
         }
     }
 
@@ -760,26 +790,44 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private enum Teleport {
         //TODO link these to a teleporting method.
         LUMBRIDGE(new Location(new RSTile(0, 0), 0)),
-        VARROCK_SPELL_1(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Fire staff"), new Item("Law rune"), new Item("Air runes", 3)}), // Sadly i think this is the only i can think of to 'cleanly' include staffs
-        VARROCK_SPELL_2(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Lava staff"), new Item("Law rune"), new Item("Air runes", 3)}), // If anyone has any other ways fix this.
-        VARROCK_SPELL_3(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Fire rune"), new Item("Law rune"), new Item("Air staff", 3)}),
+        VARROCK_SPELL_1(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Fire staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // Sadly i think this is the only i can think of to 'cleanly' include staffs
+        VARROCK_SPELL_2(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Lava staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // If anyone has any other ways fix this.
+        VARROCK_SPELL_3(new Location(new RSTile(0, 0), 0), new Item[]{new Item( NEEDS_TO_BE_EQUIPED, "Fire rune"), new Item("Law rune"), new Item("Air staff")}, 25),
         VARROCK_TAB(new Location(new RSTile(0, 0), 0), new Item[]{new Item("Varrock teleport")}), // This has the value of CANT_EQUIP so you would only check inventory
         ROD_DUEL_AREA(new Location(new RSTile(0, 0), 0), new Item(COULD_BE_EQUIPED, "Ring of dueling")); //For this you would check both inventory and equipment.
         private Item[] items;
         private Location loc;
+        private int magicLevel;
 
-        private Teleport(Location loc, Item[] items) {
+        private Teleport(Location loc, Item[] items, int magicLevel) {
             this.loc = loc;
             this.items = items;
+            this.magicLevel = magicLevel;
+        }
+        
+        private Teleport(Location loc, Item[] items) {
+            this(loc, items, 1);
         }
 
+        private Teleport(Location loc, Item item, int magicLevel) {
+            this(loc, new Item[]{item}, magicLevel);
+        }
+        
         private Teleport(Location loc, Item item) {
-            this(loc, new Item[]{item});
+            this(loc, new Item[]{item}, 1);
         }
 
         private Teleport(Location loc) {
-            this(loc, (Item) null);
+            this(loc, (Item) null, 1);
         }
+        
+        private Location getLocation() {
+			return this.loc;
+		}
+		
+		private Item[] getItems() {
+			return this.items;
+		}
     }
 
     private Bank getNearestBank() {
