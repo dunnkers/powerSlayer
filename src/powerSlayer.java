@@ -1,6 +1,7 @@
 import org.rsbot.event.listeners.PaintListener;
 import org.rsbot.script.Script;
 import org.rsbot.script.ScriptManifest;
+import org.rsbot.script.methods.Magic;
 import org.rsbot.script.methods.Skills;
 import org.rsbot.script.wrappers.RSArea;
 import org.rsbot.script.wrappers.RSItem;
@@ -324,10 +325,10 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         private int getAmount() {
             return this.amount;
         }
-        
+
         private int getType() {
-			return this.type;
-		}
+            return this.type;
+        }
 
         private String[] getNames() {
             return this.names;
@@ -513,12 +514,23 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         return -1;
     }
 
+	private boolean performAction(Item items, String action) {
+		for(RSItem item: inventory.getItems()) {
+			for(String name: items.getNames()) {
+				if(item.getName().equalsIgnoreCase(name)) {
+					return item.doAction(action);
+				}
+			}
+		}
+		return false;
+	}
+
     private boolean isInInvent(Item items) {
         for (RSItem item : inventory.getItems()) {
             for (String name : items.getNames()) {
                 if (item.getName().equalsIgnoreCase(name)) {
                     if(inventory.getCount(true, item.getID()) >= items.amount)     // Make sure you not only have the item, but also enough of the item
-	                    return true;
+                        return true;
                 }
             }
         }
@@ -535,7 +547,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
         return false;
     }
-    
+
     private boolean isEquiped(Item item) {
         for (RSItem i : equipment.getItems()) {
             for (String name : item.getNames()) {
@@ -714,77 +726,82 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private class Travel {
 
         private boolean travelToMaster(SlayerMaster master) {
-            if(shouldTeleport(master.getLocation()))
-		        return castTeleport(getBestTeleport(master.getLocation()));
-	        else
+            Teleport t = getBestTeleport(master.getLocation());
+            if(t != null)
+                return castTeleport(t);
+            else
                 return walking.getWebPath(master.getLocation()).traverse();
         }
 
         private boolean travelToMonster(Task task) {
-            if(shouldTeleport(task.monster.getLocation().getTile()))
-		        return castTeleport(getBestTeleport(task.monster.getLocation().getTile()));
-	        else
+            Teleport t = getBestTeleport(task.monster.getLocation().getTile());
+            if(t != null)
+                return castTeleport(t);
+            else
                 return walking.getWebPath(task.monster.getLocation().getTile()).traverse();
         }
 
-	    // The default will be the closest bank to the player
-	    private boolean travelToBank() {
-		    return travelToBank(getNearestBank());
-	    }
-
-        private boolean travelToBank(Bank bank) {
-	        if(shouldTeleport(bank.getRSArea().getCentralTile()))
-		        return castTeleport(getBestTeleport(bank.getRSArea().getCentralTile()));
-	        else
-		        return walking.getWebPath(bank.getRSArea().getCentralTile()).traverse();
+        // The default will be the closest bank to the player
+        private boolean travelToBank() {
+            return travelToBank(getNearestBank());
         }
 
-	    // TODO cast a teleport
-	    private boolean castTeleport(Teleport t) {
-		    return true;
-	    }
+        private boolean travelToBank(Bank bank) {
+            Teleport t = getBestTeleport(bank.getRSArea().getCentralTile());
+            if(t != null)
+                return castTeleport(t);
+            else
+                return walking.getWebPath(bank.getRSArea().getCentralTile()).traverse();
+        }
 
-	    private boolean shouldTeleport(RSTile dest) {
-		    return calc.distanceTo(dest) > calc.distanceBetween(getBestTeleport(dest).getLocation().getTile(), dest);
-	    }
+        private boolean castTeleport(Teleport t) {
+            if(t.getType().isSpell()) {
+	            return magic.castSpell(t.getType().getSpell());
+            } else {
+	            return performAction(t.getItems()[0], t.getType().getAction());  // always perform the action on the first item on the list (it should only be one item anyway)
+            }
+        }
 
-	    private Teleport getBestTeleport(RSTile dest) {
-		    Teleport best = null;
-		    double dist = 0;
-		    for(Teleport t : Teleport.values()) {
-				if(canCast(t)) {
-					if(best == null || calc.distanceBetween(t.getLocation().getTile(), dest) < dist) {
-						best = t;
-						dist = calc.distanceBetween(t.getLocation().getTile(), dest);
-					}
-			    }
-		    }
-		    return best;
-	    }
+        // returns null if there are no teleports that are closer
+        private Teleport getBestTeleport(RSTile dest) {
+            Teleport best = null;
+            double dist = 0;
+            for(Teleport t : Teleport.values()) {
+                if(canCast(t)) {
+                    if(best == null || calc.distanceBetween(t.getLocation().getTile(), dest) < dist) {
+                        best = t;
+                        dist = calc.distanceBetween(t.getLocation().getTile(), dest);
+                    }
+                }
+            }
+            if(calc.distanceTo(dest) > dist) // player is farthur away than the best teleport
+                return best;
+            return null;
+        }
 
-		// Makes sure the player has the required Magic level, and then
-		// checks to make sure all of the required items are available
+        // Makes sure the player has the required Magic level, and then
+        // checks to make sure all of the required items are available
         private boolean canCast(Teleport t) {
-			if(skills.getRealLevel(Skills.MAGIC) < t.magicLevel)
-				return false;
+            if(skills.getRealLevel(Skills.MAGIC) < t.magicLevel)
+                return false;
             for(Item i : t.getItems()) {
-				switch(i.getType()) {
-					case Item.NOT_EQUIPED:
-						if(!isInInvent(i))
-							return false;
-						break;
-					case Item.COULD_BE_EQUIPED:
-						if(!isInInvent(i) && !isEquiped(i))
-							return false;
-						break;
-					case Item.NEEDS_TO_BE_EQUIPED:
-						if(!isEquiped(i))
-							return false;
-						break;
-					default: return false; // Item doesn't have a type: error!
-				}
-			}
-			return true;
+                switch(i.getType()) {
+                    case Item.NOT_EQUIPED:
+                        if(!isInInvent(i))
+                            return false;
+                        break;
+                    case Item.COULD_BE_EQUIPED:
+                        if(!isInInvent(i) && !isEquiped(i))
+                            return false;
+                        break;
+                    case Item.NEEDS_TO_BE_EQUIPED:
+                        if(!isEquiped(i))
+                            return false;
+                        break;
+                    default: return false; // Item doesn't have a type: error!
+                }
+            }
+            return true;
         }
     }
 
@@ -820,47 +837,99 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
     }
 
+    private enum TeleportType {
+        HOME_SPELL(Magic.SPELL_HOME_TELEPORT),
+        VARROCK_SPELL(Magic.SPELL_VARROCK_TELEPORT),
+        LUMBRIDGE_SPELL(Magic.SPELL_LUMBRIDGE_TELEPORT),
+        FALADOR_SPELL(Magic.SPELL_FALADOR_TELEPORT),
+        ARDOUGNE_SPELL(Magic.SPELL_ARDOUGNE_TELEPORT),
+        TAB("Break"),
+        OTHER();
+
+        private boolean isSpell;
+        private int magicSpell;
+        private String action;
+
+        // default to the home teleport spell (realistically should never be used though)
+        private TeleportType() {
+            this(true, Magic.SPELL_HOME_TELEPORT, "");
+        }
+
+        private TeleportType(int spell) {
+            this(true, spell, "");
+        }
+
+        private TeleportType(String action) {
+            this(false, 0, "");
+        }
+
+        private TeleportType(boolean isSpell, int spell, String action) {
+            this.isSpell = isSpell;
+            this.magicSpell = spell;
+            this.action = action;
+        }
+
+        private boolean isSpell() {
+            return isSpell;
+        }
+
+        private int getSpell() {
+            return magicSpell;
+        }
+
+        private String getAction() {
+            return action;
+        }
+    }
+
     private enum Teleport {
-        //TODO link these to a teleporting method.
-        LUMBRIDGE(new Location(new RSTile(0, 0), 0)),
-        VARROCK_SPELL_1(new Location(new RSTile(0, 0), 0), new Item[]{new Item( Item.NEEDS_TO_BE_EQUIPED, "Fire staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // Sadly i think this is the only i can think of to 'cleanly' include staffs
-        VARROCK_SPELL_2(new Location(new RSTile(0, 0), 0), new Item[]{new Item( Item.NEEDS_TO_BE_EQUIPED, "Lava staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // If anyone has any other ways fix this.
-        VARROCK_SPELL_3(new Location(new RSTile(0, 0), 0), new Item[]{new Item( Item.NEEDS_TO_BE_EQUIPED, "Fire rune"), new Item("Law rune"), new Item("Air staff")}, 25),
-        VARROCK_TAB(new Location(new RSTile(0, 0), 0), new Item[]{new Item("Varrock teleport")}), // This has the value of CANT_EQUIP so you would only check inventory
-        ROD_DUEL_AREA(new Location(new RSTile(0, 0), 0), new Item(Item.COULD_BE_EQUIPED, "Ring of dueling")); //For this you would check both inventory and equipment.
+        LUMBRIDGE(TeleportType.HOME_SPELL, new Location(new RSTile(0, 0), 0)),
+        VARROCK_SPELL_1(TeleportType.VARROCK_SPELL, new Location(new RSTile(0, 0), 0), new Item[]{new Item( Item.NEEDS_TO_BE_EQUIPED, "Fire staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // Sadly i think this is the only i can think of to 'cleanly' include staffs
+        VARROCK_SPELL_2(TeleportType.VARROCK_SPELL, new Location(new RSTile(0, 0), 0), new Item[]{new Item( Item.NEEDS_TO_BE_EQUIPED, "Lava staff"), new Item("Law rune"), new Item("Air runes", 3)}, 25), // If anyone has any other ways fix this.
+        VARROCK_SPELL_3(TeleportType.VARROCK_SPELL, new Location(new RSTile(0, 0), 0), new Item[]{new Item( Item.NEEDS_TO_BE_EQUIPED, "Fire rune"), new Item("Law rune"), new Item("Air staff")}, 25),
+        VARROCK_TAB(TeleportType.TAB, new Location(new RSTile(0, 0), 0), new Item[]{new Item("Varrock teleport")}), // This has the value of CANT_EQUIP so you would only check inventory
+        // Need to figure out how to handle ROD and other teleport options that change depending on whether they are equipped
+        // or in the inventory. ROD is disabled for now (will teleport to lumbridge using home teleport)
+        ROD_DUEL_AREA(TeleportType.OTHER, new Location(new RSTile(0, 0), 0), new Item(Item.COULD_BE_EQUIPED, "Ring of dueling")); //For this you would check both inventory and equipment.
         private Item[] items;
         private Location loc;
         private int magicLevel;
+        private TeleportType type;
 
-        private Teleport(Location loc, Item[] items, int magicLevel) {
+        private Teleport(TeleportType type, Location loc, Item[] items, int magicLevel) {
+            this.type = type;
             this.loc = loc;
             this.items = items;
             this.magicLevel = magicLevel;
         }
-        
-        private Teleport(Location loc, Item[] items) {
-            this(loc, items, 1);
+
+        private Teleport(TeleportType type, Location loc, Item[] items) {
+            this(type, loc, items, 1);
         }
 
-        private Teleport(Location loc, Item item, int magicLevel) {
-            this(loc, new Item[]{item}, magicLevel);
-        }
-        
-        private Teleport(Location loc, Item item) {
-            this(loc, new Item[]{item}, 1);
+        private Teleport(TeleportType type, Location loc, Item item, int magicLevel) {
+            this(type, loc, new Item[]{item}, magicLevel);
         }
 
-        private Teleport(Location loc) {
-            this(loc, (Item) null, 1);
+        private Teleport(TeleportType type, Location loc, Item item) {
+            this(type, loc, new Item[]{item}, 1);
         }
-        
+
+        private Teleport(TeleportType type, Location loc) {
+            this(type, loc, (Item) null, 1);
+        }
+
         private Location getLocation() {
-			return this.loc;
-		}
-		
-		private Item[] getItems() {
-			return this.items;
-		}
+            return this.loc;
+        }
+
+        private Item[] getItems() {
+            return this.items;
+        }
+
+        private TeleportType getType() {
+            return type;
+        }
     }
 
     private Bank getNearestBank() {
