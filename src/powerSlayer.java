@@ -1,21 +1,27 @@
-import org.rsbot.event.listeners.PaintListener;
-import org.rsbot.script.Script;
-import org.rsbot.script.ScriptManifest;
-import org.rsbot.script.methods.Skills;
-import org.rsbot.script.wrappers.RSItem;
-import org.rsbot.script.wrappers.RSNPC;
-import org.rsbot.script.wrappers.RSTile;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+
+import org.rsbot.event.listeners.PaintListener;
+import org.rsbot.script.Script;
+import org.rsbot.script.ScriptManifest;
+import org.rsbot.script.methods.Skills;
+import org.rsbot.script.wrappers.RSInterface;
+import org.rsbot.script.wrappers.RSItem;
+import org.rsbot.script.wrappers.RSNPC;
+import org.rsbot.script.wrappers.RSTile;
 
 @ScriptManifest(authors = { "Powerbot Scripters Team" }, name = "Power Slayer", version = 0.1, description = "Slayer bot.")
 public class powerSlayer extends Script implements PaintListener, MouseListener {
@@ -299,11 +305,37 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 			.traverse();
 	}
 
+	public RSItem getEquipmentItem(int... ids) {
+	    for (RSItem i : equipment.getItems()) {
+		for (int id : ids) {
+		    if (id == i.getID())
+			return i;
+		}
+	    }
+	    return null;
+	}
+
 	private boolean castTeleport(Teleport t) {
 	    if (t instanceof TeleportSpell) {
 		TeleportSpell tS = (TeleportSpell) t;
 		if (magic.getCurrentSpellBook() == tS.getBook())
 		    return magic.castSpell(tS.getSpell());
+	    } else if (t instanceof TeleportItem) {
+		TeleportItem tI = (TeleportItem) t;
+		RSItem item;
+		if ((item = inventory.getItem(tI.getIDs())) != null
+			|| (item = getEquipmentItem(tI.getIDs())) != null) {
+		    if (item.doAction(tI.getAction())) {
+			return true;
+		    } else if (item.doAction("Rub")) {
+			sleep(1750, 2250);
+			RSInterface inter = interfaces.get(tI
+				.getRubInterfaceID());
+			if (inter != null)
+			    return interfaces.clickDialogueOption(inter,
+				    tI.getAction());
+		    }
+		}
 	    }
 	    return false;
 	}
@@ -353,9 +385,10 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 		    if (getRuneCount(rune) < tS.getRuneCount(rune))
 			return false;
 		}
-	    } else if (t instanceof TeleportTab) {
-		TeleportTab tT = (TeleportTab) t;
-		return inventory.containsOneOf(tT.getIDs());
+	    } else if (t instanceof TeleportItem) {
+		TeleportItem tT = (TeleportItem) t;
+		return inventory.containsOneOf(tT.getIDs())
+			|| equipment.containsOneOf(tT.getIDs());
 	    }
 	    return true;
 	}
@@ -697,7 +730,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 	List<Teleport> teleports = new ArrayList<Teleport>();
 	for (TeleportSpell t : TeleportSpell.values())
 	    teleports.add(t);
-	for (TeleportTab t : TeleportTab.values())
+	for (TeleportItem t : TeleportItem.values())
 	    teleports.add(t);
 	return teleports.toArray(new Teleport[teleports.size()]);
     }
