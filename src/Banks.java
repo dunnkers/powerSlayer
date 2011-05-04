@@ -13,7 +13,8 @@ enum Banks {
     YANNILLE(new RSArea(new RSTile(2617, 3098), new RSTile(2607, 3087), 0)),
     EDGEVILLE(new RSArea(new RSTile(3099, 3500), new RSTile(3089, 3487), 0)),
     AL_KHARID(new RSArea(new RSTile(3273, 3174), new RSTile(3263, 3160), 0)),
-    GRAND_EXCHANGE(new RSArea(new RSTile(3171, 3494), new RSTile(3159, 3485), 0));
+    GRAND_EXCHANGE(new RSArea(new RSTile(3171, 3494), new RSTile(3159, 3485), 0)),
+    CASTLE_WARS(new RSArea(new RSTile(2444, 3087), new RSTile(2442, 3083), 0));
     // TODO add a lot more banks.
 
     private RSArea area;
