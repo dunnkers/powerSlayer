@@ -1,11 +1,11 @@
 class CombatStyle {
-    public Style style;
+    private Style style;
 
-    public CombatStyle(Style style) {
+    private CombatStyle(Style style) {
         this.style = style;
     }
 
-    public static enum Style {
+    private static enum Style {
         MELEE,
         MAGIC,
         RANGE

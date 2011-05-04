@@ -13,6 +13,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,17 +81,17 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         return false;
     }
 
-    private boolean isInInvent(Item items) {
+    private boolean isntInInvent(Item items) {
         for (RSItem item : inventory.getItems()) {
             for (String name : items.getNames()) {
                 if (item.getName().equalsIgnoreCase(name)) {
                     if (inventory.getCount(true, item.getID()) >= items
                             .getAmount())
-                        return true;
+                        return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
     private boolean isInBank(Item items) {
@@ -126,15 +127,15 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         return false;
     }
 
-    private boolean isEquiped(Equipment equip) {
+    private boolean isntEquiped(Equipment equip) {
         for (RSItem item : equipment.getItems()) {
             for (String name : equip.getNames()) {
                 if (item.getName().equalsIgnoreCase(name)) {
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
     private boolean isInBank(Equipment equip) {
@@ -163,30 +164,30 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
     }
 
-    private boolean isFullyEquiped(Requirements req) {
+    private boolean isntFullyEquiped(Requirements req) {
         for (Equipment e : req.getEquipment()) {
-            if (!isEquiped(e)) {
+            if (isntEquiped(e)) {
                 if (isInInvent(e)) {
                     for (Equipment r : req.getEquipment()) {
                         for (String name : r.getNames()) {
                             if (willRemove(e).equals(name)) {
-                                return false;
+                                return true;
                             }
                         }
                     }
                     equip(e);
-                    if (!isEquiped(e)) {
-                        return false;
+                    if (isntEquiped(e)) {
+                        return true;
                     }
                 }
             }
         }
-        return true;
+        return false;
     }
 
     private boolean inventReady(Requirements req) {
         for (Item i : req.getItems()) {
-            if (!isInInvent(i)) {
+            if (isntInInvent(i)) {
                 return false;
             }
         }
@@ -298,6 +299,15 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
                         .traverse();
         }
 
+        private boolean castTeleport(Teleport t) {
+            if (t instanceof TeleportSpell) {
+                TeleportSpell tS = (TeleportSpell) t;
+                if (magic.getCurrentSpellBook() == tS.getBook())
+                    return magic.castSpell(tS.getSpell());
+            }
+            return false;
+        }
+
         // The default will be the closest bank to the player
         private boolean travelToBank() {
             return travelToBank(getNearestBank());
@@ -312,24 +322,16 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
                         .traverse();
         }
 
-        private boolean castTeleport(Teleport t) {
-            if (t.getType().isSpell()) {
-                return magic.castSpell(t.getType().getSpell());
-            } else {
-                return performAction(t.getItems()[0], t.getType().getAction());
-            }
-        }
-
         // returns null if there are no teleports that are closer
         private Teleport getBestTeleport(RSTile dest) {
             Teleport best = null;
             double dist = 0;
-            for (Teleport t : Teleport.values()) {
+            for (Teleport t : getAllTeleports()) {
                 if (canCast(t)) {
                     if (best == null
-                            || calc.distanceBetween(t.getLocation(), dest) < dist) {
+                            || calc.distanceBetween(t.getDest(), dest) < dist) {
                         best = t;
-                        dist = calc.distanceBetween(t.getLocation(), dest);
+                        dist = calc.distanceBetween(t.getDest(), dest);
                     }
                 }
             }
@@ -342,24 +344,14 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         // Makes sure the player has the required Magic level, and then
         // checks to make sure all of the required items are available
         private boolean canCast(Teleport t) {
-            if (skills.getRealLevel(Skills.MAGIC) < t.getMagicLevel())
-                return false;
-            for (Item i : t.getItems()) {
-                switch (i.getType()) {
-                    case Item.NOT_EQUIPED:
-                        if (!isInInvent(i))
-                            return false;
-                        break;
-                    case Item.COULD_BE_EQUIPED:
-                        if (!isInInvent(i) && !isEquiped(i))
-                            return false;
-                        break;
-                    case Item.NEEDS_TO_BE_EQUIPED:
-                        if (!isEquiped(i))
-                            return false;
-                        break;
-                    default:
-                        return false; // Item doesn't have a type: error!
+            if (t instanceof TeleportSpell) {
+                TeleportSpell tS = (TeleportSpell) t;
+                if (skills.getCurrentLevel(Skills.MAGIC) < tS.getMagicLevel()
+                        || magic.getCurrentSpellBook() != tS.getBook())
+                    return false;
+                for (Rune rune : tS.getRunes().keySet()) {
+                    if (getRuneCount(rune) < tS.getRuneCount(rune))
+                        return false;
                 }
             }
             return true;
@@ -418,7 +410,6 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     }
 
     private class UniversalFighter {
-
         private class Potion {
             // TODO add options to include pots and which pots
             private int[] ids;
@@ -446,36 +437,30 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
                 LinkedList<Potion> potions = new LinkedList<Potion>();
                 potions.add(new Potion(new int[]{3040, 3042, 3044, 3046,
                         11513, 11515, 13520, 13521, 13522, 13523},
-                        Skills.MAGIC));
-                // Magic pots
+                        Skills.MAGIC)); // Magic pots
                 potions.add(new Potion(new int[]{2434, 139, 141, 143, 11465,
-                        11467}, Skills.PRAYER));
-                // Prayer pots
+                        11467}, Skills.PRAYER)); // Prayer pots
                 potions.add(new Potion(new int[]{2444, 169, 171, 173, 11509,
-                        11511, 13524, 13525, 15326, 15327}, Skills.RANGE));
-                // Range pots
+                        11511, 13524, 13525, 15326, 15327}, Skills.RANGE)); // Range
+                // pots
                 potions.add(new Potion(new int[]{9739, 9741, 9743, 9745,
                         11445, 11447}, new int[]{Skills.ATTACK,
-                        Skills.STRENGTH}));
-                // Combat pots
+                        Skills.STRENGTH})); // Combat pots
                 potions.add(new Potion(new int[]{2428, 121, 123, 125, 2436,
                         145, 147, 149, 11429, 11431, 11429, 11431, 11429,
                         11431, 11469, 11471, 15308, 15309, 15310, 15311},
-                        Skills.ATTACK));
-                // Attack pots
+                        Skills.ATTACK)); // Attack pots
                 potions.add(new Potion(new int[]{113, 115, 117, 119, 2440,
                         157, 159, 161, 11443, 11441, 11485, 11487, 15312,
-                        15313, 15314, 15315}, Skills.STRENGTH));
-                // Strength pots
+                        15313, 15314, 15315}, Skills.STRENGTH)); // Strength
+                // pots
                 potions.add(new Potion(new int[]{2432, 133, 135, 137, 2442,
                         163, 165, 167, 11457, 11459, 11497, 11499, 15316,
-                        15317, 15318, 15319}, Skills.DEFENSE));
-                // Defense pots
+                        15317, 15318, 15319}, Skills.DEFENSE)); // Defense pots
                 potions.add(new Potion(
                         new int[]{15332, 15333, 15334, 15335}, new int[]{
                                 Skills.STRENGTH, Skills.ATTACK, Skills.DEFENSE,
-                                Skills.MAGIC, Skills.RANGE}));
-                // Overloads
+                                Skills.MAGIC, Skills.RANGE})); // Overloads
                 return potions;
             }
 
@@ -511,7 +496,6 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
             }
         }
     }
-
 
     @Override
     public int loop() {
@@ -660,7 +644,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
         @Override
         public boolean activeCondition() {
-            return !isFullyEquiped(currentTask.getRequirements());
+            return isntFullyEquiped(currentTask.getRequirements());
         }
     }
 
@@ -675,4 +659,47 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
     }
 
+    /**
+     * Gets the rune count, including staves
+     *
+     * @param rune the Rune
+     * @return rune count
+     */
+    public int getRuneCount(Rune rune) {
+        if (rune.isElemental()) {
+            String wepName = equipment
+                    .getItem(org.rsbot.script.methods.Equipment.WEAPON) != null ? equipment
+                    .getItem(org.rsbot.script.methods.Equipment.WEAPON)
+                    .getName() : "";
+            if (rune == Rune.WATER) {
+                String shieldName = equipment
+                        .getItem(org.rsbot.script.methods.Equipment.SHIELD) != null ? equipment
+                        .getItem(org.rsbot.script.methods.Equipment.SHIELD)
+                        .getName() : "";
+                if (shieldName != null
+                        && shieldName.trim().equalsIgnoreCase("tome of frost"))
+                    return 999999;
+            }
+            if (wepName != null && wepName.toLowerCase().contains("staff")) {
+                if (wepName.toLowerCase().contains(rune.name().toLowerCase()))
+                    return 999999;
+                if (wepName.toLowerCase().contains("dust")
+                        && (rune == Rune.AIR || rune == Rune.EARTH))
+                    return 999999;
+                if (wepName.toLowerCase().contains("lava")
+                        && (rune == Rune.EARTH || rune == Rune.FIRE))
+                    return 999999;
+                if (wepName.toLowerCase().contains("steam")
+                        && (rune == Rune.WATER || rune == Rune.FIRE))
+                    return 999999;
+            }
+        }
+        return inventory.getCount(true, rune.getItemIDs());
+    }
+
+    public Teleport[] getAllTeleports() {
+        List<Teleport> teleports = new ArrayList<Teleport>();
+        teleports.addAll(Arrays.asList(TeleportSpell.values()));
+        return teleports.toArray(new Teleport[teleports.size()]);
+    }
 }
