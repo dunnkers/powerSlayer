@@ -53,10 +53,6 @@ enum TeleportSpell implements Teleport {
 		}
 	}
 
-	public RSTile getLocation() {
-		return this.loc;
-	}
-
 	@Override
 	public RSTile getDest() {
 		return loc;

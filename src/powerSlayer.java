@@ -331,12 +331,12 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 		private Teleport getBestTeleport(RSTile dest) {
 			Teleport best = null;
 			double dist = 0;
-			for (TeleportSpell t : TeleportSpell.values()) {
+			for (Teleport t : getAllTeleports()) {
 				if (canCast(t)) {
 					if (best == null
-							|| calc.distanceBetween(t.getLocation(), dest) < dist) {
+							|| calc.distanceBetween(t.getDest(), dest) < dist) {
 						best = t;
-						dist = calc.distanceBetween(t.getLocation(), dest);
+						dist = calc.distanceBetween(t.getDest(), dest);
 					}
 				}
 			}
@@ -701,5 +701,12 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 			}
 		}
 		return inventory.getCount(true, rune.getItemIDs());
+	}
+
+	public Teleport[] getAllTeleports() {
+		List<Teleport> teleports = new ArrayList<Teleport>();
+		for (TeleportSpell t : TeleportSpell.values())
+			teleports.add(t);
+		return teleports.toArray(new Teleport[teleports.size()]);
 	}
 }
