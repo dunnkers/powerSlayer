@@ -1,19 +1,19 @@
 class Task {
-	private Monsters monster;
+    private Monsters monster;
 
-	private Task(Monsters monster) {
-		this.monster = monster;
-	}
+    private Task(Monsters monster) {
+        this.monster = monster;
+    }
 
-	public Requirements getRequirements() {
-		return this.monster.getRequirements();
-	}
+    public Requirements getRequirements() {
+        return this.monster.getRequirements();
+    }
 
-	public Monsters getMonster() {
-		return this.monster;
-	}
+    public Monsters getMonster() {
+        return this.monster;
+    }
 
-	public void setMonster(Monsters monster) {
-		this.monster = monster;
-	}
+    public void setMonster(Monsters monster) {
+        this.monster = monster;
+    }
 }

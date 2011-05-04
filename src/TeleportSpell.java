@@ -1,8 +1,8 @@
-import java.util.HashMap;
-import java.util.Map;
-
 import org.rsbot.script.methods.Magic;
 import org.rsbot.script.wrappers.RSTile;
+
+import java.util.HashMap;
+import java.util.Map;
 
 enum TeleportSpell implements Teleport {
     LUMBRIDGE_HOME(Magic.SPELL_HOME_TELEPORT, new RSTile(0, 0, 0), 0), VARROCK(
