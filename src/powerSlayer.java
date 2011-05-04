@@ -9,7 +9,6 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -305,6 +304,15 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 						.traverse();
 		}
 
+		private boolean castTeleport(Teleport t) {
+			if (t instanceof TeleportSpell) {
+				TeleportSpell tS = (TeleportSpell) t;
+				if (magic.getCurrentSpellBook() == tS.getBook())
+					return magic.castSpell(tS.getSpell());
+			}
+			return false;
+		}
+
 		// The default will be the closest bank to the player
 		private boolean travelToBank() {
 			return travelToBank(getNearestBank());
@@ -319,19 +327,11 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 						.traverse();
 		}
 
-		private boolean castTeleport(Teleport t) {
-			if (t.getType().isSpell()) {
-				return magic.castSpell(t.getType().getSpell());
-			} else {
-				return performAction(t.getItems()[0], t.getType().getAction());
-			}
-		}
-
 		// returns null if there are no teleports that are closer
 		private Teleport getBestTeleport(RSTile dest) {
 			Teleport best = null;
 			double dist = 0;
-			for (Teleport t : Teleport.values()) {
+			for (TeleportSpell t : TeleportSpell.values()) {
 				if (canCast(t)) {
 					if (best == null
 							|| calc.distanceBetween(t.getLocation(), dest) < dist) {
@@ -349,24 +349,14 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 		// Makes sure the player has the required Magic level, and then
 		// checks to make sure all of the required items are available
 		private boolean canCast(Teleport t) {
-			if (skills.getRealLevel(Skills.MAGIC) < t.getMagicLevel())
-				return false;
-			for (Item i : t.getItems()) {
-				switch (i.getType()) {
-				case Item.NOT_EQUIPED:
-					if (!isInInvent(i))
+			if (t instanceof TeleportSpell) {
+				TeleportSpell tS = (TeleportSpell) t;
+				if (skills.getCurrentLevel(Skills.MAGIC) < tS.getMagicLevel()
+						|| magic.getCurrentSpellBook() != tS.getBook())
+					return false;
+				for (Rune rune : tS.getRunes().keySet()) {
+					if (getRuneCount(rune) < tS.getRuneCount(rune))
 						return false;
-					break;
-				case Item.COULD_BE_EQUIPED:
-					if (!isInInvent(i) && !isEquiped(i))
-						return false;
-					break;
-				case Item.NEEDS_TO_BE_EQUIPED:
-					if (!isEquiped(i))
-						return false;
-					break;
-				default:
-					return false; // Item doesn't have a type: error!
 				}
 			}
 			return true;
@@ -674,4 +664,42 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
 	}
 
+	/**
+	 * Gets the rune count, including staves
+	 * 
+	 * @param rune
+	 *            the Rune
+	 * @return rune count
+	 */
+	public int getRuneCount(Rune rune) {
+		if (rune.isElemental()) {
+			String wepName = equipment
+					.getItem(org.rsbot.script.methods.Equipment.WEAPON) != null ? equipment
+					.getItem(org.rsbot.script.methods.Equipment.WEAPON)
+					.getName() : "";
+			if (rune == Rune.WATER) {
+				String shieldName = equipment
+						.getItem(org.rsbot.script.methods.Equipment.SHIELD) != null ? equipment
+						.getItem(org.rsbot.script.methods.Equipment.SHIELD)
+						.getName() : "";
+				if (shieldName != null
+						&& shieldName.trim().equalsIgnoreCase("tome of frost"))
+					return 999999;
+			}
+			if (wepName != null && wepName.toLowerCase().contains("staff")) {
+				if (wepName.toLowerCase().contains(rune.name().toLowerCase()))
+					return 999999;
+				if (wepName.toLowerCase().contains("dust")
+						&& (rune == Rune.AIR || rune == Rune.EARTH))
+					return 999999;
+				if (wepName.toLowerCase().contains("lava")
+						&& (rune == Rune.EARTH || rune == Rune.FIRE))
+					return 999999;
+				if (wepName.toLowerCase().contains("steam")
+						&& (rune == Rune.WATER || rune == Rune.FIRE))
+					return 999999;
+			}
+		}
+		return inventory.getCount(true, rune.getItemIDs());
+	}
 }
