@@ -1020,9 +1020,9 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
     }
 
-    private final Image closed = getImage("http://img88.imageshack.us/img88/4408/closedc.png");
-    private final Image tabOne = getImage("http://img18.imageshack.us/img18/2836/gentab.png");
-    private final Image tabTwo = getImage("http://img6.imageshack.us/img6/5461/exptab.png");
+    private final Image closed = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/closedc.png");
+    private final Image tabOne = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/gentab.png");
+    private final Image tabTwo = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/exptab.png");
     private final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
     private final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
     private final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
