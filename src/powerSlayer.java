@@ -7,6 +7,7 @@ import org.rsbot.script.wrappers.RSArea;
 import org.rsbot.script.wrappers.RSItem;
 import org.rsbot.script.wrappers.RSNPC;
 import org.rsbot.script.wrappers.RSTile;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,8 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 
 @ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 0.1, description = "Slayer bot.")
@@ -451,7 +451,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private static enum Style {
         MELEE,
         MAGIC,
-        RANGE;
+        RANGE
     }
 
     private static class Location {
@@ -852,17 +852,84 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
         private int min(int[] a) {
             int res = Integer.MAX_VALUE;
-            for (int i = 0; i < a.length; i++) {
-                res = Math.min(a[i], res);
+            for (int anA : a) {
+                res = Math.min(anA, res);
             }
             return res;
         }
     }
 
-    private class Banking{
-        public boolean doBanking(){
-             return false;
+    private class Banking {
+        public boolean doBanking() {
+            return false;
             //TODO;
+        }
+    }
+
+    private class UniversalFighter {
+        private class Potion{
+            //TODO add options to include pots and which pots
+            private int[] ids;
+            private int[] boostedSkills;
+            private int amount;
+            private Potion(int[] ids, int[] boostedSkills){
+                this.ids = ids;
+                this.boostedSkills = boostedSkills;
+            }
+
+            private Potion(int[] ids, int boostedSkill){
+                this(ids, new int[boostedSkill]);
+            }
+
+            private int getAmount(){
+                return inventory.getCount(true, ids);
+            }
+        }
+        private class PotionMethods {
+            private final int[] VIAL = new int[]{229};
+            private LinkedList<Potion> getPotions() {
+                LinkedList<Potion> potions = new LinkedList<Potion>();
+                potions.add(new Potion(new int[]{3040, 3042, 3044, 3046, 11513, 11515, 13520, 13521, 13522, 13523}, Skills.MAGIC)); //Magic pots
+                potions.add(new Potion(new int[]{2434, 139, 141, 143, 11465, 11467}, Skills.PRAYER)); //Prayer pots
+                potions.add(new Potion(new int[]{2444, 169, 171, 173, 11509, 11511, 13524, 13525, 15326, 15327}, Skills.RANGE)); //Range pots
+                potions.add(new Potion(new int[]{9739, 9741, 9743, 9745, 11445, 11447}, new int[]{Skills.ATTACK, Skills.STRENGTH})); //Combat pots
+                potions.add(new Potion(new int[]{2428, 121, 123, 125, 2436, 145, 147, 149, 11429, 11431, 11429, 11431, 11429, 11431, 11469, 11471, 15308, 15309, 15310, 15311}, Skills.ATTACK)); //Attack pots
+                potions.add(new Potion(new int[]{113, 115, 117, 119, 2440, 157, 159, 161, 11443, 11441, 11485, 11487, 15312, 15313, 15314, 15315}, Skills.STRENGTH)); //Strength pots
+                potions.add(new Potion(new int[]{2432, 133, 135, 137, 2442, 163, 165, 167, 11457, 11459, 11497, 11499, 15316, 15317, 15318, 15319}, Skills.DEFENSE)); //Defense pots
+                potions.add(new Potion(new int[]{15332, 15333, 15334, 15335}, new int[]{Skills.STRENGTH, Skills.ATTACK, Skills.DEFENSE, Skills.MAGIC, Skills.RANGE})); //Overloads
+                return potions;
+            }
+
+            private Potion needToPot() {
+                 for(Potion p : getPotions()){
+                     //Check that the pot is needed.
+                      if(p.getAmount() > 1 && areSkillsBoosted(p.boostedSkills)){
+                           return p;
+                      }
+                 }
+                return null;
+            }
+
+            public boolean usePotions() {
+                Potion pot = needToPot();
+                if(pot != null){
+                    RSItem item = inventory.getItem(pot.ids);
+                    if(item != null){
+                         return item.doClick(true);
+                    }
+                }
+                return false;
+            }
+
+
+            private boolean areSkillsBoosted(int[] skillsArray) {
+                for(int skill: skillsArray){
+                    if(skills.getCurrentLevel(skill) <= skills.getRealLevel(skill)){
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
     }
 
@@ -918,11 +985,11 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
 
         private TeleportType(int spell) {
-            this(true, spell, "");
+            this(true, spell, null);
         }
 
         private TeleportType(String action) {
-            this(false, 0, "");
+            this(false, 0, null);
         }
 
         private TeleportType(boolean isSpell, int spell, String action) {
@@ -947,12 +1014,10 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private enum Teleport {
         //TODO link these to a teleporting method.
         LUMBRIDGE(TeleportType.HOME_SPELL, new Location(new RSTile(0, 0), 0)),
-        VARROCK_SPELL_1(TeleportType.VARROCK_SPELL, new Location(new RSTile(0, 0), 0), new Item[]{new Item(Item.NEEDS_TO_BE_EQUIPED, new String[]{"Fire staff", "Lava staff"}), new Item("Law rune"), new Item("Air runes", 3)}, 25), // Sadly i think this is the only i can think of to 'cleanly' include staffs
+        VARROCK_SPELL_1(TeleportType.VARROCK_SPELL, new Location(new RSTile(0, 0), 0), new Item[]{new Item(Item.NEEDS_TO_BE_EQUIPED, new String[]{"Fire staff", "Lava staff"}), new Item("Law rune"), new Item("Air runes", 3)}, 25),
         VARROCK_SPELL_3(TeleportType.VARROCK_SPELL, new Location(new RSTile(0, 0), 0), new Item[]{new Item(Item.NEEDS_TO_BE_EQUIPED, "Fire rune"), new Item("Law rune"), new Item("Air staff")}, 25),
-        VARROCK_TAB(TeleportType.TAB, new Location(new RSTile(0, 0), 0), new Item[]{new Item("Varrock teleport")}), // This has the value of CANT_EQUIP so you would only check inventory
-        // Need to figure out how to handle ROD and other teleport options that change depending on whether they are equipped
-        // or in the inventory. ROD is disabled for now (will teleport to lumbridge using home teleport)
-        ROD_DUEL_AREA(TeleportType.OTHER, new Location(new RSTile(0, 0), 0), new Item(Item.COULD_BE_EQUIPED, "Ring of dueling")); //For this you would check both inventory and equipment.
+        VARROCK_TAB(TeleportType.TAB, new Location(new RSTile(0, 0), 0), new Item[]{new Item("Varrock teleport")}),
+        ROD_DUEL_AREA(TeleportType.OTHER, new Location(new RSTile(0, 0), 0), new Item(Item.COULD_BE_EQUIPED, "Ring of dueling"));
         private Item[] items;
         private Location loc;
         private int magicLevel;
@@ -1009,9 +1074,9 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
     }
 
-    private class Paint{
+    private class Paint {
         String Current = "Loading...";
-         private final Image closed = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/closedc.png");
+        private final Image closed = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/closedc.png");
         private final Image tabOne = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/gentab.png");
         private final Image tabTwo = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/exptab.png");
         private final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
@@ -1099,18 +1164,19 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
         public abstract boolean activeCondition();
     }
+
     private ArrayList<State> states = new ArrayList<State>();
 
-    public void initStates(){
+    public void initStates() {
         states.add(new BankingState());
     }
 
-    private int getStateLoop(){
-        for (State state: states) {
-			if (state.activeCondition()) {
-				return state.loop();
-			}
-		}
+    private int getStateLoop() {
+        for (State state : states) {
+            if (state.activeCondition()) {
+                return state.loop();
+            }
+        }
         return -1;
     }
 
@@ -1140,6 +1206,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     public class Methods {
         public Traveling travel = new Traveling();
         public Banking banking = new Banking();
+        public UniversalFighter fighter = new UniversalFighter();
         public Paint paint = new Paint();
 
     }
