@@ -26,6 +26,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     private List<String> pickup = new ArrayList<String>();
     private RSNPC currentMonster;
     private int tab = 1;
+    private Methods methods = new Methods();
 
     private enum SlayerMaster {
         //TODO Add other slayer masters + locations
@@ -521,22 +522,22 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     }
 
     //TODO 90% of these need rewriting
-	private boolean performAction(Item items, String action) {
-		for(RSItem item: inventory.getItems()) {
-			for(String name: items.getNames()) {
-				if(item.getName().equalsIgnoreCase(name)) {
-					return item.doAction(action);
-				}
-			}
-		}
-		return false;
-	}
+    private boolean performAction(Item items, String action) {
+        for (RSItem item : inventory.getItems()) {
+            for (String name : items.getNames()) {
+                if (item.getName().equalsIgnoreCase(name)) {
+                    return item.doAction(action);
+                }
+            }
+        }
+        return false;
+    }
 
     private boolean isInInvent(Item items) {
         for (RSItem item : inventory.getItems()) {
             for (String name : items.getNames()) {
                 if (item.getName().equalsIgnoreCase(name)) {
-                    if(inventory.getCount(true, item.getID()) >= items.amount)     // Make sure you not only have the item, but also enough of the item
+                    if (inventory.getCount(true, item.getID()) >= items.amount)     // Make sure you not only have the item, but also enough of the item
                         return true;
                 }
             }
@@ -730,11 +731,11 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
     // A mix of teleporting and walking/running to travel
     // to certain slayer masters, tasks, and banks
-    private class Travel {
+    private class Traveling {
 
         private boolean travelToMaster(SlayerMaster master) {
             Teleport t = getBestTeleport(master.getLocation());
-            if(t != null)
+            if (t != null)
                 return castTeleport(t);
             else
                 return walking.getWebPath(master.getLocation()).traverse();
@@ -742,7 +743,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
 
         private boolean travelToMonster(Task task) {
             Teleport t = getBestTeleport(task.monster.getLocation().getTile());
-            if(t != null)
+            if (t != null)
                 return castTeleport(t);
             else
                 return walking.getWebPath(task.monster.getLocation().getTile()).traverse();
@@ -753,19 +754,19 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
             return travelToBank(getNearestBank());
         }
 
-        private boolean travelToBank(Bank bank) {
+        private boolean travelToBank(Banks bank) {
             Teleport t = getBestTeleport(bank.getRSArea().getCentralTile());
-            if(t != null)
+            if (t != null)
                 return castTeleport(t);
             else
                 return walking.getWebPath(bank.getRSArea().getCentralTile()).traverse();
         }
 
         private boolean castTeleport(Teleport t) {
-            if(t.getType().isSpell()) {
-	            return magic.castSpell(t.getType().getSpell());
+            if (t.getType().isSpell()) {
+                return magic.castSpell(t.getType().getSpell());
             } else {
-	            return performAction(t.getItems()[0], t.getType().getAction());  // always perform the action on the first item on the list (it should only be one item anyway)
+                return performAction(t.getItems()[0], t.getType().getAction());  // always perform the action on the first item on the list (it should only be one item anyway)
             }
         }
 
@@ -774,15 +775,15 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         private Teleport getBestTeleport(RSTile dest) {
             Teleport best = null;
             double dist = 0;
-            for(Teleport t : Teleport.values()) {
-                if(canCast(t)) {
-                    if(best == null || calc.distanceBetween(t.getLocation().getTile(), dest) < dist) {
+            for (Teleport t : Teleport.values()) {
+                if (canCast(t)) {
+                    if (best == null || calc.distanceBetween(t.getLocation().getTile(), dest) < dist) {
                         best = t;
                         dist = calc.distanceBetween(t.getLocation().getTile(), dest);
                     }
                 }
             }
-            if(calc.distanceTo(dest) > dist) // player is farthur away than the best teleport
+            if (calc.distanceTo(dest) > dist) // player is farthur away than the best teleport
                 return best;
             return null;
         }
@@ -790,30 +791,82 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         // Makes sure the player has the required Magic level, and then
         // checks to make sure all of the required items are available
         private boolean canCast(Teleport t) {
-            if(skills.getRealLevel(Skills.MAGIC) < t.magicLevel)
+            if (skills.getRealLevel(Skills.MAGIC) < t.magicLevel)
                 return false;
-            for(Item i : t.getItems()) {
-                switch(i.getType()) {
+            for (Item i : t.getItems()) {
+                switch (i.getType()) {
                     case Item.NOT_EQUIPED:
-                        if(!isInInvent(i))
+                        if (!isInInvent(i))
                             return false;
                         break;
                     case Item.COULD_BE_EQUIPED:
-                        if(!isInInvent(i) && !isEquiped(i))
+                        if (!isInInvent(i) && !isEquiped(i))
                             return false;
                         break;
                     case Item.NEEDS_TO_BE_EQUIPED:
-                        if(!isEquiped(i))
+                        if (!isEquiped(i))
                             return false;
                         break;
-                    default: return false; // Item doesn't have a type: error!
+                    default:
+                        return false; // Item doesn't have a type: error!
                 }
             }
             return true;
         }
+
+        private Banks getNearestBank() {
+            /*
+            *TODO Add a method to remove all banks that a player can not reach.
+            *TODO Use the web to return a 'real' distance.
+            */
+            int[] distance = new int[Banks.values().length];
+            int i = 0;
+            for (Banks b : Banks.values()) {
+                distance[i] = calc.distanceTo(b.getRSArea().getCentralTile());
+                i++;
+            }
+            int min = min(distance);
+            if (min == -1) {
+                return null;
+            }
+            return Banks.values()[getArrayIndex(distance, min)];
+        }
+
+        private boolean isInBank(RSTile tile) {
+            for (Banks b : Banks.values()) {
+                if (b.containsTile(tile)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public int getArrayIndex(int[] array, int num) {
+            for (int i : array) {
+                if (i == num) {
+                    return (i);
+                }
+            }
+            return -1; //Find a suitable alternative
+        }
+
+        private int min(int[] a) {
+            int res = Integer.MAX_VALUE;
+            for (int i = 0; i < a.length; i++) {
+                res = Math.min(a[i], res);
+            }
+            return res;
+        }
     }
 
-    private static enum Bank {
+    private class Banking{
+        public boolean doBanking(){
+             return false;
+            //TODO;
+        }
+    }
+
+    private static enum Banks {
         VARROCK_EAST(new RSArea(new RSTile(3258, 3424), new RSTile(3249, 3415)), 0),
         VARROCK_WEST(new RSArea(new RSTile(3195, 3447), new RSTile(3178, 3431)), 0),
         SEERS(new RSArea(new RSTile(2731, 3495), new RSTile(2719, 3487)), 0),
@@ -831,7 +884,7 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         private RSArea area;
         private int plane;
 
-        private Bank(RSArea area, int plane) {
+        private Banks(RSArea area, int plane) {
             this.area = area;
             this.plane = plane;
         }
@@ -943,53 +996,9 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
     }
 
-    private Bank getNearestBank() {
-        /*
-         *TODO Add a method to remove all banks that a player can not reach.
-         *TODO Use the web to return a 'real' distance.
-         */
-        int[] distance = new int[Bank.values().length];
-        int i = 0;
-        for (Bank b : Bank.values()) {
-            distance[i] = calc.distanceTo(b.getRSArea().getCentralTile());
-            i++;
-        }
-        int min = min(distance);
-        if (min == -1) {
-            return null;
-        }
-        return Bank.values()[getArrayIndex(distance, min)];
-    }
-
-    private boolean isInBank(RSTile tile) {
-        for (Bank b : Bank.values()) {
-            if (b.containsTile(tile)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int getArrayIndex(int[] array, int num) {
-        for (int i : array) {
-            if (i == num) {
-                return (i);
-            }
-        }
-        return -1; //Find a suitable alternative
-    }
-
-    private int min(int[] a) {
-        int res = Integer.MAX_VALUE;
-        for (int i = 0; i < a.length; i++) {
-            res = Math.min(a[i], res);
-        }
-        return res;
-    }
-
     @Override
     public int loop() {
-        return 0;
+        return getStateLoop();
     }
 
     private Image getImage(String url) {
@@ -998,6 +1007,16 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         } catch (IOException e) {
             return null;
         }
+    }
+
+    private class Paint{
+        String Current = "Loading...";
+         private final Image closed = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/closedc.png");
+        private final Image tabOne = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/gentab.png");
+        private final Image tabTwo = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/exptab.png");
+        private final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
+        private final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
+        private final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
     }
 
     private enum Skill {
@@ -1020,32 +1039,25 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         }
     }
 
-    private final Image closed = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/closedc.png");
-    private final Image tabOne = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/gentab.png");
-    private final Image tabTwo = getImage("https://github.com/Timer/powerSlayer/tree/master/resources/exptab.png");
-    private final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
-    private final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
-    private final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
-
     //TODO Alot more...
     public void onRepaint(Graphics g1) {
         Graphics2D g = (Graphics2D) g1;
         if (tab == 1) {
-            g.drawImage(tabOne, -1, 293, null);
+            g.drawImage(methods.paint.tabOne, -1, 293, null);
         } else if (tab == 2) {
-            g.drawImage(tabTwo, -1, 293, null);
+            g.drawImage(methods.paint.tabTwo, -1, 293, null);
             drawSkillBars(g);
         } else {
-            g.drawImage(closed, 162, 293, null);
+            g.drawImage(methods.paint.closed, 162, 293, null);
         }
     }
 
     public void mouseClicked(MouseEvent e) {
-        if (hideRect.contains(e.getPoint())) {
+        if (methods.paint.hideRect.contains(e.getPoint())) {
             tab = 3;
-        } else if (tabOneRect.contains(e.getPoint())) {
+        } else if (methods.paint.tabOneRect.contains(e.getPoint())) {
             tab = 1;
-        } else if (tabTwoRect.contains(e.getPoint())) {
+        } else if (methods.paint.tabTwoRect.contains(e.getPoint())) {
             tab = 2;
         }
     }
@@ -1081,27 +1093,37 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
     public void mouseExited(MouseEvent e) {
     }
 
-    /*
-     * Would everyone agree this is a good way to structure the loop?
-     * To find which loop was needed we could create a list of states and loop through them,
-     * and return the loop() method on the basis of the activeCondition()
-     *
-     * Like how randoms are structured.
-     */
+
     public abstract class State {
         public abstract int loop();
 
         public abstract boolean activeCondition();
     }
+    private ArrayList<State> states = new ArrayList<State>();
 
-    public class Banking extends State {
+    public void initStates(){
+        states.add(new BankingState());
+    }
+
+    private int getStateLoop(){
+        for (State state: states) {
+			if (state.activeCondition()) {
+				return state.loop();
+			}
+		}
+        return -1;
+    }
+
+    public class BankingState extends State {
 
         @Override
         public int loop() {
-            if (isInBank(getMyPlayer().getLocation())) {
-                //TODO create a banking loop
-            }else{
-                //TODO walking
+            if (methods.travel.isInBank(getMyPlayer().getLocation())) {
+                methods.paint.Current = "Completing banking phase.";
+                methods.banking.doBanking();
+            } else {
+                methods.paint.Current = "Traveling to nearest bank.";
+                methods.travel.travelToBank();
             }
             return 0;
         }
@@ -1110,6 +1132,16 @@ public class powerSlayer extends Script implements PaintListener, MouseListener 
         public boolean activeCondition() {
             return !isFullyEquiped(currentTask.getRequirements());
         }
+    }
+
+    /*
+     * Used because we're all lazy and its just tidier.
+     */
+    public class Methods {
+        public Traveling travel = new Traveling();
+        public Banking banking = new Banking();
+        public Paint paint = new Paint();
+
     }
 
 }
