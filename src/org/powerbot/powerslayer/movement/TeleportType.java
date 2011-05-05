@@ -1,6 +1,8 @@
+package org.powerbot.powerslayer.movement;
+
 import org.rsbot.script.methods.Magic;
 
-enum TeleportType {
+public enum TeleportType {
     HOME_SPELL(Magic.SPELL_HOME_TELEPORT),
     VARROCK_SPELL(
             Magic.SPELL_VARROCK_TELEPORT),

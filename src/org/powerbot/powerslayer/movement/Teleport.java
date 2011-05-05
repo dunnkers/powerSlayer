@@ -1,6 +1,9 @@
+package org.powerbot.powerslayer.movement;
+
+import org.powerbot.powerslayer.wrappers.Item;
 import org.rsbot.script.wrappers.RSTile;
 
-enum TeleportSpell {
+public enum Teleport {
     // TODO link these to a teleporting method.
     LUMBRIDGE(TeleportType.HOME_SPELL, new RSTile(0, 0, 0)),
     VARROCK_SPELL_1(TeleportType.VARROCK_SPELL, new RSTile(0, 0, 0), new Item[]{new Item(Item.NEEDS_TO_BE_EQUIPED, new String[]{"Fire staff", "Lava staff"}), new Item("Law rune"), new Item("Air runes", 3)}, 25),
@@ -12,33 +15,35 @@ enum TeleportSpell {
     private int magicLevel;
     private TeleportType type;
 
-    private TeleportSpell(TeleportType type, RSTile loc, Item[] items,
-                          int magicLevel) {
+    private Teleport(TeleportType type, RSTile loc, Item[] items, int magicLevel) {
         this.type = type;
         this.loc = loc;
         this.items = items;
         this.magicLevel = magicLevel;
     }
 
-    private TeleportSpell(TeleportType type, RSTile loc, Item[] items) {
+    private Teleport(TeleportType type, RSTile loc, Item[] items) {
         this(type, loc, items, 1);
     }
 
-    private TeleportSpell(TeleportType type, RSTile loc, Item item,
-                          int magicLevel) {
+    private Teleport(TeleportType type, RSTile loc, Item item, int magicLevel) {
         this(type, loc, new Item[]{item}, magicLevel);
     }
 
-    private TeleportSpell(TeleportType type, RSTile loc, Item item) {
+    private Teleport(TeleportType type, RSTile loc, Item item) {
         this(type, loc, new Item[]{item}, 1);
     }
 
-    private TeleportSpell(TeleportType type, RSTile loc) {
+    private Teleport(TeleportType type, RSTile loc) {
         this(type, loc, (Item) null, 1);
     }
 
     public RSTile getLocation() {
         return this.loc;
+    }
+
+    public int getMagicLevel() {
+        return magicLevel;
     }
 
     public Item[] getItems() {

@@ -1,4 +1,6 @@
-class Finisher {
+package org.powerbot.powerslayer.wrappers;
+
+public class Finisher {
     private String[] names;
     private int amount;
 

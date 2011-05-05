@@ -1,8 +1,11 @@
+package org.powerbot.powerslayer.data;
+
 import org.rsbot.script.wrappers.RSTile;
 
-enum SlayerMaster {
+public enum SlayerMaster
+{
     // TODO Add other slayer masters + locations
-    MAZCHNA("Mazchna", new RSTile(0, 0, 0), 20),
+    MAZCHNA("Mazchna", new RSTile(3510, 3509, 0), 20),
     TURAEL("Turael", new RSTile(0, 0, 0), 3);
     private RSTile location;
     private String name;
@@ -16,8 +19,7 @@ enum SlayerMaster {
         this.slayerLevel = 0;
     }
 
-    private SlayerMaster(String name, RSTile location, int combatLevel,
-                         int slayerLevel) {
+    private SlayerMaster(String name, RSTile location, int combatLevel, int slayerLevel) {
         this.name = name;
         this.location = location;
         this.combatLevel = combatLevel;

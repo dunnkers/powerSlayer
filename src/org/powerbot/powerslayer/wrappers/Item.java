@@ -1,4 +1,6 @@
-class Item {
+package org.powerbot.powerslayer.wrappers;
+
+public class Item {
     private String[] names;
     private int amount;
     private int type;

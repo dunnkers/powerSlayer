@@ -1,4 +1,6 @@
-class Starter {
+package org.powerbot.powerslayer.wrappers;
+
+public class Starter {
     private String[] names;
     private int amount;
 

@@ -1,4 +1,8 @@
-class Task {
+package org.powerbot.powerslayer.wrappers;
+
+import org.powerbot.powerslayer.data.Monsters;
+
+public class Task {
     private Monsters monster;
 
     private Task(Monsters monster) {
@@ -6,11 +10,11 @@ class Task {
     }
 
     public Requirements getRequirements() {
-        return this.monster.getRequirements();
+        return monster.getRequirements();
     }
 
     public Monsters getMonster() {
-        return this.monster;
+        return monster;
     }
 
     public void setMonster(Monsters monster) {
