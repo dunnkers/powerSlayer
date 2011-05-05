@@ -3,8 +3,7 @@ package org.powerbot.powerslayer.data;
 import org.powerbot.powerslayer.abstracts.ITeleport;
 import org.rsbot.script.wrappers.RSTile;
 
-public enum TeleportItem implements ITeleport
-{
+public enum TeleportItem implements ITeleport {
     ECTOPHIAL(new RSTile(3658, 3522), "Empty", 4251),
     LUMBRIDGE_TAB(new RSTile(3221, 3220), 8008),
     ARDOUGENE_TAB(new RSTile(2661, 3303), 8011),

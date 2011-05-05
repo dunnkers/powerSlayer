@@ -1,7 +1,6 @@
 package org.powerbot.powerslayer.wrappers;
 
-public class EquipmentItems
-{
+public class EquipmentItems {
     private String[] names;
     private int slot;
 

@@ -3,8 +3,7 @@ package org.powerbot.powerslayer.states;
 import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.abstracts.State;
 
-public class BankingState extends State
-{
+public class BankingState extends State {
 
     public BankingState(PowerSlayer main) {
         super(main);
@@ -15,8 +14,7 @@ public class BankingState extends State
         if (methods.travel.isInBank(main.getMyPlayer().getLocation())) {
             methods.paint.Current = "Completing banking phase.";
             methods.banking.doBanking();
-        }
-        else {
+        } else {
             methods.paint.Current = "Traveling to nearest bank.";
             methods.travel.travelToBank();
         }

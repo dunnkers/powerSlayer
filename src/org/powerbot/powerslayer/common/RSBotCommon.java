@@ -10,8 +10,7 @@ import org.rsbot.script.methods.*;
  * Time: 5:05 PM
  * Package: org.powerbot.powerslayer.common;
  */
-public class RSBotCommon
-{
+public class RSBotCommon {
     protected final PowerSlayer main;
     protected final Equipment equipment;
     protected final Combat combat;

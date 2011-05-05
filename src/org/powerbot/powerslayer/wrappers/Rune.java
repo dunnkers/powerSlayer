@@ -7,8 +7,7 @@ package org.powerbot.powerslayer.wrappers;
  * Time: 6:03 PM
  * Package: org.powerbot.powerslayer.wrappers;
  */
-public enum Rune
-{
+public enum Rune {
     AIR,
     EARTH,
     WATER,

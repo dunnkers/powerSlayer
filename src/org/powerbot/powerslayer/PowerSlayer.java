@@ -5,7 +5,6 @@ import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.data.Banks;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.data.TeleportItem;
-import org.powerbot.powerslayer.movement.Teleport;
 import org.powerbot.powerslayer.movement.TeleportSpell;
 import org.powerbot.powerslayer.states.BankingState;
 import org.powerbot.powerslayer.wrappers.*;
@@ -29,11 +28,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 @ScriptManifest(authors = {"Powerbot Scripters Team"},
-                name = "Power Slayer",
-                version = 0.1,
-                description = "Slayer bot.")
-public class PowerSlayer extends Script implements PaintListener, MouseListener
-{
+        name = "Power Slayer",
+        version = 0.1,
+        description = "Slayer bot.")
+public class PowerSlayer extends Script implements PaintListener, MouseListener {
     public Task currentTask;
     public SlayerMaster slayerMaster;
     private int weaponSpecUsage = -1;
@@ -116,35 +114,35 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
     private int specialUsage() {
         int[] amountUsage = {10, 25, 33, 35, 45, 50, 55, 60, 80, 85, 100};
         String[][] weapons = {{"Rune thrownaxe", "Rod of ivandis"},
-                              {"Dragon Dagger",
-                               "Dragon dagger (p)",
-                               "Dragon dagger (p+)",
-                               "Dragon dagger (p++)",
-                               "Dragon Mace",
-                               "Dragon Spear",
-                               "Dragon longsword",
-                               "Rune claws"},
-                              {"Dragon Halberd"},
-                              {"Magic Longbow"},
-                              {"Magic Composite Bow"},
-                              {"Dragon Claws",
-                               "Abyssal Whip",
-                               "Granite Maul",
-                               "Darklight",
-                               "Barrelchest Anchor",
-                               "Armadyl Godsword"},
-                              {"Magic Shortbow"},
-                              {"Dragon Scimitar", "Dragon 2H Sword", "Zamorak Godsword", "Korasi's sword"},
-                              {"Dorgeshuun Crossbow", "Bone Dagger", "Bone Dagger (p+)", "Bone Dagger (p++)"},
-                              {"Brine Sabre"},
-                              {"Bandos Godsword",
-                               "Dragon Battleaxe",
-                               "Dragon Hatchet",
-                               "Seercull Bow",
-                               "Excalibur",
-                               "Enhanced excalibur",
-                               "Ancient Mace",
-                               "Saradomin sword"}};
+                {"Dragon Dagger",
+                        "Dragon dagger (p)",
+                        "Dragon dagger (p+)",
+                        "Dragon dagger (p++)",
+                        "Dragon Mace",
+                        "Dragon Spear",
+                        "Dragon longsword",
+                        "Rune claws"},
+                {"Dragon Halberd"},
+                {"Magic Longbow"},
+                {"Magic Composite Bow"},
+                {"Dragon Claws",
+                        "Abyssal Whip",
+                        "Granite Maul",
+                        "Darklight",
+                        "Barrelchest Anchor",
+                        "Armadyl Godsword"},
+                {"Magic Shortbow"},
+                {"Dragon Scimitar", "Dragon 2H Sword", "Zamorak Godsword", "Korasi's sword"},
+                {"Dorgeshuun Crossbow", "Bone Dagger", "Bone Dagger (p+)", "Bone Dagger (p++)"},
+                {"Brine Sabre"},
+                {"Bandos Godsword",
+                        "Dragon Battleaxe",
+                        "Dragon Hatchet",
+                        "Seercull Bow",
+                        "Excalibur",
+                        "Enhanced excalibur",
+                        "Ancient Mace",
+                        "Saradomin sword"}};
         String str = equipment.getItem(org.rsbot.script.methods.Equipment.WEAPON).getName();
         str = str.substring(str.indexOf(">") + 1);
         for (int i = 0; i < weapons.length; i++) {
@@ -367,8 +365,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
 
     // A mix of teleporting and walking/running to travel
     // to certain slayer masters, tasks, and banks
-    public class Traveling
-    {
+    public class Traveling {
         public boolean travelToMaster(SlayerMaster master) {
             ITeleport t = getBestTeleport(master.getLocation());
             if (t != null)
@@ -400,15 +397,13 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
                 TeleportSpell tS = (TeleportSpell) t;
                 if (magic.getCurrentSpellBook() == tS.getBook())
                     return magic.castSpell(tS.getSpell());
-            }
-            else if (t instanceof TeleportItem) {
+            } else if (t instanceof TeleportItem) {
                 TeleportItem tI = (TeleportItem) t;
                 RSItem item;
                 if ((item = inventory.getItem(tI.getIDs())) != null || (item = getEquipmentItem(tI.getIDs())) != null) {
                     if (item.doAction(tI.getAction())) {
                         return true;
-                    }
-                    else if (item.doAction("Rub")) {
+                    } else if (item.doAction("Rub")) {
                         sleep(1750, 2250);
                         RSInterface inter = interfaces.get(tI.getRubInterfaceID());
                         if (inter != null)
@@ -456,14 +451,13 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
             if (t instanceof TeleportSpell) {
                 TeleportSpell tS = (TeleportSpell) t;
                 if (skills.getCurrentLevel(Skills.MAGIC) < tS.getMagicLevel() ||
-                    magic.getCurrentSpellBook() != tS.getBook())
+                        magic.getCurrentSpellBook() != tS.getBook())
                     return false;
                 for (Rune rune : tS.getRunes().keySet()) {
                     if (getRuneCount(rune) < tS.getRuneCount(rune))
                         return false;
                 }
-            }
-            else if (t instanceof TeleportItem) {
+            } else if (t instanceof TeleportItem) {
                 TeleportItem tT = (TeleportItem) t;
                 return inventory.containsOneOf(tT.getIDs()) || equipment.containsOneOf(tT.getIDs());
             }
@@ -515,19 +509,16 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
     }
 
 
-    public class Banking
-    {
+    public class Banking {
         public boolean doBanking() {
             return false;
             // TODO;
         }
     }
 
-    private class UniversalFighter
-    {
+    private class UniversalFighter {
 
-        private class Potion
-        {
+        private class Potion {
             // TODO add options to include pots and which pots
             private int[] ids;
             private int[] boostedSkills;
@@ -547,84 +538,83 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
             }
         }
 
-        private class PotionMethods
-        {
+        private class PotionMethods {
             private final int[] VIAL = new int[]{229};
 
             private LinkedList<Potion> getPotions() {
                 LinkedList<Potion> potions = new LinkedList<Potion>();
                 potions.add(new Potion(new int[]{3040, 3042, 3044, 3046, 11513, 11515, 13520, 13521, 13522, 13523},
-                                       Skills.MAGIC));
+                        Skills.MAGIC));
                 // Magic pots
                 potions.add(new Potion(new int[]{2434, 139, 141, 143, 11465, 11467}, Skills.PRAYER));
                 // Prayer pots
                 potions.add(new Potion(new int[]{2444, 169, 171, 173, 11509, 11511, 13524, 13525, 15326, 15327},
-                                       Skills.RANGE));
+                        Skills.RANGE));
                 // Range pots
                 potions.add(new Potion(new int[]{9739, 9741, 9743, 9745, 11445, 11447},
-                                       new int[]{Skills.ATTACK, Skills.STRENGTH}));
+                        new int[]{Skills.ATTACK, Skills.STRENGTH}));
                 // Combat pots
                 potions.add(new Potion(new int[]{2428,
-                                                 121,
-                                                 123,
-                                                 125,
-                                                 2436,
-                                                 145,
-                                                 147,
-                                                 149,
-                                                 11429,
-                                                 11431,
-                                                 11429,
-                                                 11431,
-                                                 11429,
-                                                 11431,
-                                                 11469,
-                                                 11471,
-                                                 15308,
-                                                 15309,
-                                                 15310,
-                                                 15311}, Skills.ATTACK));
+                        121,
+                        123,
+                        125,
+                        2436,
+                        145,
+                        147,
+                        149,
+                        11429,
+                        11431,
+                        11429,
+                        11431,
+                        11429,
+                        11431,
+                        11469,
+                        11471,
+                        15308,
+                        15309,
+                        15310,
+                        15311}, Skills.ATTACK));
                 // Attack pots
                 potions.add(new Potion(new int[]{113,
-                                                 115,
-                                                 117,
-                                                 119,
-                                                 2440,
-                                                 157,
-                                                 159,
-                                                 161,
-                                                 11443,
-                                                 11441,
-                                                 11485,
-                                                 11487,
-                                                 15312,
-                                                 15313,
-                                                 15314,
-                                                 15315}, Skills.STRENGTH));
+                        115,
+                        117,
+                        119,
+                        2440,
+                        157,
+                        159,
+                        161,
+                        11443,
+                        11441,
+                        11485,
+                        11487,
+                        15312,
+                        15313,
+                        15314,
+                        15315}, Skills.STRENGTH));
                 // Strength pots
                 potions.add(new Potion(new int[]{2432,
-                                                 133,
-                                                 135,
-                                                 137,
-                                                 2442,
-                                                 163,
-                                                 165,
-                                                 167,
-                                                 11457,
-                                                 11459,
-                                                 11497,
-                                                 11499,
-                                                 15316,
-                                                 15317,
-                                                 15318,
-                                                 15319}, Skills.DEFENSE));
+                        133,
+                        135,
+                        137,
+                        2442,
+                        163,
+                        165,
+                        167,
+                        11457,
+                        11459,
+                        11497,
+                        11499,
+                        15316,
+                        15317,
+                        15318,
+                        15319}, Skills.DEFENSE));
                 // Defense pots
                 potions.add(new Potion(new int[]{15332, 15333, 15334, 15335},
-                                       new int[]{Skills.STRENGTH,
-                                                 Skills.ATTACK,
-                                                 Skills.DEFENSE,
-                                                 Skills.MAGIC,
-                                                 Skills.RANGE}));
+                        new int[]{Skills.STRENGTH,
+                                Skills.ATTACK,
+                                Skills.DEFENSE,
+                                Skills.MAGIC,
+                                Skills.RANGE}));
                 // Overloads
                 return potions;
             }
@@ -675,8 +665,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
         }
     }
 
-    public class Paint
-    {
+    public class Paint {
         public String Current = "Loading...";
         public final Image closed = getImage("https://github.com/Timer/PowerSlayer/tree/master/resources/closedc.png");
         public final Image tabOne = getImage("https://github.com/Timer/PowerSlayer/tree/master/resources/gentab.png");
@@ -686,8 +675,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
         public final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
     }
 
-    private enum Skill
-    {
+    private enum Skill {
         SLAYER(Skills.SLAYER, "Slayer", 0),
         ATTACK(Skills.ATTACK, "Attack", 1),
         STRENGTH(Skills.STRENGTH, "Strength", 2),
@@ -710,8 +698,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
     /*
     * Used because we're all lazy and its just tidier.
     */
-    public class Methods
-    {
+    public class Methods {
         public Traveling travel = new Traveling();
         public Banking banking = new Banking();
         public UniversalFighter fighter = new UniversalFighter();
@@ -723,12 +710,10 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
         Graphics2D g = (Graphics2D) g1;
         if (tab == 1) {
             g.drawImage(methods.paint.tabOne, -1, 293, null);
-        }
-        else if (tab == 2) {
+        } else if (tab == 2) {
             g.drawImage(methods.paint.tabTwo, -1, 293, null);
             drawSkillBars(g);
-        }
-        else {
+        } else {
             g.drawImage(methods.paint.closed, 162, 293, null);
         }
     }
@@ -736,11 +721,9 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
     public void mouseClicked(MouseEvent e) {
         if (methods.paint.hideRect.contains(e.getPoint())) {
             tab = 3;
-        }
-        else if (methods.paint.tabOneRect.contains(e.getPoint())) {
+        } else if (methods.paint.tabOneRect.contains(e.getPoint())) {
             tab = 1;
-        }
-        else if (methods.paint.tabTwoRect.contains(e.getPoint())) {
+        } else if (methods.paint.tabTwoRect.contains(e.getPoint())) {
             tab = 2;
         }
     }
@@ -756,16 +739,16 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
             g.setColor(new Color(90, 15, 15));
             g.setFont(new Font("Serif", 0, 12));
             g.drawString(s.skillName +
-                         ": " +
-                         skills.getPercentToNextLevel(s.skillID) +
-                         "% to level " +
-                         (skills.getRealLevel(s.skillID) + 1), x + 4, y + 12);
+                    ": " +
+                    skills.getPercentToNextLevel(s.skillID) +
+                    "% to level " +
+                    (skills.getRealLevel(s.skillID) + 1), x + 4, y + 12);
             g.setColor(new Color(255, 255, 255, 90));
             g.drawString(s.skillName +
-                         ": " +
-                         skills.getPercentToNextLevel(s.skillID) +
-                         "% to level " +
-                         (skills.getRealLevel(s.skillID) + 1), x + 5, y + 13);
+                    ": " +
+                    skills.getPercentToNextLevel(s.skillID) +
+                    "% to level " +
+                    (skills.getRealLevel(s.skillID) + 1), x + 5, y + 13);
         }
     }
 
@@ -805,12 +788,12 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener
     public int getRuneCount(Rune rune) {
         if (rune.isElemental()) {
             String wepName = equipment.getItem(org.rsbot.script.methods.Equipment.WEAPON) != null ?
-                             equipment.getItem(org.rsbot.script.methods.Equipment.WEAPON).getName() :
-                             "";
+                    equipment.getItem(org.rsbot.script.methods.Equipment.WEAPON).getName() :
+                    "";
             if (rune == Rune.WATER) {
                 String shieldName = equipment.getItem(org.rsbot.script.methods.Equipment.SHIELD) != null ?
-                                    equipment.getItem(org.rsbot.script.methods.Equipment.SHIELD).getName() :
-                                    "";
+                        equipment.getItem(org.rsbot.script.methods.Equipment.SHIELD).getName() :
+                        "";
                 if (shieldName != null && shieldName.trim().equalsIgnoreCase("tome of frost"))
                     return 999999;
             }

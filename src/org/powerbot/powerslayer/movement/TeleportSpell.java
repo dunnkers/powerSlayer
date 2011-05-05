@@ -8,8 +8,7 @@ import org.rsbot.script.wrappers.RSTile;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum TeleportSpell implements ITeleport
-{
+public enum TeleportSpell implements ITeleport {
     LUMBRIDGE_HOME(Magic.SPELL_HOME_TELEPORT, new RSTile(3221, 3220), 0),
     VARROCK(Magic.SPELL_VARROCK_TELEPORT, new RSTile(3212, 3429), 25, Rune.FIRE, 3, Rune.AIR, Rune.LAW),
     MOBILISING_ARMIES(Magic.SPELL_MOBILISING_ARMIES_TELEPORT, new RSTile(0, 0, 0), 10, Rune.LAW, Rune.WATER, Rune.AIR),

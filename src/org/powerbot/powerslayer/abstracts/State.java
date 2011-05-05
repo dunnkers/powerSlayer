@@ -10,8 +10,7 @@ import org.powerbot.powerslayer.common.RSBotCommon;
  * Time: 5:40 PM
  * Package: org.powerbot.powerslayer.abstracts;
  */
-public abstract class State extends RSBotCommon
-{
+public abstract class State extends RSBotCommon {
     public State(PowerSlayer main) {
         super(main);
     }

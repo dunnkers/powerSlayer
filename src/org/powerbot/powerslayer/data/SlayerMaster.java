@@ -2,8 +2,7 @@ package org.powerbot.powerslayer.data;
 
 import org.rsbot.script.wrappers.RSTile;
 
-public enum SlayerMaster
-{
+public enum SlayerMaster {
     // TODO Add other slayer masters + locations
     MAZCHNA("Mazchna", new RSTile(3510, 3509, 0), 20),
     TURAEL("Turael", new RSTile(0, 0, 0), 3);

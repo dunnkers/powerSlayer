@@ -1,7 +1,6 @@
 package org.powerbot.powerslayer.methods;
 
-public class CombatStyle
-{
+public class CombatStyle {
     private Style[] style;
 
     public CombatStyle(Style a, Style... style) {
@@ -24,8 +23,7 @@ public class CombatStyle
         return getStyle(0);
     }
 
-    public static enum Style
-    {
+    public static enum Style {
         MELEE, MAGIC, RANGE
     }
 }

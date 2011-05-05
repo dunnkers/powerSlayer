@@ -3,8 +3,7 @@ package org.powerbot.powerslayer.data;
 import org.rsbot.script.wrappers.RSArea;
 import org.rsbot.script.wrappers.RSTile;
 
-public enum Banks
-{
+public enum Banks {
     VARROCK_EAST(new RSArea(new RSTile(3258, 3424), new RSTile(3249, 3415), 0)),
     VARROCK_WEST(new RSArea(new RSTile(3195, 3447), new RSTile(3178, 3431), 0)),
     SEERS(new RSArea(new RSTile(2731, 3495), new RSTile(2719, 3487), 0)),
