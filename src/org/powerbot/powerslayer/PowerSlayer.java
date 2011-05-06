@@ -19,6 +19,7 @@ import org.powerbot.powerslayer.abstracts.ITeleport;
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.SlayerMaster;
+import org.powerbot.powerslayer.movement.FairyRing;
 import org.powerbot.powerslayer.movement.TeleportItem;
 import org.powerbot.powerslayer.movement.TeleportSpell;
 import org.powerbot.powerslayer.states.BankingState;
@@ -479,6 +480,8 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
 			teleports.add(t);
 		for (TeleportItem t : TeleportItem.values())
 			teleports.add(t);
+		for (FairyRing f : FairyRing.values())
+			teleports.add(f);
 		return teleports.toArray(new ITeleport[teleports.size()]);
 	}
 
