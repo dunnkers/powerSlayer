@@ -1,28 +1,29 @@
 package org.powerbot.powerslayer.states;
 
-import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.abstracts.State;
+import org.powerbot.powerslayer.common.MethodBase;
 
 public class BankingState extends State {
 
-    public BankingState(PowerSlayer main) {
-        super(main);
-    }
+	public BankingState(MethodBase methods) {
+		super(methods);
+	}
 
-    @Override
-    public int loop() {
-        if (methods.travel.isInBank(main.getMyPlayer().getLocation())) {
-            methods.paint.Current = "Completing banking phase.";
-            methods.banking.doBanking();
-        } else {
-            methods.paint.Current = "Traveling to nearest bank.";
-            methods.travel.travelToBank();
-        }
-        return 0;
-    }
+	@Override
+	public int loop() {
+		if (methods.travel.isInBank(getMyPlayer().getLocation())) {
+			methods.parent.paint.Current = "Completing banking phase.";
+			methods.bankingProcess.doBanking();
+		} else {
+			methods.parent.paint.Current = "Traveling to nearest bank.";
+			methods.travel.travelToBank();
+		}
+		return 0;
+	}
 
-    @Override
-    public boolean activeCondition() {
-        return !main.isFullyEquiped(main.currentTask.getRequirements());
-    }
+	@Override
+	public boolean activeCondition() {
+		return !methods.parent.isFullyEquiped(methods.parent.currentTask
+				.getRequirements());
+	}
 }
