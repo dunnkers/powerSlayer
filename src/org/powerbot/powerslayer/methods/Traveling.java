@@ -6,13 +6,17 @@ import org.powerbot.powerslayer.common.DMethodProvider;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.Banks;
 import org.powerbot.powerslayer.data.SlayerMaster;
+import org.powerbot.powerslayer.movement.FairyRing;
 import org.powerbot.powerslayer.movement.TeleportItem;
 import org.powerbot.powerslayer.movement.TeleportSpell;
 import org.powerbot.powerslayer.wrappers.Rune;
 import org.powerbot.powerslayer.wrappers.Task;
+import org.rsbot.script.methods.Objects;
 import org.rsbot.script.methods.Skills;
+import org.rsbot.script.wrappers.RSComponent;
 import org.rsbot.script.wrappers.RSInterface;
 import org.rsbot.script.wrappers.RSItem;
+import org.rsbot.script.wrappers.RSObject;
 import org.rsbot.script.wrappers.RSTile;
 
 public class Traveling extends DMethodProvider {
@@ -45,8 +49,9 @@ public class Traveling extends DMethodProvider {
 	public RSItem getEquipmentItem(int... ids) {
 		for (RSItem i : methods.equipment.getItems()) {
 			for (int id : ids) {
-				if (id == i.getID())
+				if (id == i.getID()) {
 					return i;
+				}
 			}
 		}
 		return null;
@@ -55,22 +60,108 @@ public class Traveling extends DMethodProvider {
 	public boolean castTeleport(ITeleport t) {
 		if (t instanceof TeleportSpell) {
 			TeleportSpell tS = (TeleportSpell) t;
-			if (methods.magic.getCurrentSpellBook() == tS.getBook())
+			if (methods.magic.getCurrentSpellBook() == tS.getBook()) {
 				return methods.magic.castSpell(tS.getSpell());
+			}
 		} else if (t instanceof TeleportItem) {
 			TeleportItem tI = (TeleportItem) t;
 			RSItem item;
 			if ((item = methods.inventory.getItem(tI.getIDs())) != null
 					|| (item = getEquipmentItem(tI.getIDs())) != null) {
-				if (item.doAction(tI.getAction())) {
-					return true;
-				} else if (item.doAction("Rub")) {
+				for (String opt : tI.getAction()) {
+					if (item.doAction(opt)) {
+						return true;
+					}
+				}
+				if (item.doAction("Rub")) {
 					sleep(1750, 2250);
 					RSInterface inter = methods.interfaces.get(tI
 							.getRubInterfaceID());
-					if (inter != null)
-						return methods.interfaces.clickDialogueOption(inter,
-								tI.getAction());
+					if (inter != null) {
+						for (String opt : tI.getAction()) {
+							if (methods.interfaces.clickDialogueOption(inter,
+									opt)) {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		} else if (t instanceof FairyRing) {
+			FairyRing tF = (FairyRing) t;
+			FairyRing best = null;
+			double bDist = -1;
+			for (FairyRing f : FairyRing.values()) {
+				double dist = methods.calc.distanceTo(f.getLocation());
+				if (bDist == -1 || dist < bDist) {
+					best = f;
+					bDist = dist;
+				}
+			}
+			if (best == tF) {
+				return true;
+			} else if (best == FairyRing.MAIN_HUB) {
+				RSObject obj;
+				RSInterface spinners = methods.interfaces.get(734);
+				if (spinners != null && spinners.isValid()) {
+					RSComponent[] spinClockwise = new RSComponent[] {
+							spinners.getComponent(23),
+							spinners.getComponent(25),
+							spinners.getComponent(27) };
+					RSComponent[] spinAntiClockwise = new RSComponent[] {
+							spinners.getComponent(24),
+							spinners.getComponent(26),
+							spinners.getComponent(28) };
+					int[] currentChars = new int[] {
+							spinners.getComponent(2).getXRotation() / 512,
+							spinners.getComponent(7).getXRotation() / 512,
+							spinners.getComponent(12).getXRotation() / 512 };
+					int[] correctChars = new int[3];
+					for (int i = 0; i < 3; i++) {
+						char chr = tF.getCode().toLowerCase().charAt(i);
+						if (chr == 'a' || chr == 'i' || chr == 'p')
+							correctChars[i] = 0;
+						else if (chr == 'b' || chr == 'j' || chr == 'q')
+							correctChars[i] = 1;
+						else if (chr == 'c' || chr == 'k' || chr == 'r')
+							correctChars[i] = 2;
+						else
+							correctChars[i] = 3;
+					}
+					int i = 0;
+					while (i < 3) {
+						if (currentChars[i] != correctChars[i]) {
+							int curr = currentChars[i];
+							int corr = correctChars[i];
+							if (corr == curr + 1) {
+								if (spinAntiClockwise[i].doClick())
+									sleep(10000);
+							} else {
+								if (spinClockwise[i].doClick())
+									sleep(10000);
+							}
+						} else {
+							i++;
+						}
+					}
+					// TODO hit enter & testing
+				} else {
+					return (obj = methods.objects.getTopAt(
+							FairyRing.MAIN_HUB.getLocation(),
+							Objects.TYPE_FLOOR_DECORATION)) != null
+							&& obj.doAction("Use");
+				}
+			} else {
+				if (!methods.calc.tileOnScreen(best.getLocation())) {
+					return methods.walking.newTilePath(
+							methods.web.generateNodePath(getMyPlayer()
+									.getLocation(), best.getLocation()))
+							.traverse();
+				} else {
+					RSObject obj;
+					return (obj = methods.objects.getTopAt(best.getLocation(),
+							Objects.TYPE_FLOOR_DECORATION)) != null
+							&& obj.doAction("Use");
 				}
 			}
 		}
