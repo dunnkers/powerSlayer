@@ -253,6 +253,21 @@ public enum Monsters {
 		return this.location;
 	}
 
+	public RSTile getNearest(RSTile base) {
+		RSTile best = null;
+		double len = -1;
+		for (RSTile t : location) {
+			int dX = t.getX() - base.getX();
+			int dY = t.getY() - base.getY();
+			double tLen = Math.sqrt((dX * dX) + (dY * dY));
+			if (len == -1 || tLen < len) {
+				best = t;
+				len = tLen;
+			}
+		}
+		return best;
+	}
+
 	public Requirements getRequirements() {
 		return Requirements;
 	}

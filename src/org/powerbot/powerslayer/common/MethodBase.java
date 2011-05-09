@@ -35,6 +35,7 @@ import org.rsbot.script.methods.Summoning;
 import org.rsbot.script.methods.Tiles;
 import org.rsbot.script.methods.Trade;
 import org.rsbot.script.methods.Walking;
+import org.rsbot.script.methods.Web;
 
 /**
  * Created by IntelliJ IDEA. User: Taylor Date: 5/5/11 Time: 5:05 PM Package:
@@ -75,6 +76,7 @@ public class MethodBase {
 	public Banking bankingProcess = new Banking(this);
 	public Traveling travel = new Traveling(this);
 	public Random random = new Random();
+	public Web web;
 
 	public MethodBase(PowerSlayer parent) {
 		this.parent = parent;

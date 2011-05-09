@@ -6,7 +6,6 @@ import org.powerbot.powerslayer.common.DMethodProvider;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.Banks;
 import org.powerbot.powerslayer.data.SlayerMaster;
-import org.powerbot.powerslayer.movement.FairyRing;
 import org.powerbot.powerslayer.movement.TeleportItem;
 import org.powerbot.powerslayer.movement.TeleportSpell;
 import org.powerbot.powerslayer.wrappers.Rune;
@@ -14,9 +13,7 @@ import org.powerbot.powerslayer.wrappers.Task;
 import org.rsbot.script.methods.Skills;
 import org.rsbot.script.wrappers.RSInterface;
 import org.rsbot.script.wrappers.RSItem;
-import org.rsbot.script.wrappers.RSObject;
 import org.rsbot.script.wrappers.RSTile;
-import org.rsbot.script.wrappers.Web;
 
 public class Traveling extends DMethodProvider {
 	public Traveling(MethodBase methods) {
@@ -27,17 +24,22 @@ public class Traveling extends DMethodProvider {
 		ITeleport t = getBestTeleport(master.getLocation());
 		if (t != null)
 			return castTeleport(t);
-		else
-			return methods.walking.getWebPath(master.getLocation()).traverse();
+		else {
+			return methods.walking.newTilePath(
+					methods.web.generateNodePath(getMyPlayer().getLocation(),
+							master.getLocation())).traverse();
+		}
 	}
 
 	public boolean travelToMonster(Task task) {
-		ITeleport t = getBestTeleport(task.getMonster().getLocation());
+		RSTile dest = task.getMonster().getNearest(getMyPlayer().getLocation());
+		ITeleport t = getBestTeleport(dest);
 		if (t != null)
 			return castTeleport(t);
 		else
-			return methods.walking.getWebPath(task.getMonster().getLocation())
-					.traverse();
+			return methods.walking.newTilePath(
+					methods.web.generateNodePath(getMyPlayer().getLocation(),
+							dest)).traverse();
 	}
 
 	public RSItem getEquipmentItem(int... ids) {
@@ -71,31 +73,6 @@ public class Traveling extends DMethodProvider {
 								tI.getAction());
 				}
 			}
-		} else if (t instanceof FairyRing) {
-			FairyRing bestFRing = getNearestFairyRing();
-			Web w = methods.walking.getWebPath(bestFRing.getDest());
-			RSObject ring = null;
-			while (!w.atDestination()
-					&& ((ring = methods.objects.getNearest(bestFRing.getID())) == null || methods.calc
-							.distanceBetween(ring.getLocation(),
-									bestFRing.getDest()) > 10))
-				w.traverse();
-			if (ring != null) {
-				for (byte b = 0; b < 5
-						&& methods.calc
-								.distanceTo(FairyRing.MAIN_HUB.getDest()) > 5; b++) {
-					if (ring.doAction("Use"))
-						sleep(750, 1250);
-				}
-				if (methods.calc.distanceTo(FairyRing.MAIN_HUB.getDest()) < 5) {
-					RSObject mainHub = methods.objects
-							.getNearest(FairyRing.MAIN_HUB.getID());
-					if (mainHub != null) {
-						// Ok... well now we need to use the main hub to
-						// teleport to the correct ring!
-					}
-				}
-			}
 		}
 		return false;
 	}
@@ -110,13 +87,13 @@ public class Traveling extends DMethodProvider {
 		if (t != null)
 			return castTeleport(t);
 		else
-			return methods.walking
-					.getWebPath(bank.getRSArea().getCentralTile()).traverse();
+			return methods.walking.newTilePath(
+					methods.web.generateNodePath(getMyPlayer().getLocation(),
+							bank.getRSArea().getCentralTile())).traverse();
 	}
 
 	// returns null if there are no teleports that are closer
 	public ITeleport getBestTeleport(RSTile dest) {
-		FairyRing bestFRing = getNearestFairyRing();
 		ITeleport best = null;
 		double dist = 0;
 		for (ITeleport t : methods.parent.getAllTeleports()) {
@@ -125,8 +102,6 @@ public class Traveling extends DMethodProvider {
 				if (t instanceof ITeleportLocation)
 					tDist += methods.calc.distanceTo(((ITeleportLocation) t)
 							.getLocation());
-				if (t instanceof FairyRing)
-					tDist += methods.calc.distanceTo(bestFRing.getDest());
 				if (best == null || tDist < dist) {
 					best = t;
 					dist = tDist;
@@ -138,19 +113,6 @@ public class Traveling extends DMethodProvider {
 			// best teleport
 			return best;
 		return null;
-	}
-
-	public FairyRing getNearestFairyRing() {
-		FairyRing best = null;
-		double dist = Double.MAX_VALUE;
-		for (FairyRing f : FairyRing.values()) {
-			double tDist = methods.calc.distanceTo(f.getDest());
-			if (tDist < dist) {
-				dist = tDist;
-				best = f;
-			}
-		}
-		return best;
 	}
 
 	// Makes sure the player has the required Magic level, and then
