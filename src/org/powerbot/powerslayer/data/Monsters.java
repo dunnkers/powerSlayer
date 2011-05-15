@@ -15,7 +15,7 @@ public enum Monsters {
 			3418, 3567, 2)),
 	AQUANITE("Aquanite", new MonsterProfile(new CombatStyle(Style.MAGIC)), new RSTile(
 			2715, 9973)),
-	ANKOU("Ankou", new CombatStyle(Style.MELEE), new RSTile(0, 0, 0)),
+	ANKOU("Ankou", new CombatStyle(Style.MELEE), new RSTile(2326, 5199)),
 	BANSHEE("Banshee", new Requirements(new EquipmentItems(new String[] {
 			"Earmuffs", "Masked earmuffs", "Slayer helmet" }, Equipment.HELMET)), new CombatStyle(
 			Style.MAGICAL_MELEE), new RSTile(3441, 3546)),
@@ -36,8 +36,9 @@ public enum Monsters {
 	BRONZE_DRAGON("Bronze dragon", new CombatStyle(Style.MELEE,
 			Style.RANGED_DRAGONFIRE), new RSTile(0, 0, 0)),
 	CATABLEPON("Catablepon", new CombatStyle(Style.MELEE, Style.MAGIC), new RSTile(
-			0, 0, 0)),
-	CAVE_BUG("Cave bug", new RSTile(0, 0, 0)),
+			2153, 5253), new RSTile(2161, 5282), new RSTile(2166, 5303), new RSTile(
+			2122, 5299)),
+	CAVE_BUG("Cave bug", new Requirements(true), new RSTile(0, 0, 0)),
 	CAVE_CRAWLER("Cave crawler", null, new MonsterProfile(new CombatStyle(
 			Style.MELEE), true), new RSTile(2787, 9997, 0)),
 	CAVE_HORROR("Cave horror", new Requirements(new EquipmentItems(
@@ -133,7 +134,7 @@ public enum Monsters {
 	SCORPION("Scorpion", new RSTile(0, 0, 0)),
 	SEA_SNAKE("Sea snake hatchlings", null, new MonsterProfile(new CombatStyle(
 			Style.MELEE), true), new RSTile(0, 0, 0)),
-	SHADE("Shade", new RSTile(0, 0, 0)),
+	SHADE("Shade", new RSTile(2361, 5213)),
 	SHADOW_WARRIOR("Shadow warrior", new RSTile(0, 0, 0)),
 	SKELETAL_WYVERN("Skeletal wyvern", new Requirements(new EquipmentItems(
 			new String[] { "Dragonfire shield", "Mind shield",
@@ -251,6 +252,21 @@ public enum Monsters {
 
 	public RSTile[] getLocation() {
 		return this.location;
+	}
+
+	public RSTile getNearest(RSTile base) {
+		RSTile best = null;
+		double len = -1;
+		for (RSTile t : location) {
+			int dX = t.getX() - base.getX();
+			int dY = t.getY() - base.getY();
+			double tLen = Math.sqrt((dX * dX) + (dY * dY));
+			if (len == -1 || tLen < len) {
+				best = t;
+				len = tLen;
+			}
+		}
+		return best;
 	}
 
 	public Requirements getRequirements() {

@@ -1,11 +1,6 @@
 package org.powerbot.powerslayer;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -19,21 +14,13 @@ import org.powerbot.powerslayer.abstracts.ITeleport;
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.SlayerMaster;
-import org.powerbot.powerslayer.movement.FairyRing;
-import org.powerbot.powerslayer.movement.TeleportItem;
-import org.powerbot.powerslayer.movement.TeleportSpell;
 import org.powerbot.powerslayer.states.BankingState;
-import org.powerbot.powerslayer.wrappers.EquipmentItems;
-import org.powerbot.powerslayer.wrappers.Finisher;
-import org.powerbot.powerslayer.wrappers.Item;
-import org.powerbot.powerslayer.wrappers.Requirements;
-import org.powerbot.powerslayer.wrappers.Rune;
-import org.powerbot.powerslayer.wrappers.Starter;
-import org.powerbot.powerslayer.wrappers.Task;
+import org.powerbot.powerslayer.wrappers.*;
 import org.rsbot.event.listeners.PaintListener;
 import org.rsbot.script.Script;
 import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.methods.Skills;
+import org.rsbot.script.web.methods.TeleportItem;
 import org.rsbot.script.wrappers.RSItem;
 import org.rsbot.script.wrappers.RSNPC;
 
@@ -474,17 +461,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
 		return inventory.getCount(true, rune.getItemIDs());
 	}
 
-	public ITeleport[] getAllTeleports() {
-		List<ITeleport> teleports = new ArrayList<ITeleport>();
-		for (TeleportSpell t : TeleportSpell.values())
-			teleports.add(t);
-		for (TeleportItem t : TeleportItem.values())
-			teleports.add(t);
-		for (FairyRing f : FairyRing.values())
-			teleports.add(f);
-		return teleports.toArray(new ITeleport[teleports.size()]);
-	}
-
 	public void setMethodBase() {
 		if (methodBase == null)
 			methodBase = new MethodBase(this);
@@ -517,5 +493,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
 		methodBase.summoning = summoning;
 		methodBase.tiles = tiles;
 		methodBase.trade = trade;
+		methodBase.web = web;
 	}
 }
