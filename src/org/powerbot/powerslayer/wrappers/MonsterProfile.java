@@ -6,7 +6,7 @@ import org.powerbot.powerslayer.methods.CombatStyle;
 import org.powerbot.powerslayer.methods.CombatStyle.Style;
 
 public class MonsterProfile {
-	private boolean posion;
+	private boolean poison;
 	private boolean fire;
 	private CombatStyle style;
 	private EnumSet<Weakness> weak;
@@ -23,17 +23,17 @@ public class MonsterProfile {
 		this(attack, weak, false);
 	}
 
-	public MonsterProfile(CombatStyle attack, boolean posion) {
-		this(attack, null, posion);
+	public MonsterProfile(CombatStyle attack, boolean poison) {
+		this(attack, null, poison);
 	}
 
 	public MonsterProfile(CombatStyle style, EnumSet<Weakness> weak,
-			boolean posion) {
+			boolean poison) {
 		this.style = style;
 		this.weak = weak;
 		this.fire = this.style.hasStyle(Style.DRAGONFIRE)
 				|| this.style.hasStyle(Style.RANGED_DRAGONFIRE);
-		this.posion = posion;
+		this.poison = poison;
 	}
 
 	public CombatStyle getStyle() {
@@ -44,8 +44,8 @@ public class MonsterProfile {
 		return fire;
 	}
 
-	public boolean posionous() {
-		return posion;
+	public boolean poisonous() {
+		return poison;
 	}
 
 	public EnumSet<Weakness> getWeakness() {
