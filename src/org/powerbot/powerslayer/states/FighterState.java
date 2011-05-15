@@ -3,60 +3,57 @@ package org.powerbot.powerslayer.states;
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.rsbot.script.methods.Game;
-import org.rsbot.script.wrappers.RSComponent;
-import org.rsbot.script.wrappers.RSInterface;
 import org.rsbot.script.wrappers.RSNPC;
-import org.rsbot.script.wrappers.RSTile;
 
 
 public class FighterState extends State {
 
     public FighterState(MethodBase methods) {
-		super(methods);
-	}
+        super(methods);
+    }
 
     private int badFoodCount = 0;
-    private LoopAction[] loopActions = new LoopAction[] {new InCombatLoop(), new AttackLoop()};
+    private LoopAction[] loopActions = new LoopAction[]{new InCombatLoop(), new AttackLoop()};
 
     @Override
-    public int loop () {
-		if (!methods.walking.isRunEnabled() && methods.walking.getEnergy() > random(60, 90)) {
-			methods.walking.setRun(true);
-			return random(1200, 1600);
-		}
-		if(canContinue()) {
-			clickContinue();
-			return random(1200, 1600);
-		}
-		if (methods.game.getCurrentTab() != Game.TAB_INVENTORY) {
-			methods.game.openTab(Game.TAB_INVENTORY);
-			return random(700, 1500);
-		}
-		if (methods.fighter.eat.needEat()) {
-			if (methods.fighter.eat.haveFood()) {
-				badFoodCount = 0;
-				methods.fighter.eat.eatFood();
-			} else if (methods.fighter.eat.haveB2pTab() && methods.fighter.eat.haveBones()) {
-				methods.fighter.eat.breakB2pTab();
-				return random(2600, 3000);
-			} else {
-				badFoodCount++;
-				if (badFoodCount > 5) {
-					log("You ran out of food! Stopping.");
-					methods.parent.stopScript(true);
-				}
-			}
-			return random(1200, 1600);
-		}
+    public int loop() {
+        if (!methods.walking.isRunEnabled() && methods.walking.getEnergy() > random(60, 90)) {
+            methods.walking.setRun(true);
+            return random(1200, 1600);
+        }
+        if (methods.interfaces.canContinue()) {
+            methods.interfaces.clickContinue();
+            return random(1200, 1600);
+        }
+        if (methods.game.getCurrentTab() != Game.TAB_INVENTORY) {
+            methods.game.openTab(Game.TAB_INVENTORY);
+            return random(700, 1500);
+        }
+        if (methods.fighter.eat.needEat()) {
+            if (methods.fighter.eat.haveFood()) {
+                badFoodCount = 0;
+                methods.fighter.eat.eatFood();
+            } else if (methods.fighter.eat.haveB2pTab() && methods.fighter.eat.haveBones()) {
+                methods.fighter.eat.breakB2pTab();
+                return random(2600, 3000);
+            } else {
+                badFoodCount++;
+                if (badFoodCount > 5) {
+                    log("You ran out of food! Stopping.");
+                    methods.parent.stopScript(true);
+                }
+            }
+            return random(1200, 1600);
+        }
 
-		if(methods.fighter.pot.needPot()) {
-			return methods.fighter.pot.usePotions();
-		}
+        if (methods.fighter.pot.needPot()) {
+            return methods.fighter.pot.usePotions();
+        }
 
-		for(LoopAction a : loopActions)
-			if(a != null && a.activate())
-				return a.loop();
-		return random(50, 200);
+        for (LoopAction a : loopActions)
+            if (a != null && a.activate())
+                return a.loop();
+        return random(50, 200);
     }
 
     @Override
@@ -68,6 +65,7 @@ public class FighterState extends State {
 
     public interface LoopAction {
         public int loop();
+
         public boolean activate();
     }
 
@@ -94,7 +92,7 @@ public class FighterState extends State {
                 // add starter code
                 int result = methods.fighter.npcs.clickNPC(n, "Attack " + n.getName());
                 if (result == 0) {
-                        waitWhileMoving();
+                    waitWhileMoving();
                     return random(300, 500);
                 } else if (result == 1) {
                     waitWhileMoving();
@@ -135,10 +133,6 @@ public class FighterState extends State {
 //
 //		}
 
-
-
-
-
     /**
      * Waits until we are no longer moving.
      */
@@ -151,44 +145,5 @@ public class FighterState extends State {
             sleep(random(20, 50));
         }
     }
-
-    /**
-     * True if click continue interface is valid.
-     * @return True if you can click continue.
-     */
-    public boolean canContinue() {
-        return getContinueInterface() != null;
-    }
-
-    /**
-     * True if we successfully clicked continue.
-     * @return True if we clicked continue.
-     */
-    public boolean clickContinue() {
-        RSComponent c = getContinueInterface();
-        if(c != null)
-            return c.doClick();
-        return false;
-    }
-
-    /**
-     * Gets the "Click here to continue" button on any interface.
-     * @return The "Click here to continue" button.
-     */
-    public RSComponent getContinueInterface() {
-        for(RSInterface iface : methods.interfaces.getAll()) {
-            //skip chat
-            if(iface.getIndex() == 137)
-                continue;
-            for(RSComponent c : iface.getComponents()) {
-                if(c != null && c.isValid() && c.containsText("Click here to continue")
-                        && c.getAbsoluteX() > 100 && c.getAbsoluteY() > 300)
-                    return c;
-            }
-        }
-        return null;
-    }
-
-
 }
 
