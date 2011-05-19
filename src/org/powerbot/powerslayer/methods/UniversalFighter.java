@@ -106,7 +106,7 @@ public class UniversalFighter extends DMethodProvider {
          * @param action The action to perform.
          * @return 0 if the NPC was clicked, 1 if we walked to it, or -1 if nothing happened.
          */
-        public int clickNPC(RSCharacter npc, String action) {
+        public int clickNPC(RSNPC npc, String action) {
             for (int i = 0; i < 10; i++) {
                 if (isPartiallyOnScreen(npc.getModel())) {
                     Point p = getPointOnScreen(npc.getModel(), false);
