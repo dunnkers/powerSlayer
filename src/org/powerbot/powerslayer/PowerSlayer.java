@@ -38,9 +38,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         return true;
     }
 
-    private int getKillsLeft() {
-        return settings.getSetting(394);
-    }
 
     private int inventSpace() {
         return 28 - inventory.getCount();
@@ -116,7 +113,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         return false;
     }
 
-    public boolean isEquiped(Item item) {
+    public boolean isEquipped(Item item) {
         for (RSItem i : equipment.getItems()) {
             for (String name : item.getNames()) {
                 if (i.getName().equalsIgnoreCase(name)) {
@@ -138,7 +135,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         return false;
     }
 
-    public boolean isEquiped(EquipmentItems equip) {
+    public boolean isEquipped(EquipmentItems equip) {
         for (RSItem item : equipment.getItems()) {
             for (String name : equip.getNames()) {
                 if (item.getName().equalsIgnoreCase(name)) {
@@ -175,9 +172,9 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         }
     }
 
-    public boolean isFullyEquiped(Requirements req) {
+    public boolean isFullyEquipped(Requirements req) {
         for (EquipmentItems e : req.getEquipment()) {
-            if (!isEquiped(e)) {
+            if (!isEquipped(e)) {
                 if (isInInvent(e)) {
                     for (EquipmentItems r : req.getEquipment()) {
                         for (String name : r.getNames()) {
@@ -187,7 +184,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
                         }
                     }
                     equip(e);
-                    if (!isEquiped(e)) {
+                    if (!isEquipped(e)) {
                         return false;
                     }
                 }
@@ -249,45 +246,9 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         return false;
     }
 
-    public boolean use(Starter start, RSNPC monster) {
-        for (String s : start.getNames()) {
-            for (RSItem inventItem : inventory.getItems()) {
-                if (s.equalsIgnoreCase(inventItem.getName())) {
-                    if (inventory.selectItem(inventItem.getID())) {
-                        if (monster != null) {
-                            if (!monster.isOnScreen()) {
-                                camera.turnTo(monster);
-                            }
-                            if (monster.isOnScreen()) {
-                                return monster.doAction("Use");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
 
-    public boolean use(Finisher finisher, RSNPC monster) {
-        for (String s : finisher.getNames()) {
-            for (RSItem inventItem : inventory.getItems()) {
-                if (s.equalsIgnoreCase(inventItem.getName())) {
-                    if (inventory.selectItem(inventItem.getID())) {
-                        if (monster != null) {
-                            if (!monster.isOnScreen()) {
-                                camera.turnTo(monster);
-                            }
-                            if (monster.isOnScreen()) {
-                                return monster.doAction("Use");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
+
+
 
     // A mix of teleporting and walking/running to travel
     // to certain slayer masters, tasks, and banks

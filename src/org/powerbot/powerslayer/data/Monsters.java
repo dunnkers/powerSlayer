@@ -273,7 +273,7 @@ public enum Monsters {
         return Requirements;
     }
 
-    public boolean isPosionous() {
+    public boolean isPoisonous() {
         return profile != null ? profile.poisonous() : false;
     }
 

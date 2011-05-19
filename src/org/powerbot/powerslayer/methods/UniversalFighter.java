@@ -22,6 +22,8 @@ public class UniversalFighter extends DMethodProvider {
 
     /**
      * Waits until the inventory count changes
+     * @param origCount The original count of the inventory. inventory.getCount(true)
+     * @return true when the time has passed
      */
     public boolean waitForInvChange(int origCount) {
         long start = System.currentTimeMillis();
@@ -29,15 +31,6 @@ public class UniversalFighter extends DMethodProvider {
             sleep(random(20, 70));
         }
         return methods.inventory.getCount(true) != origCount;
-    }
-
-
-    public int[] toIntArray(Integer[] ints) {
-        int[] done = new int[ints.length];
-        for (int i = 0; i < done.length; i++) {
-            done[i] = ints[i];
-        }
-        return done;
     }
 
     /**
@@ -113,7 +106,7 @@ public class UniversalFighter extends DMethodProvider {
          * @param action The action to perform.
          * @return 0 if the NPC was clicked, 1 if we walked to it, or -1 if nothing happened.
          */
-        public int clickNPC(RSNPC npc, String action) {
+        public int clickNPC(RSCharacter npc, String action) {
             for (int i = 0; i < 10; i++) {
                 if (isPartiallyOnScreen(npc.getModel())) {
                     Point p = getPointOnScreen(npc.getModel(), false);
@@ -255,6 +248,46 @@ public class UniversalFighter extends DMethodProvider {
                     good = true;
             }
             return good;
+        }
+        public boolean useStarter( RSNPC monster) {
+
+            for (String s : methods.parent.currentTask.getRequirements().getStarter().getNames()) {
+                for (RSItem inventItem : methods.inventory.getItems()) {
+                    if (s.equalsIgnoreCase(inventItem.getName())) {
+                        if (methods.inventory.selectItem(inventItem.getID())) {
+                            if (monster != null) {
+                                if (!monster.isOnScreen()) {
+                                    methods.camera.turnTo(monster);
+                                }
+                                if (monster.isOnScreen()) {
+                                    return monster.doAction("Use");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public boolean useFinisher(RSNPC monster) {
+            for (String s : methods.parent.currentTask.getRequirements().getFinisher().getNames()) {
+                for (RSItem inventItem : methods.inventory.getItems()) {
+                    if (s.equalsIgnoreCase(inventItem.getName())) {
+                        if (methods.inventory.selectItem(inventItem.getID())) {
+                            if (monster != null) {
+                                if (!monster.isOnScreen()) {
+                                    methods.camera.turnTo(monster);
+                                }
+                                if (monster.isOnScreen()) {
+                                    return monster.doAction("Use");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         /**
@@ -422,7 +455,7 @@ public class UniversalFighter extends DMethodProvider {
 
         private final int[] VIAL = new int[]{229};
 
-        private HashMap<String, RSItem[]> getPotions() {
+        public HashMap<String, RSItem[]> getPotions() {
             HashMap<String, RSItem[]> potions = new HashMap<String, RSItem[]>();
             potions.put("MAGIC", methods.inventory.getItems(MAGIC_POTIONS));
             potions.put("PRAYER", methods.inventory.getItems(PRAYER_POTIONS));
@@ -438,6 +471,7 @@ public class UniversalFighter extends DMethodProvider {
             potions.put("OVERLOAD", methods.inventory.getItems(OVERLOAD_POTIONS));
             return potions;
         }
+
 
         public boolean needPot() {
             HashMap<String, RSItem[]> potions = getPotions();
