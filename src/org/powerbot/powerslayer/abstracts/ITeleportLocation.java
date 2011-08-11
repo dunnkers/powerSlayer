@@ -1,7 +1,7 @@
 package org.powerbot.powerslayer.abstracts;
 
-import org.rsbot.script.wrappers.RSTile;
+import org.rsbot.script.wrappers.Tile;
 
 public interface ITeleportLocation extends ITeleport {
-    public abstract RSTile getLocation();
+    public abstract Tile getLocation();
 }

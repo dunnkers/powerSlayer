@@ -1,7 +1,7 @@
 package org.powerbot.powerslayer.abstracts;
 
-import org.rsbot.script.wrappers.RSTile;
+import org.rsbot.script.wrappers.Tile;
 
 public interface ITeleport {
-    public abstract RSTile getDest();
+    public abstract Tile getDest();
 }
