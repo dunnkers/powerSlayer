@@ -2,10 +2,15 @@ package org.powerbot.powerslayer.states;
 
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
-import org.powerbot.powerslayer.wrappers.Item;
+import org.powerbot.powerslayer.wrappers.SlayerItem;
 import org.rsbot.script.methods.Game;
-import org.rsbot.script.wrappers.RSItem;
-import org.rsbot.script.wrappers.RSNPC;
+import org.rsbot.script.methods.Interfaces;
+import org.rsbot.script.methods.Inventory;
+import org.rsbot.script.methods.Prayer;
+import org.rsbot.script.methods.Settings;
+import org.rsbot.script.methods.Walking;
+import org.rsbot.script.wrappers.Item;
+import org.rsbot.script.wrappers.NPC;
 
 
 public class FighterState extends State {
@@ -19,19 +24,19 @@ public class FighterState extends State {
     private boolean killCondition = false;
     @Override
     public int loop() {
-        if (!methods.walking.isRunEnabled() && methods.walking.getEnergy() > random(60, 90)) {
+        if (!Walking.isRunEnabled() && Walking.getEnergy() > random(60, 90)) {
             methods.parent.paint.Current = "Setting Run";
-            methods.walking.setRun(true);
+            Walking.setRun(true);
             return random(1200, 1600);
         }
-        if (methods.interfaces.canContinue()) {
+        if (Interfaces.canContinue()) {
             methods.parent.paint.Current = "Clicking Continue";
-            methods.interfaces.clickContinue();
+            Interfaces.clickContinue();
             return random(1200, 1600);
         }
-        if (methods.game.getCurrentTab() != Game.TAB_INVENTORY) {
+        if (Game.getTab() != Game.Tab.INVENTORY) {
             methods.parent.paint.Current = "Opening Inventory";
-            methods.game.openTab(Game.TAB_INVENTORY);
+            Game.openTab(Game.Tab.INVENTORY);
             return random(700, 1500);
         }
         if (methods.fighter.eat.needEat()) {
@@ -54,7 +59,7 @@ public class FighterState extends State {
         }
         if(methods.fighter.pot.getPotions().get("PRAYER").length != 0) {
             methods.parent.paint.Current = "Setting Prayer";
-            methods.prayer.setQuickPrayer(true);
+           	Prayer.setQuickPrayer(true);
         }
         if (methods.fighter.pot.needPot()) {
             methods.parent.paint.Current = "Using Potions";
@@ -69,10 +74,10 @@ public class FighterState extends State {
 
     @Override
     public boolean activeCondition() {
-        RSNPC inter = methods.fighter.npcs.getInteracting();
-        RSNPC n = inter != null ? inter : methods.fighter.npcs.getNPC();
+        NPC inter = methods.fighter.npcs.getInteracting();
+        NPC n = inter != null ? inter : methods.fighter.npcs.getNPC();
 
-        return n != null && !killCondition && methods.settings.getSetting(394) != 0 && checkItems();
+        return n != null && !killCondition && Settings.get(394) != 0 && checkItems();
     }
 
     public interface LoopAction {
@@ -86,7 +91,7 @@ public class FighterState extends State {
 
         public int loop() {
             //TODO: Double Check If Finisher Code Will Work
-            RSNPC n = methods.fighter.npcs.getInteracting();
+            NPC n = methods.fighter.npcs.getInteracting();
             if(n != null && methods.fighter.npcs.getInteracting().getHPPercent() <= 10 &&
                     methods.parent.currentTask.getMonster().getRequirements().getFinisher() != null) {
 
@@ -111,8 +116,8 @@ public class FighterState extends State {
     public class AttackLoop implements LoopAction {
 
         public int loop() {
-            RSNPC inter = methods.fighter.npcs.getInteracting();
-            RSNPC n = inter != null ? inter : methods.fighter.npcs.getNPC();
+            NPC inter = methods.fighter.npcs.getInteracting();
+            NPC n = inter != null ? inter : methods.fighter.npcs.getNPC();
             if (n != null) {
                 int result;
                 //TODO: Double Check If Starter Code Will Work
@@ -183,7 +188,7 @@ public class FighterState extends State {
     }
 
     public boolean checkItems() {
-        for (Item i : methods.parent.currentTask.getRequirements().getItems()) {
+        for (SlayerItem i : methods.parent.currentTask.getRequirements().getItems()) {
             if (!isInInvent(i)) {
                 return false;
             }
@@ -192,12 +197,11 @@ public class FighterState extends State {
         return true;
     }
 
-    private boolean isInInvent(Item items) {
-        for (RSItem item : methods.inventory.getItems()) {
+    private boolean isInInvent(SlayerItem items) {
+        for (Item item : Inventory.getItems()) {
             for (String name : items.getNames()) {
                 if (item.getName().equalsIgnoreCase(name)) {
-                    if (methods.inventory.getCount(true, item.getID()) >= items
-                            .getAmount())
+                    if (Inventory.getCount(true, item.getID()) >= items.getAmount())
                         return true;
                 }
             }

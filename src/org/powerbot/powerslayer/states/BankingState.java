@@ -23,7 +23,7 @@ public class BankingState extends State {
 
     @Override
     public boolean activeCondition() {
-        return !methods.parent.isFullyEquiped(methods.parent.currentTask
+        return !methods.parent.isFullyEquipped(methods.parent.currentTask
                 .getRequirements());
     }
 }

@@ -1,14 +1,31 @@
 package org.powerbot.powerslayer.methods;
 
-import org.powerbot.powerslayer.common.DMethodProvider;
-import org.powerbot.powerslayer.common.MethodBase;
-import org.rsbot.script.methods.Skills;
-import org.rsbot.script.util.Filter;
-import org.rsbot.script.wrappers.*;
-
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.powerbot.powerslayer.common.DMethodProvider;
+import org.powerbot.powerslayer.common.MethodBase;
+import org.rsbot.client.RSPlayer;
+import org.rsbot.script.methods.Calculations;
+import org.rsbot.script.methods.Camera;
+import org.rsbot.script.methods.Combat;
+import org.rsbot.script.methods.Game;
+import org.rsbot.script.methods.Interfaces;
+import org.rsbot.script.methods.Inventory;
+import org.rsbot.script.methods.Menu;
+import org.rsbot.script.methods.Mouse;
+import org.rsbot.script.methods.NPCs;
+import org.rsbot.script.methods.Players;
+import org.rsbot.script.methods.Skills;
+import org.rsbot.script.methods.Walking;
+import org.rsbot.script.util.Filter;
+import org.rsbot.script.wrappers.Character;
+import org.rsbot.script.wrappers.GameModel;
+import org.rsbot.script.wrappers.Item;
+import org.rsbot.script.wrappers.NPC;
+import org.rsbot.script.wrappers.Tile;
 
 public class UniversalFighter extends DMethodProvider {
     public UniversalFighter(MethodBase methods) {
@@ -16,7 +33,7 @@ public class UniversalFighter extends DMethodProvider {
     }
 
     private long nextAntiban = 0;
-    public NPCs npcs = new NPCs();
+    public SlayerNPCs npcs = new SlayerNPCs();
     public Eating eat = new Eating();
     public Potion pot = new Potion();
 
@@ -27,10 +44,10 @@ public class UniversalFighter extends DMethodProvider {
      */
     public boolean waitForInvChange(int origCount) {
         long start = System.currentTimeMillis();
-        while (methods.inventory.getCount(true) == origCount && System.currentTimeMillis() - start < 2000) {
+        while (Inventory.getCount(true) == origCount && System.currentTimeMillis() - start < 2000) {
             sleep(random(20, 70));
         }
-        return methods.inventory.getCount(true) != origCount;
+        return Inventory.getCount(true) != origCount;
     }
 
     /**
@@ -47,13 +64,13 @@ public class UniversalFighter extends DMethodProvider {
             public void run() {
                 switch (random(0, 5)) {
                     case 0:
-                        methods.mouse.moveOffScreen();
+                        Mouse.moveOffScreen();
                         break;
                     case 1:
-                        methods.mouse.move(random(0, methods.game.getWidth()), random(0, methods.game.getHeight()));
+                        Mouse.move(random(0, Game.getWidth()), random(0, Game.getHeight()));
                         break;
                     case 2:
-                        methods.mouse.move(random(0, methods.game.getWidth()), random(0, methods.game.getHeight()));
+                        Mouse.move(random(0, Game.getWidth()), random(0, Game.getHeight()));
                         break;
                 }
             }
@@ -62,13 +79,13 @@ public class UniversalFighter extends DMethodProvider {
             public void run() {
                 switch (random(0, 4)) {
                     case 0:
-                        methods.camera.setAngle(methods.camera.getAngle() + random(-100, 100));
+                        Camera.setAngle(Camera.getAngle() + random(-100, 100));
                         break;
                     case 1:
-                        methods.camera.setAngle(methods.camera.getAngle() + random(-100, 100));
+                        Camera.setAngle(Camera.getAngle() + random(-100, 100));
                         break;
                     case 2:
-                        methods.camera.setAngle(methods.camera.getAngle() + random(-100, 100));
+                        Camera.setAngle(Camera.getAngle() + random(-100, 100));
                         break;
                 }
             }
@@ -86,7 +103,7 @@ public class UniversalFighter extends DMethodProvider {
             sleep(random(30, 100));
     }
 
-    public class NPCs {
+    public class SlayerNPCs {
 
         private String[] npcNames = methods.parent.currentTask.getMonster().getNames();
 
@@ -96,7 +113,7 @@ public class UniversalFighter extends DMethodProvider {
          * @return True if we are in combat.
          */
         public boolean isInCombat() {
-            return getMyPlayer().getInteracting() instanceof RSNPC;
+            return Players.getMyPlayer().getInteracting() instanceof Character;
         }
 
         /**
@@ -106,34 +123,34 @@ public class UniversalFighter extends DMethodProvider {
          * @param action The action to perform.
          * @return 0 if the NPC was clicked, 1 if we walked to it, or -1 if nothing happened.
          */
-        public int clickNPC(RSNPC npc, String action) {
+        public int clickNPC(NPC npc, String action) {
             for (int i = 0; i < 10; i++) {
                 if (isPartiallyOnScreen(npc.getModel())) {
                     Point p = getPointOnScreen(npc.getModel(), false);
-                    if (p == null || !methods.calc.pointOnScreen(p)) {
+                    if (p == null || !Calculations.pointOnScreen(p)) {
                         continue;
                     }
-                    methods.mouse.move(p, 0, 0);
-                    String[] items = methods.menu.getItems();
+                    Mouse.move(p, 0, 0);
+                    String[] items = Menu.getItems();
                     if (items.length > 0 && items[0].contains(action)) {
-                        methods.mouse.click(true);
+                        Mouse.click(true);
                         return 0;
-                    } else if (methods.menu.contains(action)) {
-                        methods.mouse.click(false);
+                    } else if (Menu.contains(action)) {
+                        Mouse.click(false);
                         sleep(random(100, 200));
                         for (int x = 0; x < 4; x++) {
-                            if (!methods.menu.contains(action)) {
+                            if (!Menu.contains(action)) {
                                 break;
                             }
-                            if (methods.menu.doAction(action)) {
+                            if (Menu.doAction(action)) {
                                 return 0;
                             }
                         }
                     }
                 } else {
-                    int angle = methods.camera.getCharacterAngle(npc);
-                    if (methods.calc.distanceTo(npc) < 10 && Math.abs(angle - methods.camera.getAngle()) > 20) {
-                        methods.camera.setAngle(angle + random(-20, 20));
+                    int angle = Camera.getCharacterAngle(npc);
+                    if (Calculations.distanceTo(npc) < 10 && Math.abs(angle - Camera.getAngle()) > 20) {
+                        Camera.setAngle(angle + random(-20, 20));
                     }
                 }
             }
@@ -146,7 +163,7 @@ public class UniversalFighter extends DMethodProvider {
          * @param m The RSModel to check.
          * @return True if any point on the model is on screen.
          */
-        private boolean isPartiallyOnScreen(RSModel m) {
+        private boolean isPartiallyOnScreen(GameModel m) {
             return getPointOnScreen(m, true) != null;
         }
 
@@ -157,7 +174,7 @@ public class UniversalFighter extends DMethodProvider {
          * @param first If true, it will return the first point that it finds on screen.
          * @return A random point on screen of an object.
          */
-        private Point getPointOnScreen(RSModel m, boolean first) {
+        private Point getPointOnScreen(GameModel m, boolean first) {
             if (m == null) {
                 return null;
             }
@@ -167,7 +184,7 @@ public class UniversalFighter extends DMethodProvider {
                 for (Polygon p : tris) {
                     for (int j = 0; j < p.xpoints.length; j++) {
                         Point pt = new Point(p.xpoints[j], p.ypoints[j]);
-                        if (methods.calc.pointOnScreen(pt)) {
+                        if (Calculations.pointOnScreen(pt)) {
                             if (first)
                                 return pt;
                             list.add(pt);
@@ -187,7 +204,8 @@ public class UniversalFighter extends DMethodProvider {
          * @param p2 The second point.
          * @return The distance between the two points, using the distance formula.
          */
-        private double distanceBetween(Point p1, Point p2) {
+        @SuppressWarnings("unused")
+		private double distanceBetween(Point p1, Point p2) {
             return Math.sqrt(((p1.x - p2.x) * (p1.x - p2.x)) + ((p1.y - p2.y) * (p1.y - p2.y)));
         }
 
@@ -198,14 +216,15 @@ public class UniversalFighter extends DMethodProvider {
          * @param dist The max dist.
          * @return A closer tile.
          */
-        private RSTile closerTile(RSTile t, int dist) {
-            RSTile loc = getMyPlayer().getLocation();
+        @SuppressWarnings("unused")
+		private Tile closerTile(Tile t, int dist) {
+            Tile loc = getMyPlayer().getLocation();
             int newX = t.getX(), newY = t.getY();
             for (int i = 1; i < dist; i++) {
                 newX = t.getX() != loc.getX() ? (t.getX() < loc.getX() ? newX-- : newX++) : newX;
                 newY = t.getY() != loc.getY() ? (t.getY() < loc.getY() ? newY-- : newY++) : newY;
             }
-            return new RSTile(newX, newY);
+            return new Tile(newX, newY);
         }
 
         /**
@@ -213,11 +232,11 @@ public class UniversalFighter extends DMethodProvider {
          *
          * @return The nearest NPC that matches the filter.
          */
-        public RSNPC getNPC() {
-            RSNPC onScreen = methods.npcs.getNearest(npcOnScreenFilter);
+        public NPC getNPC() {
+            NPC onScreen = NPCs.getNearest(npcOnScreenFilter);
             if (onScreen != null)
                 return onScreen;
-            return methods.npcs.getNearest(npcFilter);
+            return NPCs.getNearest(npcFilter);
         }
 
         /**
@@ -225,22 +244,22 @@ public class UniversalFighter extends DMethodProvider {
          *
          * @return The closest interacting NPC that matches the filter.
          */
-        public RSNPC getInteracting() {
-            RSNPC npc = null;
+        public NPC getInteracting() {
+            NPC npc = null;
             int dist = 20;
-            for (RSNPC n : methods.npcs.getAll()) {
+            for (NPC n : NPCs.getAll()) {
                 if (!isOurNPC(n))
                     continue;
-                RSCharacter inter = n.getInteracting();
-                if (inter != null && inter instanceof RSPlayer && inter.equals(getMyPlayer()) && methods.calc.distanceTo(n) < dist) {
-                    dist = methods.calc.distanceTo(n);
+                Character inter = n.getInteracting();
+                if (inter != null && inter instanceof RSPlayer && inter.equals(getMyPlayer()) && Calculations.distanceTo(n) < dist) {
+                    dist = Calculations.distanceTo(n);
                     npc = n;
                 }
             }
             return npc;
         }
 
-        private boolean isOurNPC(RSNPC t) {
+        private boolean isOurNPC(NPC t) {
             String name = t.getName();
             boolean good = false;
             for (String s : npcNames) {
@@ -249,18 +268,18 @@ public class UniversalFighter extends DMethodProvider {
             }
             return good;
         }
-        public boolean useStarter( RSNPC monster) {
+        public boolean useStarter( NPC monster) {
 
             for (String s : methods.parent.currentTask.getRequirements().getStarter().getNames()) {
-                for (RSItem inventItem : methods.inventory.getItems()) {
+                for (Item inventItem : Inventory.getItems()) {
                     if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (methods.inventory.selectItem(inventItem.getID())) {
+                        if (Inventory.selectItem(inventItem.getID())) {
                             if (monster != null) {
                                 if (!monster.isOnScreen()) {
-                                    methods.camera.turnTo(monster);
+                                    Camera.turnTo(monster);
                                 }
                                 if (monster.isOnScreen()) {
-                                    return monster.doAction("Use");
+                                    return monster.interact("Use");
                                 }
                             }
                         }
@@ -270,17 +289,17 @@ public class UniversalFighter extends DMethodProvider {
             return false;
         }
 
-        public boolean useFinisher(RSNPC monster) {
+        public boolean useFinisher(NPC monster) {
             for (String s : methods.parent.currentTask.getRequirements().getFinisher().getNames()) {
-                for (RSItem inventItem : methods.inventory.getItems()) {
+                for (Item inventItem : Inventory.getItems()) {
                     if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (methods.inventory.selectItem(inventItem.getID())) {
+                        if (Inventory.selectItem(inventItem.getID())) {
                             if (monster != null) {
                                 if (!monster.isOnScreen()) {
-                                    methods.camera.turnTo(monster);
+                                    Camera.turnTo(monster);
                                 }
                                 if (monster.isOnScreen()) {
-                                    return monster.doAction("Use");
+                                    return monster.interact("Use");
                                 }
                             }
                         }
@@ -293,17 +312,17 @@ public class UniversalFighter extends DMethodProvider {
         /**
          * The filter we use!
          */
-        private final Filter<RSNPC> npcFilter = new Filter<RSNPC>() {
-            public boolean accept(RSNPC t) {
-                return (isOurNPC(t) && t.isValid() && !t.isInCombat() && t.getInteracting() == null && t.getHPPercent() != 0);
+        private final Filter<NPC> npcFilter = new Filter<NPC>() {
+            public boolean accept(NPC t) {
+                return (isOurNPC(t) && t != null && !t.isInCombat() && t.getInteracting() == null && t.getHPPercent() != 0);
             }
         };
 
         /**
          * Will only return an on screen NPC. Based on npcFilter.
          */
-        private final Filter<RSNPC> npcOnScreenFilter = new Filter<RSNPC>() {
-            public boolean accept(RSNPC n) {
+        private final Filter<NPC> npcOnScreenFilter = new Filter<NPC>() {
+            public boolean accept(NPC n) {
                 return npcFilter.accept(n) && getPointOnScreen(n.getModel(), true) != null;
             }
         };
@@ -331,16 +350,16 @@ public class UniversalFighter extends DMethodProvider {
          * @return True if we have a tab.
          */
         public boolean haveB2pTab() {
-            return methods.inventory.getCount(B2P_TAB_ID) > 0;
+            return Inventory.getCount(B2P_TAB_ID) > 0;
         }
 
         /**
          * Breaks a B2P tab.
          */
         public void breakB2pTab() {
-            RSItem i = methods.inventory.getItem(B2P_TAB_ID);
+            Item i = Inventory.getItem(B2P_TAB_ID);
             if (i != null)
-                i.doClick(true);
+                i.click(true);
         }
 
         /**
@@ -349,7 +368,7 @@ public class UniversalFighter extends DMethodProvider {
          * @return True if we have bones.
          */
         public boolean haveBones() {
-            return methods.inventory.getCount(BONES_ID) > 0;
+            return Inventory.getCount(BONES_ID) > 0;
         }
 
         /**
@@ -364,10 +383,10 @@ public class UniversalFighter extends DMethodProvider {
         /**
          * Finds food based on inventory actions.
          *
-         * @return The RSItem of food, or null if none was found.
+         * @return The Item of food, or null if none was found.
          */
-        private RSItem getFood() {
-            for (RSItem i : methods.inventory.getItems()) {
+        private Item getFood() {
+            for (Item i : Inventory.getItems()) {
                 if (i == null || i.getID() == -1)
                     continue;
                 if (i.getComponent().getActions() == null || i.getComponent().getActions()[0] == null)
@@ -384,11 +403,11 @@ public class UniversalFighter extends DMethodProvider {
          * @return True if we ate.
          */
         public boolean eatFood() {
-            RSItem i = getFood();
+            Item i = getFood();
             for (int j = 0; j < 3; j++) {
                 if (i == null)
                     break;
-                if (i.doAction("Eat")) {
+                if (i.interact("Eat")) {
                     return true;
                 }
             }
@@ -415,7 +434,7 @@ public class UniversalFighter extends DMethodProvider {
          */
         public int getHPPercent() {
             try {
-                return ((int) ((Integer.parseInt(methods.interfaces.get(748).getComponent(8).getText().trim()) / (double) (methods.skills.getRealLevel(Skills.CONSTITUTION) * 10)) * 100));
+                return ((int) ((Integer.parseInt(Interfaces.get(748).getComponent(8).getText().trim()) / (double) (Skills.getAbsoluteLevel(Skills.CONSTITUTION) * 10)) * 100));
             } catch (Exception e) {
                 return 100;
             }
@@ -455,31 +474,31 @@ public class UniversalFighter extends DMethodProvider {
 
         private final int[] VIAL = new int[]{229};
 
-        public HashMap<String, RSItem[]> getPotions() {
-            HashMap<String, RSItem[]> potions = new HashMap<String, RSItem[]>();
-            potions.put("MAGIC", methods.inventory.getItems(MAGIC_POTIONS));
-            potions.put("PRAYER", methods.inventory.getItems(PRAYER_POTIONS));
-            potions.put("RANGE", methods.inventory.getItems(RANGE_POTIONS));
-            potions.put("ENERGY", methods.inventory.getItems(ENERGY_POTIONS));
-            potions.put("COMBAT", methods.inventory.getItems(COMBAT_POTIONS));
-            potions.put("ATTACK", methods.inventory.getItems(ATTACK_POTIONS));
-            potions.put("STRENGTH", methods.inventory.getItems(STRENGTH_POTIONS));
-            potions.put("DEFENSE", methods.inventory.getItems(DEFENSE_POTIONS));
-            potions.put("ANTIPOISON", methods.inventory.getItems(ANTIPOISON));
-            potions.put("ZAMORAK", methods.inventory.getItems(ZAMORAK_POTIONS));
-            potions.put("SARADOMIN", methods.inventory.getItems(SARADOMIN_POTIONS));
-            potions.put("OVERLOAD", methods.inventory.getItems(OVERLOAD_POTIONS));
+        public HashMap<String, Item[]> getPotions() {
+            HashMap<String, Item[]> potions = new HashMap<String, Item[]>();
+            potions.put("MAGIC", Inventory.getItems(MAGIC_POTIONS));
+            potions.put("PRAYER", Inventory.getItems(PRAYER_POTIONS));
+            potions.put("RANGE", Inventory.getItems(RANGE_POTIONS));
+            potions.put("ENERGY", Inventory.getItems(ENERGY_POTIONS));
+            potions.put("COMBAT", Inventory.getItems(COMBAT_POTIONS));
+            potions.put("ATTACK", Inventory.getItems(ATTACK_POTIONS));
+            potions.put("STRENGTH", Inventory.getItems(STRENGTH_POTIONS));
+            potions.put("DEFENSE", Inventory.getItems(DEFENSE_POTIONS));
+            potions.put("ANTIPOISON", Inventory.getItems(ANTIPOISON));
+            potions.put("ZAMORAK", Inventory.getItems(ZAMORAK_POTIONS));
+            potions.put("SARADOMIN", Inventory.getItems(SARADOMIN_POTIONS));
+            potions.put("OVERLOAD", Inventory.getItems(OVERLOAD_POTIONS));
             return potions;
         }
 
 
         public boolean needPot() {
-            HashMap<String, RSItem[]> potions = getPotions();
+            HashMap<String, Item[]> potions = getPotions();
 
-            if (methods.inventory.getItems(VIAL).length != 0) {
-                for (RSItem i : methods.inventory.getItems(VIAL)) {
-                    int n = methods.inventory.getCount(true);
-                    i.doAction("Drop Vial");
+            if (Inventory.getItems(VIAL).length != 0) {
+                for (Item i : Inventory.getItems(VIAL)) {
+                    int n = Inventory.getCount(true);
+                    i.interact("Drop Vial");
                     waitForInvChange(n);
                 }
             }
@@ -495,7 +514,7 @@ public class UniversalFighter extends DMethodProvider {
             if (potions.get("RANGE").length != 0 && !statIsBoosted(Skills.RANGE)) {
                 return true;
             }
-            if (potions.get("ENERGY").length != 0 && methods.walking.getEnergy() < random(40, 70)) {
+            if (potions.get("ENERGY").length != 0 && Walking.getEnergy() < random(40, 70)) {
                 return true;
             }
 
@@ -515,7 +534,7 @@ public class UniversalFighter extends DMethodProvider {
                 return true;
             }
 
-            if (potions.get("ANTIPOISON").length != 0 && methods.combat.isPoisoned()) {
+            if (potions.get("ANTIPOISON").length != 0 && Combat.isPoisoned()) {
                 return true;
             }
 
@@ -535,85 +554,85 @@ public class UniversalFighter extends DMethodProvider {
         }
 
         public int usePotions() {
-            HashMap<String, RSItem[]> potions = getPotions();
+            HashMap<String, Item[]> potions = getPotions();
 
             if (!(statIsBoosted(Skills.MAGIC)) && (potions.get("MAGIC").length != 0 || potions.get("OVERLOAD").length != 0)) {
                 if (potions.get("MAGIC").length != 0) {
-                    potions.get("MAGIC")[0].doClick(true);
+                    potions.get("MAGIC")[0].click(true);
                     return random(2000, 2500);
                 } else if (potions.get("OVERLOAD").length != 0) {
-                    potions.get("OVERLOAD")[0].doClick(true);
+                    potions.get("OVERLOAD")[0].click(true);
                     return random(2000, 2500);
                 }
             }
 
-            if ((methods.skills.getRealLevel(Skills.PRAYER) - methods.skills.getCurrentLevel(Skills.PRAYER) >= random(Math.floor(7 + methods.skills.getRealLevel(Skills.PRAYER) / 4) - 2, Math.floor(7 + (methods.skills.getRealLevel(Skills.PRAYER) / 4)) + 2)) && potions.get("PRAYER").length != 0) {
+            if ((Skills.getAbsoluteLevel(Skills.PRAYER) - Skills.getLevel(Skills.PRAYER) >= random(Math.floor(7 + Skills.getAbsoluteLevel(Skills.PRAYER) / 4) - 2, Math.floor(7 + (Skills.getAbsoluteLevel(Skills.PRAYER) / 4)) + 2)) && potions.get("PRAYER").length != 0) {
                 return random(2000, 2500);
             }
 
             if (!(statIsBoosted(Skills.RANGE)) && (potions.get("RANGE").length != 0 || potions.get("OVERLOAD").length != 0)) {
                 if (potions.get("RANGE").length != 0) {
-                    potions.get("RANGE")[0].doClick(true);
+                    potions.get("RANGE")[0].click(true);
                     return random(2000, 2500);
                 } else if (potions.get("OVERLOAD").length != 0) {
-                    potions.get("OVERLOAD")[0].doClick(true);
+                    potions.get("OVERLOAD")[0].click(true);
                     return random(2000, 2500);
                 }
             }
 
-            if (methods.walking.getEnergy() < random(40, 70) && potions.get("ENERGY").length != 0) {
-                potions.get("ENERGY")[0].doClick(true);
+            if (Walking.getEnergy() < random(40, 70) && potions.get("ENERGY").length != 0) {
+                potions.get("ENERGY")[0].click(true);
 
                 return random(2000, 2500);
             }
 
             if (!(statIsBoosted(Skills.STRENGTH)) && (potions.get("STRENGTH").length != 0 || potions.get("COMBAT").length != 0 || potions.get("ZAMORAK").length != 0 || potions.get("OVERLOAD").length != 0)) {
                 if (potions.get("COMBAT").length != 0) {
-                    potions.get("COMBAT")[0].doClick(true);
+                    potions.get("COMBAT")[0].click(true);
                     return random(2000, 2500);
                 } else if (potions.get("STRENGTH").length != 0) {
-                    potions.get("STRENGTH")[0].doClick(true);
+                    potions.get("STRENGTH")[0].click(true);
                     return random(2000, 2500);
                 } else if (potions.get("ZAMORAK").length != 0) {
-                    potions.get("ZAMORAK")[0].doClick(true);
+                    potions.get("ZAMORAK")[0].click(true);
                     return random(2000, 2500);
                 } else if (potions.get("OVERLOAD").length != 0) {
-                    potions.get("OVERLOAD")[0].doClick(true);
+                    potions.get("OVERLOAD")[0].click(true);
                     return random(2000, 2500);
                 }
             }
 
             if (!(statIsBoosted(Skills.DEFENSE)) && (potions.get("DEFENSE").length != 0 || potions.get("SARADOMIN").length != 0 || potions.get("OVERLOAD").length != 0)) {
                 if (potions.get("DEFENSE").length != 0) {
-                    potions.get("DEFENSE")[0].doClick(true);
+                    potions.get("DEFENSE")[0].click(true);
                     return random(2000, 2500);
                 } else if (potions.get("SARADOMIN").length != 0) {
-                    potions.get("SARADOMIN")[0].doClick(true);
+                    potions.get("SARADOMIN")[0].click(true);
                     return random(2000, 2500);
                 } else if (potions.get("OVERLOAD").length != 0) {
-                    potions.get("OVERLOAD")[0].doClick(true);
+                    potions.get("OVERLOAD")[0].click(true);
                     return random(2000, 2500);
                 }
             }
 
             if (!(statIsBoosted(Skills.ATTACK)) && (potions.get("ATTACK").length != 0 || potions.get("COMBAT").length != 0 || potions.get("ZAMORAK").length != 0 || potions.get("OVERLOAD").length != 0)) {
                 if (potions.get("COMBAT").length != 0) {
-                    potions.get("COMBAT")[0].doClick(true);
+                    potions.get("COMBAT")[0].click(true);
                     return random(2000, 2500);
                 } else if (potions.get("ATTACK").length != 0) {
-                    potions.get("ATTACK")[0].doClick(true);
+                    potions.get("ATTACK")[0].click(true);
                     return random(2000, 2500);
                 } else if (potions.get("ZAMORAK").length != 0) {
-                    potions.get("ZAMORAK")[0].doClick(true);
+                    potions.get("ZAMORAK")[0].click(true);
                     return random(2000, 2500);
                 } else if (potions.get("OVERLOAD").length != 0) {
-                    potions.get("OVERLOAD")[0].doClick(true);
+                    potions.get("OVERLOAD")[0].click(true);
                     return random(2000, 2500);
                 }
             }
 
-            if (methods.combat.isPoisoned() && potions.get("ANTIPOISON").length != 0) {
-                potions.get("ANTIPOISON")[0].doClick(true);
+            if (Combat.isPoisoned() && potions.get("ANTIPOISON").length != 0) {
+                potions.get("ANTIPOISON")[0].click(true);
                 return random(2000, 2500);
             }
 
@@ -623,7 +642,7 @@ public class UniversalFighter extends DMethodProvider {
 
 
         private boolean statIsBoosted(int Skill) {
-            return methods.skills.getCurrentLevel(Skill) != methods.skills.getRealLevel(Skill);
+            return Skills.getLevel(Skill) != Skills.getAbsoluteLevel(Skill);
         }
 
     }
@@ -654,20 +673,20 @@ public class UniversalFighter extends DMethodProvider {
 //				String action = "Take " + item.getItem().getName();
 //				if (item.isOnScreen()) {
 //					for (int i = 0; i < 5; i++) {
-//						if (methods.menu.isOpen())
-//							methods.mouse.moveRandomly(300, 500);
-//						Point p = methods.calc.tileToScreen(item.getLocation(), random(0.48, 0.52), random(0.48, 0.52), 0);
-//						if (!methods.calc.pointOnScreen(p))
+//						if (Menu.isOpen())
+//							Mouse.moveRandomly(300, 500);
+//						Point p = Calculations.tileToScreen(item.getLocation(), random(0.48, 0.52), random(0.48, 0.52), 0);
+//						if (!Calculations.pointOnScreen(p))
 //							continue;
-//						methods.mouse.move(p, 3, 3);
-//						if (methods.menu.contains(action)) {
-//							if (methods.menu.getItems()[0].contains(action)) {
-//								methods.mouse.click(true);
+//						Mouse.move(p, 3, 3);
+//						if (Menu.contains(action)) {
+//							if (Menu.getItems()[0].contains(action)) {
+//								Mouse.click(true);
 //								return 0;
 //							} else {
-//								methods.mouse.click(false);
+//								Mouse.click(false);
 //								sleep(random(100, 200));
-//								if (methods.menu.doAction(action))
+//								if (Menu.doAction(action))
 //									return 0;
 //							}
 //						}
@@ -682,12 +701,12 @@ public class UniversalFighter extends DMethodProvider {
 //			private final Filter<RSGroundItem> lootFilter = new Filter<RSGroundItem>() {
 //				public boolean accept(RSGroundItem t) {
 //					//Skip if we can't hold it
-//					RSItem i;
-//					if (methods.inventory.isFull() && ((i = methods.inventory.getItem(t.getItem().getID())) == null || i.getStackSize() <= 1)) {
+//					Item i;
+//					if (Inventory.isFull() && ((i = Inventory.getItem(t.getItem().getID())) == null || i.getStackSize() <= 1)) {
 //						return false;
 //					}
 //					//Skip if its out of radius or far away
-//					if (methods.calc.distanceTo(t.getLocation()) > 25) {
+//					if (Calculations.distanceTo(t.getLocation()) > 25) {
 //						return false;
 //					}
 //					//Check ID/name

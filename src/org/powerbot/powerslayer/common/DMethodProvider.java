@@ -1,11 +1,15 @@
 package org.powerbot.powerslayer.common;
 
-import org.rsbot.script.methods.Players;
-import org.rsbot.script.wrappers.*;
-
-import java.awt.*;
+import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.rsbot.script.methods.Players;
+import org.rsbot.script.wrappers.GameObject;
+import org.rsbot.script.wrappers.GroundItem;
+import org.rsbot.script.wrappers.NPC;
+import org.rsbot.script.wrappers.Player;
+import org.rsbot.script.wrappers.Tile;
 
 public abstract class DMethodProvider {
     public MethodBase methods;
@@ -30,8 +34,8 @@ public abstract class DMethodProvider {
      * @return The current client's <tt>RSPlayer</tt>.
      * @see Players#getMyPlayer()
      */
-    public RSPlayer getMyPlayer() {
-        return methods.players.getMyPlayer();
+    public Player getMyPlayer() {
+        return Players.getMyPlayer();
     }
 
     /**
@@ -53,7 +57,7 @@ public abstract class DMethodProvider {
      * @param npc The NPC to check for.
      * @return <tt>true</tt> if found.
      */
-    public boolean verify(RSNPC npc) {
+    public boolean verify(NPC npc) {
         return npc != null;
     }
 
@@ -63,7 +67,7 @@ public abstract class DMethodProvider {
      * @param o The RSObject to check for.
      * @return <tt>true</tt> if found.
      */
-    public boolean verify(RSObject o) {
+    public boolean verify(GameObject o) {
         return o != null;
     }
 
@@ -73,7 +77,7 @@ public abstract class DMethodProvider {
      * @param t The RSTile to check for.
      * @return <tt>true</tt> if found.
      */
-    public boolean verify(RSTile t) {
+    public boolean verify(Tile t) {
         return t != null;
     }
 
@@ -83,7 +87,7 @@ public abstract class DMethodProvider {
      * @param i The RSGroundItem to check for.
      * @return <tt>true</tt> if found.
      */
-    public boolean verify(RSGroundItem i) {
+    public boolean verify(GroundItem i) {
         return i != null;
     }
 

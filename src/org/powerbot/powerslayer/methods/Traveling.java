@@ -5,8 +5,10 @@ import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.Banks;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.wrappers.Task;
-import org.rsbot.script.wrappers.RSItem;
-import org.rsbot.script.wrappers.RSTile;
+import org.rsbot.script.methods.Calculations;
+import org.rsbot.script.methods.Equipment;
+import org.rsbot.script.wrappers.Item;
+import org.rsbot.script.wrappers.Tile;
 
 public class Traveling extends DMethodProvider {
     public Traveling(MethodBase methods) {
@@ -22,8 +24,8 @@ public class Traveling extends DMethodProvider {
                 getMyPlayer().getLocation()));
     }
 
-    public RSItem getEquipmentItem(int... ids) {
-        for (RSItem i : methods.equipment.getItems()) {
+    public Item getEquipmentItem(int... ids) {
+        for (Item i : Equipment.getItems()) {
             for (int id : ids) {
                 if (id == i.getID()) {
                     return i;
@@ -39,11 +41,11 @@ public class Traveling extends DMethodProvider {
     }
 
     public boolean travelToBank(Banks bank) {
-        return travelTo(bank.getRSArea().getCentralTile());
+        return travelTo(bank.getArea().getCentralTile());
     }
 
-    public boolean travelTo(RSTile t) {
-        return methods.web.generateRoute(getMyPlayer().getLocation(), t).execute();
+    public boolean travelTo(Tile t) {
+        return Web.generateRoute(getMyPlayer().getLocation(), t).execute();
     }
 
     public Banks getNearestBank() {
@@ -54,7 +56,7 @@ public class Traveling extends DMethodProvider {
         Banks best = null;
         int bDist = Integer.MAX_VALUE;
         for (Banks b : Banks.values()) {
-            int dist = methods.calc.distanceTo(b.getRSArea().getCentralTile());
+            int dist = Calculations.distanceTo(b.getArea().getCentralTile());
             if (dist < bDist) {
                 best = b;
                 bDist = dist;
@@ -63,7 +65,7 @@ public class Traveling extends DMethodProvider {
         return best;
     }
 
-    public boolean isInBank(RSTile tile) {
+    public boolean isInBank(Tile tile) {
         for (Banks b : Banks.values()) {
             if (b.containsTile(tile)) {
                 return true;
