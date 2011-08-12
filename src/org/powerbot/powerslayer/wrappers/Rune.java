@@ -38,7 +38,7 @@ public enum Rune {
 
     public boolean isElemental() {
 	    //TODO: FIX WARNING: Confusing primitive array argument to var-arg method ( Anyone know how to fix this?)
-	    List ids =  Arrays.asList(this.getItemIDs());
+	    List ids =  Arrays.asList(this.ids);
         return ids.contains(AIR.getItemIDs()) || ids.contains(WATER.getItemIDs()) ||
 		        ids.contains(FIRE.getItemIDs()) || ids.contains(EARTH.getItemIDs());
     }
