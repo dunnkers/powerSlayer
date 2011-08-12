@@ -1,12 +1,12 @@
 package org.powerbot.powerslayer.common;
 
-import java.util.Random;
-
 import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.methods.Banking;
 import org.powerbot.powerslayer.methods.Traveling;
 import org.powerbot.powerslayer.methods.UniversalFighter;
 import org.rsbot.script.methods.*;
+
+import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA. User: Taylor Date: 5/5/11 Time: 5:05 PM Package:
@@ -25,9 +25,9 @@ public class MethodBase {
     public Equipment equipment = null;
     public FriendChat friendChat = null;
     public Game game = null;
-    public GrandExchange grandExchange = null;
+    //public GrandExchange grandExchange = null;
     public GroundItems groundItems = null;
-    public Hiscores hiscores = null;
+    //public Hiscores hiscores = null;
     public Interfaces interfaces = null;
     public Inventory inventory = null;
     public Keyboard keyboard = null;
@@ -43,12 +43,12 @@ public class MethodBase {
     public Settings settings = null;
 	public Quests quests = null;
     public Skills skills = null;
-    public Store store = null;
-    public Summoning summoning = null;
+   // public Store store = null;
+    //public Summoning summoning = null;
     public Tiles tiles = null;
-    public Trade trade = null;
+    //public Trade trade = null;
     public Walking walking = null;
-    public Web web = null;
+    //public Web web = null;
     
     //Internal classes
     public UniversalFighter fighter = new UniversalFighter(this);

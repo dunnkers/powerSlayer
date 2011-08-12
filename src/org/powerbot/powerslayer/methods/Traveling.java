@@ -52,8 +52,8 @@ public class Traveling extends DMethodProvider {
 
     public Banks getNearestBank() {
         /*
-       * TODO Add a method to remove all banks that a player can not
-       * reach.TODO Use the web to return a 'real' distance.
+       * TODO Add a method to remove all banks that a player can not  reach.
+       * TODO Use the web to return a 'real' distance.
        */
         Banks best = null;
         int bDist = Integer.MAX_VALUE;
