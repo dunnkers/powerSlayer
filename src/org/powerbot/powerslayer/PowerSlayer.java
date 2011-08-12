@@ -1,28 +1,37 @@
 package org.powerbot.powerslayer;
 
-import org.powerbot.powerslayer.abstracts.State;
-import org.powerbot.powerslayer.common.MethodBase;
-import org.powerbot.powerslayer.data.SlayerMaster;
-import org.powerbot.powerslayer.states.BankingState;
-import org.powerbot.powerslayer.wrappers.*;
-import org.rsbot.event.listeners.PaintListener;
-import org.rsbot.script.Script;
-import org.rsbot.script.ScriptManifest;
-import org.rsbot.script.methods.Bank;
-import org.rsbot.script.methods.Equipment;
-import org.rsbot.script.methods.Inventory;
-import org.rsbot.script.methods.Skills;
-import org.rsbot.script.wrappers.Item;
-import org.rsbot.script.wrappers.NPC;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+
+import org.powerbot.powerslayer.abstracts.State;
+import org.powerbot.powerslayer.common.MethodBase;
+import org.powerbot.powerslayer.data.SlayerMaster;
+import org.powerbot.powerslayer.states.BankingState;
+import org.powerbot.powerslayer.wrappers.EquipmentItems;
+import org.powerbot.powerslayer.wrappers.Finisher;
+import org.powerbot.powerslayer.wrappers.Requirements;
+import org.powerbot.powerslayer.wrappers.Rune;
+import org.powerbot.powerslayer.wrappers.SlayerItem;
+import org.powerbot.powerslayer.wrappers.Starter;
+import org.powerbot.powerslayer.wrappers.Task;
+import org.rsbot.event.listeners.PaintListener;
+import org.rsbot.script.Script;
+import org.rsbot.script.ScriptManifest;
+import org.rsbot.script.methods.*;
+import org.rsbot.script.wrappers.Item;
+import org.rsbot.script.wrappers.NPC;
 
 @SuppressWarnings("unused")
 @ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 0.1, description = "Slayer bot.")
@@ -425,35 +434,39 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
     public void setMethodBase() {
         if (methodBase == null)
             methodBase = new MethodBase(this);
-        methodBase.equipment = equipment;
-        methodBase.combat = combat;
-        methodBase.walking = walking;
-        methodBase.grandExchange = grandExchange;
-        methodBase.account = account;
-        methodBase.bank = bank;
-        methodBase.calc = calc;
-        methodBase.camera = camera;
-        methodBase.clanChat = clanChat;
-        methodBase.env = env;
-        methodBase.friendChat = friendChat;
-        methodBase.groundItems = groundItems;
-        methodBase.hiscores = hiscores;
-        methodBase.interfaces = interfaces;
-        methodBase.inventory = inventory;
-        methodBase.keyboard = keyboard;
-        methodBase.magic = magic;
-        methodBase.menu = menu;
-        methodBase.mouse = mouse;
-        methodBase.npcs = npcs;
-        methodBase.objects = objects;
-        methodBase.players = players;
-        methodBase.prayer = prayer;
-        methodBase.settings = settings;
-        methodBase.skills = skills;
-        methodBase.store = store;
-        methodBase.summoning = summoning;
-        methodBase.tiles = tiles;
-        methodBase.trade = trade;
-        methodBase.web = web;
+        methodBase.account = new Account();
+        methodBase.bank = new Bank();
+        methodBase.calculations = new Calculations();
+        methodBase.camera = new Camera();
+        methodBase.clanChat = new ClanChat();
+        methodBase.combat = new Combat();
+        methodBase.environment = new Environment();
+        methodBase.equipment = new Equipment();
+        methodBase.friendChat = new FriendChat();
+        methodBase.game = new Game();
+        methodBase.grandExchange = new GrandExchange();
+        methodBase.groundItems = new GroundItems();
+        methodBase.hiscores = new Hiscores();
+        methodBase.interfaces = new Interfaces();
+        methodBase.inventory = new Inventory();
+        methodBase.keyboard = new Keyboard();
+        methodBase.lobby = new Lobby();
+        methodBase.magic = new Magic();
+        methodBase.menu = new Menu();
+        methodBase.mouse = new Mouse();
+        methodBase.npcs = new NPCs();
+        methodBase.objects = new Objects();
+        methodBase.players = new Players();
+        methodBase.prayer = new Prayer();
+        methodBase.projectiles = new Projectiles();
+        methodBase.quests = new Quests();
+        methodBase.settings = new Settings();
+        methodBase.skills = new Skills();
+        methodBase.store = new Store();
+        methodBase.summoning = new Summoning();
+        methodBase.tiles = new Tiles();
+        methodBase.trade = new Trade();
+        methodBase.walking = new Walking();
+        methodBase.web = new Web();
     }
 }
