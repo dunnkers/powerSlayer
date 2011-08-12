@@ -9,6 +9,7 @@ import org.rsbot.script.wrappers.Tile;
 
 public enum Monsters {
     // TODO Add locations
+	// TODO Add Loots?
     ABBERANT_SPECTRE("Aberrant Spectre", new Requirements(new EquipmentItems(
             new String[]{"Slayer helmet", "Nosepeg"}, Equipment.HELMET)), new CombatStyle(
             Style.MAGIC), new Tile(3418, 3549, 1)),

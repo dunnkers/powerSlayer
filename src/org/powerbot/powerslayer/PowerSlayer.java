@@ -5,11 +5,15 @@ import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.states.*;
 import org.powerbot.powerslayer.wrappers.*;
+import org.rsbot.event.events.MessageEvent;
+import org.rsbot.event.listeners.MessageListener;
 import org.rsbot.event.listeners.PaintListener;
 import org.rsbot.script.Script;
 import org.rsbot.script.ScriptManifest;
-import org.rsbot.script.methods.*;
-import org.rsbot.script.methods.Menu;
+import org.rsbot.script.methods.Bank;
+import org.rsbot.script.methods.Equipment;
+import org.rsbot.script.methods.Inventory;
+import org.rsbot.script.methods.Skills;
 import org.rsbot.script.wrappers.Item;
 
 import javax.imageio.ImageIO;
@@ -22,7 +26,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings("unused")
 @ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 0.1, description = "Slayer bot.")
-public class PowerSlayer extends Script implements PaintListener, MouseListener {
+public class PowerSlayer extends Script implements PaintListener, MouseListener, MessageListener {
 	
 	public Task currentTask;
     public SlayerMaster slayerMaster;
@@ -37,7 +41,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
     @Override
     public boolean onRun() {
 	    //TODO: Decide where a player must start the script
-        setMethodBase();
+        initalizeMethodBase();
 	    initStates();
         return true;
     }
@@ -237,7 +241,20 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         return false;
     }
 
-   	//Start Paint
+	public void messageReceived(MessageEvent messageEvent) {
+		if(messageEvent.getMessage().equals("You can't reach that.")) {
+			if(methodBase.fighter.loot.itemWasClickedLast && methodBase.fighter.loot.lastClickedItem != null) {
+				methodBase.fighter.tiles.addBadTile(methodBase.fighter.loot.lastClickedItem.getLocation());
+			} else if(methodBase.fighter.npcs.npcWasClickedLast && methodBase.fighter.npcs.lastClickedNPC != null) {
+				methodBase.fighter.tiles.addBadTile(methodBase.fighter.npcs.lastClickedNPC.getLocation());
+			}
+		} else if(messageEvent.getMessage().equals("You don't have any quick prayers selected.")) {
+			methodBase.fighter.pot.setQuickPrayer = false;
+			log("You must set your quick prayers to use prayer potions.");
+		}
+	}
+
+	//Start Paint
 
     public class Paint {
         public String Current = "Loading...";
@@ -401,42 +418,8 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         return Inventory.getCount(true, rune.getItemIDs());
     }
 
-    public void setMethodBase() {
+    public void initalizeMethodBase() {
         if (methodBase == null)
             methodBase = new MethodBase(this);
-        methodBase.account = new Account();
-        methodBase.bank = new Bank();
-        methodBase.calculations = new Calculations();
-        methodBase.camera = new Camera();
-        methodBase.clanChat = new ClanChat();
-        methodBase.combat = new Combat();
-        methodBase.environment = new Environment();
-        methodBase.equipment = new Equipment();
-        methodBase.friendChat = new FriendChat();
-        methodBase.game = new Game();
-        //methodBase.grandExchange = new GrandExchange();
-        methodBase.groundItems = new GroundItems();
-        //methodBase.hiscores = new Hiscores();
-        methodBase.interfaces = new Interfaces();
-        methodBase.inventory = new Inventory();
-        methodBase.keyboard = new Keyboard();
-        methodBase.lobby = new Lobby();
-        methodBase.magic = new Magic();
-        methodBase.menu = new Menu();
-        methodBase.mouse = new Mouse();
-        methodBase.npcs = new NPCs();
-        methodBase.objects = new Objects();
-        methodBase.players = new Players();
-        methodBase.prayer = new Prayer();
-        methodBase.projectiles = new Projectiles();
-        methodBase.quests = new Quests();
-        methodBase.settings = new Settings();
-        methodBase.skills = new Skills();
-        //methodBase.store = new Store();
-        //methodBase.summoning = new Summoning();
-        methodBase.tiles = new Tiles();
-        //methodBase.trade = new Trade();
-        methodBase.walking = new Walking();
-        //methodBase.web = new Web();
     }
 }

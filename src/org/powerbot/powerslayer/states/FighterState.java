@@ -4,10 +4,11 @@ import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.wrappers.SlayerItem;
 import org.rsbot.script.methods.*;
+import org.rsbot.script.wrappers.GroundItem;
 import org.rsbot.script.wrappers.Item;
 import org.rsbot.script.wrappers.NPC;
 
-//TODO: Zalgo2462 ReWrite State
+//TODO: Zalgo2462 Touch up State
 public class FighterState extends State {
 
     public FighterState(MethodBase methods) {
@@ -52,13 +53,11 @@ public class FighterState extends State {
             }
             return random(1200, 1600);
         }
-        if(methods.fighter.pot.getPotions().get("PRAYER").length != 0) {
-            methods.parent.paint.Current = "Setting Prayer";
-           	Prayer.setQuickPrayer(true);
-        }
-        if (methods.fighter.pot.needPot()) {
-            methods.parent.paint.Current = "Using Potions";
-            return methods.fighter.pot.usePotions();
+
+        methods.fighter.pot.usePotions();
+
+		if(methods.fighter.pot.getPotions().get("PRAYER").length != 0 && !Prayer.isQuickPrayerOn() &&  methods.fighter.pot.setQuickPrayer) {
+            Prayer.setQuickPrayer(true);
         }
 
         for (LoopAction a : loopActions)
@@ -69,10 +68,8 @@ public class FighterState extends State {
 
     @Override
     public boolean activeCondition() {
-        NPC inter = methods.fighter.npcs.getInteracting();
-        NPC n = inter != null ? inter : methods.fighter.npcs.getNPC();
 
-        return n != null && !killCondition && Settings.get(394) != 0 && checkItems();
+        return methods.fighter.npcs.getNPC() != null && !killCondition && Settings.get(394) != 0 && checkItems();
     }
 
     public interface LoopAction {
@@ -82,92 +79,117 @@ public class FighterState extends State {
     }
 
 
-    public class InCombatLoop implements LoopAction {
 
-        public int loop() {
-            //TODO: Double Check If Finisher Code Will Work
-            NPC n = methods.fighter.npcs.getInteracting();
-            if(n != null && methods.fighter.npcs.getInteracting().getHPPercent() <= 10 &&
+
+	private class InCombatLoop implements LoopAction {
+
+			public int loop() {
+				methods.parent.paint.Current = "Fighting";
+
+				if(methods.fighter.npcs.getInteracting() != null) {
+					if(methods.fighter.npcs.getInteracting().getHPPercent() <= 10 &&
                     methods.parent.currentTask.getMonster().getRequirements().getFinisher() != null) {
+						if(!methods.fighter.npcs.useFinisher(methods.fighter.npcs.getInteracting())) {
+							log("You ran out of finishers! Stopping Fighter.");
+							killCondition = true;
+						}
+					}
 
-                if(!methods.fighter.npcs.useFinisher(n)) {
-                    log("You ran out of finishers! Stopping Fighter.");
-                    killCondition = true;
-                }
-            }
-            else {
-                methods.parent.paint.Current = "Fighting";
-                methods.fighter.antiban();
-            }
-            return random(50, 200);
-        }
+					if( methods.fighter.npcs.useSpecial() && !Combat.isSpecialEnabled() && !methods.fighter.npcs.getInteracting().isDead()) {
+						sleep(random(500, 1000));
+						Combat.setSpecialAttack(true);
+					}
 
-        public boolean activate() {
-            return methods.fighter.npcs.isInCombat();
-        }
 
-    }
+					if(methods.fighter.loot.onlyTakeLootFromKilled) {
+						if(methods.fighter.npcs.getInteracting() != null){
+							if(!methods.fighter.npcs.tilesFoughtOn.contains(methods.fighter.npcs.getInteracting().getLocation())
+									&& !methods.fighter.npcs.getInteracting().isMoving()) {
+								methods.fighter.npcs.tilesFoughtOn.add(methods.fighter.npcs.getInteracting().getLocation());
+							}
+						}
+					}
+				}
+				methods.fighter.antiban();
+				return random(50, 200);
+			}
 
-    public class AttackLoop implements LoopAction {
+			public boolean activate() {
+				return methods.fighter.npcs.isInCombat();
+			}
 
-        public int loop() {
-            NPC inter = methods.fighter.npcs.getInteracting();
-            NPC n = inter != null ? inter : methods.fighter.npcs.getNPC();
-            if (n != null) {
-                int result;
-                //TODO: Double Check If Starter Code Will Work
-                if(methods.parent.currentTask.getRequirements().getStarter() != null) {
-                    if(!methods.fighter.npcs.useStarter(n)) {
-                        log("You ran out of starters! Stopping Fighter.");
-                        killCondition = true;
-                    }
-                    result = 0;
-                }
-                else {
-                    methods.parent.paint.Current = "Attacking " + n.getName();
-                    result = methods.fighter.npcs.clickNPC(n, "Attack " + n.getName());
-                }
-                if (result == 0) {
-                    waitWhileMoving();
-                    return random(300, 500);
-                } else if (result == 1) {
-                    waitWhileMoving();
-                    return random(0, 200);
-                }
-            } else {
-                methods.fighter.antiban();
-            }
-            return random(50, 200);
-        }
+		}
 
-        public boolean activate() {
-            return !methods.fighter.npcs.isInCombat();
-        }
+		private class AttackLoop implements LoopAction {
 
-    }
+			public int loop() {
+				NPC inter = methods.fighter.npcs.getInteracting();
+				NPC n = inter != null ? inter : methods.fighter.npcs.getNPC();
+				if (n != null) {
+					int result = -5;
+					if(methods.parent.currentTask.getRequirements().getStarter() != null) {
+						if(!methods.fighter.npcs.useStarter(n)) {
+							log("You ran out of starters! Stopping Fighter.");
+							killCondition = true;
+						}
+						result = 0;
+					}
+					else {
+						methods.parent.paint.Current = "Attacking " + n.getName();
+						result = methods.fighter.npcs.clickNPC(n, "Attack " + n.getName());
+					}
+					if (result == 0) {
+						waitWhileMoving();
+						return random(300, 500);
+					} else if (result == 1) {
+						waitWhileMoving();
+						return random(0, 200);
+					}
+				} else {
+					if (Calculations.distanceTo(methods.fighter.tiles.getNearestTile(methods.parent.currentTask.getMonster().getLocation())) > 10) {
+						Walking.walkTileMM(Walking.getClosestTileOnMap(methods.fighter.tiles.getNearestTile(methods.parent.currentTask.getMonster().getLocation())));
+						waitWhileMoving();
+					} else {
+						methods.fighter.antiban();
+					}
+				}
+				return random(50, 200);
+			}
 
-//		private class LootLoop implements LoopAction {
-//
-//			private RSGroundItem loot = null;
-//
-//			public int loop() {
-//				int origCount = methods.inventory.getCount(true);
-//				String name = loot.getItem().getName();
-//				int count = loot.getItem().getStackSize();
-//				int result = u.loot.takeItem(loot);
-//				if (result == 0) {
-//					waitWhileMoving();
-//				} else if (result == 1) {
-//					waitWhileMoving();
-//				}
-//				return random(50, 200);
-//			}
-//
-//			public boolean activate() {
-//				return (loot = u.loot.getLoot()) != null;
-//			}
-//
-//		}
+			public boolean activate() {
+				return !methods.fighter.npcs.isInCombat();
+			}
+
+		}
+
+
+		private class LootLoop implements LoopAction {
+
+			private GroundItem loot = null;
+
+			public int loop() {
+				int origCount = Inventory.getCount(true);
+				String name = loot.getItem().getName();
+				int count = loot.getItem().getStackSize();
+				int result = methods.fighter.loot.takeItem(loot);
+				if (result == 0) {
+					waitWhileMoving();
+					if (methods.fighter.waitForInvChange(origCount)) {
+						if(methods.fighter.loot.onlyTakeLootFromKilled && methods.fighter.npcs.tilesFoughtOn.contains(loot.getLocation())) {
+							methods.fighter.npcs.tilesFoughtOn.remove(loot.getLocation());
+						}
+					}
+				} else if (result == 1) {
+					waitWhileMoving();
+				}
+				return random(50, 200);
+			}
+
+			public boolean activate() {
+				return (loot = methods.fighter.loot.getLoot()) != null;
+			}
+		}
+
 
     /**
      * Waits until we are no longer moving.
@@ -188,7 +210,6 @@ public class FighterState extends State {
                 return false;
             }
         }
-
         return true;
     }
 
