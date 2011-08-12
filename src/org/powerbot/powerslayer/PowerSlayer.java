@@ -3,8 +3,7 @@ package org.powerbot.powerslayer;
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.SlayerMaster;
-import org.powerbot.powerslayer.states.BankingState;
-import org.powerbot.powerslayer.states.FighterState;
+import org.powerbot.powerslayer.states.*;
 import org.powerbot.powerslayer.wrappers.*;
 import org.rsbot.event.listeners.PaintListener;
 import org.rsbot.script.Script;
@@ -37,6 +36,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
 
     @Override
     public boolean onRun() {
+	    //TODO: Decide where a player must start the script
         setMethodBase();
 	    initStates();
         return true;
@@ -47,7 +47,11 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
     }
 
 	public void initStates() {
-        states.add(new BankingState(methodBase));
+		states.add(new GetTaskState(methodBase));
+        states.add(new GoToMasterState(methodBase));
+		states.add(new GoToBankState(methodBase));
+		states.add(new GoToMonsterState(methodBase));
+		states.add(new BankingState(methodBase));
 	    states.add(new FighterState(methodBase));
     }
 
@@ -233,7 +237,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         return false;
     }
 
-
+   	//Start Paint
 
     public class Paint {
         public String Current = "Loading...";

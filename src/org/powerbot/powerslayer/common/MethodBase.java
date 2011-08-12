@@ -2,6 +2,7 @@ package org.powerbot.powerslayer.common;
 
 import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.methods.Banking;
+import org.powerbot.powerslayer.methods.SlayerMasters;
 import org.powerbot.powerslayer.methods.Traveling;
 import org.powerbot.powerslayer.methods.UniversalFighter;
 import org.rsbot.script.methods.*;
@@ -54,6 +55,7 @@ public class MethodBase {
     public UniversalFighter fighter = new UniversalFighter(this);
     public Banking bankingProcess = new Banking(this);
     public Traveling travel = new Traveling(this);
+	public SlayerMasters masters = new SlayerMasters(this);
     public Random random = new Random();
 
     public MethodBase(PowerSlayer parent) {
