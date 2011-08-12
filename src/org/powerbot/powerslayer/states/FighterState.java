@@ -3,16 +3,11 @@ package org.powerbot.powerslayer.states;
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.wrappers.SlayerItem;
-import org.rsbot.script.methods.Game;
-import org.rsbot.script.methods.Interfaces;
-import org.rsbot.script.methods.Inventory;
-import org.rsbot.script.methods.Prayer;
-import org.rsbot.script.methods.Settings;
-import org.rsbot.script.methods.Walking;
+import org.rsbot.script.methods.*;
 import org.rsbot.script.wrappers.Item;
 import org.rsbot.script.wrappers.NPC;
 
-
+//TODO: Zalgo2462 ReWrite
 public class FighterState extends State {
 
     public FighterState(MethodBase methods) {

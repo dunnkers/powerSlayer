@@ -10,6 +10,7 @@ import org.rsbot.script.methods.Equipment;
 import org.rsbot.script.wrappers.Item;
 import org.rsbot.script.wrappers.Tile;
 
+//TODO: Convert to QS Once it comes out
 public class Traveling extends DMethodProvider {
     public Traveling(MethodBase methods) {
         super(methods);
@@ -45,7 +46,8 @@ public class Traveling extends DMethodProvider {
     }
 
     public boolean travelTo(Tile t) {
-        return Web.generateRoute(getMyPlayer().getLocation(), t).execute();
+        //return Web.generateRoute(getMyPlayer().getLocation(), t).execute();
+	    return false;
     }
 
     public Banks getNearestBank() {

@@ -4,7 +4,7 @@ public class Starter extends SlayerItem {
 	String[] itemNames;
 	
     public Starter(int amount, String... names) {
-        super(SlayerItem.COULD_BE_EQUIPPED, amount, names);
+        super(SlayerItem.NOT_EQUIPPED, amount, names);
     }
 
     public Starter(String... names) {

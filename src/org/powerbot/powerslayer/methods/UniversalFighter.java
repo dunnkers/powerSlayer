@@ -1,36 +1,24 @@
 package org.powerbot.powerslayer.methods;
 
-import java.awt.Point;
-import java.awt.Polygon;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.powerbot.powerslayer.common.DMethodProvider;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.rsbot.client.RSPlayer;
-import org.rsbot.script.methods.Calculations;
-import org.rsbot.script.methods.Camera;
-import org.rsbot.script.methods.Combat;
-import org.rsbot.script.methods.Game;
-import org.rsbot.script.methods.Interfaces;
-import org.rsbot.script.methods.Inventory;
+import org.rsbot.script.methods.*;
 import org.rsbot.script.methods.Menu;
-import org.rsbot.script.methods.Mouse;
-import org.rsbot.script.methods.NPCs;
-import org.rsbot.script.methods.Players;
-import org.rsbot.script.methods.Skills;
-import org.rsbot.script.methods.Walking;
 import org.rsbot.script.util.Filter;
 import org.rsbot.script.wrappers.Character;
-import org.rsbot.script.wrappers.GameModel;
-import org.rsbot.script.wrappers.Item;
-import org.rsbot.script.wrappers.NPC;
-import org.rsbot.script.wrappers.Tile;
+import org.rsbot.script.wrappers.*;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+//TODO: Zalgo2462 ReWrite
 public class UniversalFighter extends DMethodProvider {
     public UniversalFighter(MethodBase methods) {
         super(methods);
     }
+
 
     private long nextAntiban = 0;
     public SlayerNPCs npcs = new SlayerNPCs();
@@ -383,7 +371,7 @@ public class UniversalFighter extends DMethodProvider {
         /**
          * Finds food based on inventory actions.
          *
-         * @return The Item of food, or null if none was found.
+         * @return The food, or null if none was found.
          */
         private Item getFood() {
             for (Item i : Inventory.getItems()) {
@@ -701,7 +689,7 @@ public class UniversalFighter extends DMethodProvider {
 //			private final Filter<RSGroundItem> lootFilter = new Filter<RSGroundItem>() {
 //				public boolean accept(RSGroundItem t) {
 //					//Skip if we can't hold it
-//					Item i;
+//					SlayerItem i;
 //					if (Inventory.isFull() && ((i = Inventory.getItem(t.getItem().getID())) == null || i.getStackSize() <= 1)) {
 //						return false;
 //					}

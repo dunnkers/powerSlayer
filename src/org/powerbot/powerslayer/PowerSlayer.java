@@ -1,37 +1,25 @@
 package org.powerbot.powerslayer;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
+import org.powerbot.powerslayer.abstracts.State;
+import org.powerbot.powerslayer.common.MethodBase;
+import org.powerbot.powerslayer.data.SlayerMaster;
+import org.powerbot.powerslayer.states.BankingState;
+import org.powerbot.powerslayer.states.FighterState;
+import org.powerbot.powerslayer.wrappers.*;
+import org.rsbot.event.listeners.PaintListener;
+import org.rsbot.script.Script;
+import org.rsbot.script.ScriptManifest;
+import org.rsbot.script.methods.*;
+import org.rsbot.script.methods.Menu;
+import org.rsbot.script.wrappers.Item;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import org.powerbot.powerslayer.abstracts.State;
-import org.powerbot.powerslayer.common.MethodBase;
-import org.powerbot.powerslayer.data.SlayerMaster;
-import org.powerbot.powerslayer.states.BankingState;
-import org.powerbot.powerslayer.wrappers.EquipmentItems;
-import org.powerbot.powerslayer.wrappers.Finisher;
-import org.powerbot.powerslayer.wrappers.Requirements;
-import org.powerbot.powerslayer.wrappers.Rune;
-import org.powerbot.powerslayer.wrappers.SlayerItem;
-import org.powerbot.powerslayer.wrappers.Starter;
-import org.powerbot.powerslayer.wrappers.Task;
-import org.rsbot.event.listeners.PaintListener;
-import org.rsbot.script.Script;
-import org.rsbot.script.ScriptManifest;
-import org.rsbot.script.methods.*;
-import org.rsbot.script.wrappers.Item;
-import org.rsbot.script.wrappers.NPC;
 
 @SuppressWarnings("unused")
 @ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 0.1, description = "Slayer bot.")
@@ -39,17 +27,37 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
 	
 	public Task currentTask;
     public SlayerMaster slayerMaster;
-    private int weaponSpecUsage = -1;
-    private List<String> pickup = new ArrayList<String>();
-    public NPC currentMonster;
+
+	private ArrayList<State> states = new ArrayList<State>();
+	public MethodBase methodBase = null;
+
     private int tab = 1;
     public Paint paint = new Paint();
-    public MethodBase methodBase = null;
+
 
     @Override
     public boolean onRun() {
         setMethodBase();
+	    initStates();
         return true;
+    }
+
+	public int loop() {
+        return getStateLoop();
+    }
+
+	public void initStates() {
+        states.add(new BankingState(methodBase));
+	    states.add(new FighterState(methodBase));
+    }
+
+    private int getStateLoop() {
+        for (State state : states) {
+            if (state.activeCondition()) {
+                return state.loop();
+            }
+        }
+        return -1;
     }
 
 
@@ -57,41 +65,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         return 28 - Inventory.getCount();
     }
 
-	private int specialUsage() {
-        int[] amountUsage = {10, 25, 33, 35, 45, 50, 55, 60, 80, 85, 100};
-        String[][] weapons = {
-                {"Rune thrownaxe", "Rod of ivandis"},
-                {"Dragon Dagger", "Dragon dagger (p)", "Dragon dagger (p+)",
-                        "Dragon dagger (p++)", "Dragon Mace", "Dragon Spear",
-                        "Dragon longsword", "Rune claws"},
-                {"Dragon Halberd"},
-                {"Magic Longbow"},
-                {"Magic Composite Bow"},
-                {"Dragon Claws", "Abyssal Whip", "Granite Maul", "Darklight",
-                        "Barrelchest Anchor", "Armadyl Godsword"},
-                {"Magic Shortbow"},
-                {"Dragon Scimitar", "Dragon 2H Sword", "Zamorak Godsword",
-                        "Korasi's sword"},
-                {"Dorgeshuun Crossbow", "Bone Dagger", "Bone Dagger (p+)",
-                        "Bone Dagger (p++)"},
-                {"Brine Sabre"},
-                {"Bandos Godsword", "Dragon Battleaxe", "Dragon Hatchet",
-                        "Seercull Bow", "Excalibur", "Enhanced excalibur",
-                        "Ancient Mace", "Saradomin sword"}};
-        String str = Equipment.getItem(
-                org.rsbot.script.methods.Equipment.WEAPON).getName();
-        str = str.substring(str.indexOf(">") + 1);
-        for (int i = 0; i < weapons.length; i++) {
-            for (int j = 0; j < weapons[i].length; j++) {
-                if (weapons[i][j].equalsIgnoreCase(str)) {
-                    return amountUsage[i];
-                }
-            }
-        }
-        return -1;
-    }
-
-    // TODO 90% of these need rewriting
+	// TODO 90% of these need rewriting and classification
     public boolean performAction(SlayerItem items, String action) {
         for (Item item : Inventory.getItems()) {
             for (String name : items.getNames()) {
@@ -261,56 +235,61 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
 
 
 
-
-
-    // A mix of teleporting and walking/running to travel
-    // to certain slayer masters, tasks, and banks
-
-    @Override
-    public int loop() {
-        return getStateLoop();
-    }
-
-    private Image getImage(String url) {
-        try {
-            return ImageIO.read(new URL(url));
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
     public class Paint {
         public String Current = "Loading...";
-        public final Image closed = getImage("https://github.com/Timer/PowerSlayer/tree/master/resources/closedc.png");
-        public final Image tabOne = getImage("https://github.com/Timer/PowerSlayer/tree/master/resources/gentab.png");
-        public final Image tabTwo = getImage("https://github.com/Timer/PowerSlayer/tree/master/resources/exptab.png");
+	    public Image closed;
+        public Image tabOne;
+        public Image tabTwo;
         public final Rectangle hideRect = new Rectangle(477, 336, 34, 37);
         public final Rectangle tabOneRect = new Rectangle(177, 335, 147, 37);
         public final Rectangle tabTwoRect = new Rectangle(327, 336, 148, 37);
-    }
 
-    private enum Skill {
-        SLAYER(Skills.SLAYER, "Slayer", 0),
-        ATTACK(Skills.ATTACK, "Attack", 1),
-        STRENGTH(Skills.STRENGTH, "Strength", 2),
-        DEFENCE(Skills.DEFENSE, "Defence", 3),
-        CONSTITUTION(Skills.CONSTITUTION, "Constitution", 4),
-        RANGE(Skills.RANGE, "Range", 5),
-        MAGIC(Skills.MAGIC, "Magic", 6);
+	    public Paint () {
+		    URL resource = this.getClass().getClassLoader().getResource("/resources/slosedc.png");
+			if (resource != null) {
+				try {
+					closed = ImageIO.read(resource);
+					resource = this.getClass().getClassLoader().getResource("/resources/gentab.png");
+					tabOne = ImageIO.read(resource);
+					resource = this.getClass().getClassLoader().getResource("/resources/exptab.png");
+					tabTwo = ImageIO.read(resource);
+				} catch (Exception ignored) {}
+			} else {
+				closed = getImage("https://github.com/Zalgo2462/PowerSlayer/tree/master/resources/closedc.png");
+				tabOne = getImage("https://github.com/Zalgo2462/PowerSlayer/tree/master/resources/gentab.png");
+				tabTwo = getImage("https://github.com/Zalgo2462/PowerSlayer/tree/master/resources/exptab.png");
+			}
+	    }
 
-        int skillID;
-        String skillName;
-        int index;
-
-        private Skill(int skillID, String skillName, int index) {
-            this.skillID = skillID;
-            this.skillName = skillName;
-            this.index = index;
+	    private Image getImage(String url) {
+			try {
+				return ImageIO.read(new URL(url));
+			} catch (IOException e) {
+				return null;
+            }
         }
     }
 
-    // TODO Alot more...
-    @Override
+	enum Skill {
+		SLAYER(Skills.SLAYER, "Slayer", 0),
+		ATTACK(Skills.ATTACK, "Attack", 1),
+		STRENGTH(Skills.STRENGTH, "Strength", 2),
+		DEFENCE(Skills.DEFENSE, "Defence", 3),
+		CONSTITUTION(Skills.CONSTITUTION, "Constitution", 4),
+		RANGE(Skills.RANGE, "Range", 5),
+		MAGIC(Skills.MAGIC, "Magic", 6);
+
+		int skillID;
+		String skillName;
+		int index;
+
+		private Skill(int skillID, String skillName, int index) {
+			this.skillID = skillID;
+			this.skillName = skillName;
+			this.index = index;
+		}
+	}
+
     public void onRepaint(Graphics g1) {
         Graphics2D g = (Graphics2D) g1;
         if (tab == 1) {
@@ -320,17 +299,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
             drawSkillBars(g);
         } else {
             g.drawImage(paint.closed, 162, 293, null);
-        }
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if (paint.hideRect.contains(e.getPoint())) {
-            tab = 3;
-        } else if (paint.tabOneRect.contains(e.getPoint())) {
-            tab = 1;
-        } else if (paint.tabTwoRect.contains(e.getPoint())) {
-            tab = 2;
         }
     }
 
@@ -362,36 +330,34 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         }
     }
 
-    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (paint.hideRect.contains(e.getPoint())) {
+            tab = 3;
+        } else if (paint.tabOneRect.contains(e.getPoint())) {
+            tab = 1;
+        } else if (paint.tabTwoRect.contains(e.getPoint())) {
+            tab = 2;
+        }
+    }
+
     public void mousePressed(MouseEvent e) {
     }
 
-    @Override
+
     public void mouseReleased(MouseEvent e) {
     }
 
-    @Override
+
     public void mouseEntered(MouseEvent e) {
     }
 
-    @Override
+
     public void mouseExited(MouseEvent e) {
     }
 
-    private ArrayList<State> states = new ArrayList<State>();
 
-    public void initStates() {
-        states.add(new BankingState(methodBase));
-    }
 
-    private int getStateLoop() {
-        for (State state : states) {
-            if (state.activeCondition()) {
-                return state.loop();
-            }
-        }
-        return -1;
-    }
+
 
     /**
      * Gets the rune count, including staves
@@ -444,9 +410,9 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         methodBase.equipment = new Equipment();
         methodBase.friendChat = new FriendChat();
         methodBase.game = new Game();
-        methodBase.grandExchange = new GrandExchange();
+        //methodBase.grandExchange = new GrandExchange();
         methodBase.groundItems = new GroundItems();
-        methodBase.hiscores = new Hiscores();
+        //methodBase.hiscores = new Hiscores();
         methodBase.interfaces = new Interfaces();
         methodBase.inventory = new Inventory();
         methodBase.keyboard = new Keyboard();
@@ -462,11 +428,11 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
         methodBase.quests = new Quests();
         methodBase.settings = new Settings();
         methodBase.skills = new Skills();
-        methodBase.store = new Store();
-        methodBase.summoning = new Summoning();
+        //methodBase.store = new Store();
+        //methodBase.summoning = new Summoning();
         methodBase.tiles = new Tiles();
-        methodBase.trade = new Trade();
+        //methodBase.trade = new Trade();
         methodBase.walking = new Walking();
-        methodBase.web = new Web();
+        //methodBase.web = new Web();
     }
 }

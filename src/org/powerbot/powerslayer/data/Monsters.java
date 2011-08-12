@@ -279,7 +279,7 @@ public enum Monsters {
     }
 
     public boolean needsAntiFire() {
-        return profile != null && profile.dragonfire();
+        return profile != null && profile.dragonFire();
     }
 
     public CombatStyle getStyle() {

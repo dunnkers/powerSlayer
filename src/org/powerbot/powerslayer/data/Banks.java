@@ -53,6 +53,6 @@ public enum Banks {
     }
 
     public boolean containsTile(Tile tile) {
-        return this.area.contains(tile);
+        return this.area.contains(new Tile[] {tile});
     }
 }

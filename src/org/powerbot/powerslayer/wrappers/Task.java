@@ -16,8 +16,4 @@ public class Task {
     public Monsters getMonster() {
         return monster;
     }
-
-    public void setMonster(Monsters monster) {
-        this.monster = monster;
-    }
 }
