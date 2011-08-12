@@ -6,6 +6,7 @@ import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.methods.Banking;
 import org.powerbot.powerslayer.methods.Traveling;
 import org.powerbot.powerslayer.methods.UniversalFighter;
+import org.powerbot.powerslayer.wrappers.SlayerItems;
 import org.rsbot.script.methods.*;
 
 /**
@@ -55,6 +56,7 @@ public class MethodBase {
     public Banking bankingProcess = new Banking(this);
     public Traveling travel = new Traveling(this);
     public Random random = new Random();
+    public SlayerItems slayerItems = new SlayerItems();
 
     public MethodBase(PowerSlayer parent) {
         this.parent = parent;

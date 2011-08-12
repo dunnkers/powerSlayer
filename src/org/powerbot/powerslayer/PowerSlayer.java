@@ -268,6 +268,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
 
     @Override
     public int loop() {
+    	//TODO add in logout handling code and others
         return getStateLoop();
     }
 
@@ -412,20 +413,20 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener 
                         .getName() : "";
                 if (shieldName != null
                         && shieldName.trim().equalsIgnoreCase("tome of frost"))
-                    return 999999;
+                    return Integer.MAX_VALUE;
             }
             if (wepName != null && wepName.toLowerCase().contains("staff")) {
                 if (wepName.toLowerCase().contains(rune.name().toLowerCase()))
-                    return 999999;
+                    return Integer.MAX_VALUE;
                 if (wepName.toLowerCase().contains("dust")
                         && (rune == Rune.AIR || rune == Rune.EARTH))
-                    return 999999;
+                    return Integer.MAX_VALUE;
                 if (wepName.toLowerCase().contains("lava")
                         && (rune == Rune.EARTH || rune == Rune.FIRE))
-                    return 999999;
+                    return Integer.MAX_VALUE;
                 if (wepName.toLowerCase().contains("steam")
                         && (rune == Rune.WATER || rune == Rune.FIRE))
-                    return 999999;
+                    return Integer.MAX_VALUE;
             }
         }
         return Inventory.getCount(true, rune.getItemIDs());

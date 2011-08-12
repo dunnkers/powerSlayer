@@ -1,12 +1,5 @@
 package org.powerbot.powerslayer.wrappers;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Taylor
- * Date: 5/5/11
- * Time: 6:03 PM
- * Package: org.powerbot.powerslayer.wrappers;
- */
 public enum Rune {
     AIR,
     EARTH,
