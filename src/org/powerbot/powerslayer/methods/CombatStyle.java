@@ -1,16 +1,20 @@
 package org.powerbot.powerslayer.methods;
 
+import org.powerbot.powerslayer.common.DMethodProvider;
+import org.powerbot.powerslayer.common.MethodBase;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class CombatStyle {
+public class CombatStyle extends DMethodProvider {
     private Style[] style;
     private int[] maxHits;
 
-    public CombatStyle(Style a, Style... style) {
-        this.style = new Style[1 + style.length];
+    public CombatStyle(MethodBase m, Style a, Style... style) {
+        super(m);
+	    this.style = new Style[1 + style.length];
         this.style[0] = a;
         for (int i = 0; i < style.length; i++)
             this.style[i + 1] = style[0];
@@ -18,7 +22,8 @@ public class CombatStyle {
         Arrays.fill(maxHits, -1);
     }
 
-    public CombatStyle(Object... objects) {
+    public CombatStyle(MethodBase m, Object... objects) {
+	    super(m);
         Map<Style, Integer> styles = new HashMap<Style, Integer>();
         for (int i = 0; i < objects.length; i++) {
             if (i > 0 && objects[i] instanceof Integer

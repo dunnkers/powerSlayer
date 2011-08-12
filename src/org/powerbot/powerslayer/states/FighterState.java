@@ -7,7 +7,7 @@ import org.rsbot.script.methods.*;
 import org.rsbot.script.wrappers.Item;
 import org.rsbot.script.wrappers.NPC;
 
-//TODO: Zalgo2462 ReWrite
+//TODO: Zalgo2462 ReWrite State
 public class FighterState extends State {
 
     public FighterState(MethodBase methods) {
