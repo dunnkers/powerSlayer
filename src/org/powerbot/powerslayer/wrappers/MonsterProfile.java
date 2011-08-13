@@ -40,7 +40,7 @@ public class MonsterProfile {
         return style;
     }
 
-    public boolean dragonfire() {
+    public boolean dragonFire() {
         return fire;
     }
 
