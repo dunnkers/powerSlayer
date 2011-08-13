@@ -328,7 +328,7 @@ public class UniversalFighter extends DMethodProvider {
         }
 
         public boolean useFinisher(NPC monster) {
-            for (String s : methods.parent.currentTask.getRequirements().getFinisher().getNames()) {
+            String s = methods.parent.currentTask.getRequirements().getFinisher().name();
                 for (Item inventItem : Inventory.getItems()) {
                     if (s.equalsIgnoreCase(inventItem.getName())) {
                         if (Inventory.selectItem(inventItem.getID())) {
@@ -343,7 +343,6 @@ public class UniversalFighter extends DMethodProvider {
                         }
                     }
                 }
-            }
             return false;
         }
 
@@ -816,7 +815,7 @@ public class UniversalFighter extends DMethodProvider {
 					if (tilesWithinRadius.size() > 1){
 						tilesWithinRadius.add(tile);
 						Area temp = new Area(tilesWithinRadius.toArray(new Tile[tilesWithinRadius.size()]));
-						Tile[] areaTiles = temp.getTileArray();
+						Tile[] areaTiles = temp.getTiles();
 						for(Tile tileToAdd : areaTiles) {
 							if(!badTiles.contains(tileToAdd)) {
 								badTiles.add(tileToAdd);

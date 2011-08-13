@@ -1,145 +1,112 @@
 package org.powerbot.powerslayer.wrappers;
 
+import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.methods.CombatStyle;
+import org.rsbot.script.wrappers.Tile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Requirements {
-    List<SlayerItem> items = new ArrayList<SlayerItem>();
+	//TODO: Shouldn't lightsource be put with locations?
+    List<SlayerEquipment> items = new ArrayList<SlayerEquipment>();
     Finisher finisher;
     Starter starter;
-    List<EquipmentItems> equipments = new ArrayList<EquipmentItems>();
     CombatStyle style = null;
     boolean lightsource = false;
 
-    public Requirements(SlayerItem[] itemArray, Finisher finisher, Starter starter,
-                        EquipmentItems[] equipmentArray, CombatStyle style,
-                        boolean lightsource) {
+    public Requirements(SlayerEquipment[] itemArray, Finisher finisher, Starter starter,
+    		CombatStyle style, boolean lightsource) {
         this.items.addAll(Arrays.asList(itemArray));
         this.finisher = finisher;
         this.starter = starter;
-        this.equipments.addAll(Arrays.asList(equipmentArray));
         this.style = style;
     }
 
-    public Requirements(SlayerItem[] itemArray, Finisher finisher, Starter starter,
-                        EquipmentItems[] equipmentArray, CombatStyle style) {
+    public Requirements(SlayerEquipment[] itemArray, Finisher finisher, Starter starter,
+    		CombatStyle style) {
         this.items.addAll(Arrays.asList(itemArray));
         this.finisher = finisher;
         this.starter = starter;
-        this.equipments.addAll(Arrays.asList(equipmentArray));
         this.style = style;
     }
 
-    public Requirements(SlayerItem[] itemArray, Finisher finisher, Starter starter,
-                        EquipmentItems[] equipmentArray, boolean lightsource) {
-        this(itemArray, finisher, starter, equipmentArray, null, lightsource);
-    }
-
-    public Requirements(SlayerItem[] itemArray, Finisher finisher, Starter starter,
+    public Requirements (SlayerEquipment[] itemArray, Finisher finisher, Starter starter,
                         boolean lightsource) {
-        this(itemArray, finisher, starter, null, null, lightsource);
+        this(itemArray, finisher, starter, null, lightsource);
     }
 
-    public Requirements(SlayerItem[] itemArray, Finisher finisher, boolean lightsource) {
-        this(itemArray, finisher, null, null, null, lightsource);
+    public Requirements(SlayerEquipment[] itemArray, Finisher finisher, boolean lightsource) {
+        this(itemArray, finisher, null, null, lightsource);
     }
 
-    public Requirements(SlayerItem item, Finisher finisher, boolean lightsource) {
-        this(new SlayerItem[]{item}, finisher, null, null, null, lightsource);
+    public Requirements(SlayerEquipment item, Finisher finisher, boolean lightsource) {
+        this(new SlayerEquipment[]{item}, finisher, null, null, lightsource);
     }
 
-    public Requirements(SlayerItem[] itemArray, Starter starter, boolean lightsource) {
-        this(itemArray, null, starter, null, null, lightsource);
+    public Requirements(SlayerEquipment[] itemArray, Starter starter, boolean lightsource) {
+        this(itemArray, null, starter, null, lightsource);
     }
 
-    public Requirements(SlayerItem item, Starter starter, boolean lightsource) {
-        this(new SlayerItem[]{item}, null, starter, null, null, lightsource);
+    public Requirements(SlayerEquipment item, Starter starter, boolean lightsource) {
+        this(new SlayerEquipment[]{item}, null, starter, null, lightsource);
     }
 
     public Requirements(CombatStyle style, boolean lightsource) {
-        this(null, null, null, null, style, lightsource);
+        this(null, null, null, style, lightsource);
     }
 
-    public Requirements(EquipmentItems[] equipmentArray, CombatStyle style,
-                        boolean lightsource) {
-        this(null, null, null, equipmentArray, style, lightsource);
+    public Requirements(SlayerEquipment[] itemArray, boolean lightsource) {
+        this(itemArray, null, null, null, lightsource);
     }
 
-    public Requirements(EquipmentItems[] equipmentArray, boolean lightsource) {
-        this(null, null, null, equipmentArray, null, lightsource);
+    public Requirements(SlayerEquipment item, boolean lightsource) {
+        this(new SlayerEquipment[]{item}, null, null, null, lightsource);
     }
 
-    public Requirements(EquipmentItems equipment, boolean lightsource) {
-        this(null, null, null, new EquipmentItems[]{equipment}, null,
-                lightsource);
+    public Requirements(SlayerEquipment[] itemArray, Finisher finisher, Starter starter) {
+        this(itemArray, finisher, starter, null);
     }
 
-    public Requirements(boolean lightsource) {
-        this(null, null, null, null, null, lightsource);
+    public Requirements(SlayerEquipment[] itemArray, Finisher finisher) {
+        this(itemArray, finisher, null, null);
     }
 
-    public Requirements(SlayerItem[] itemArray, boolean lightsource) {
-        this(itemArray, null, null, null, null, lightsource);
+    public Requirements(SlayerEquipment item, Finisher finisher) {
+        this(new SlayerEquipment[]{item}, finisher, null, null);
     }
 
-    public Requirements(SlayerItem item, boolean lightsource) {
-        this(new SlayerItem[]{item}, null, null, null, null, lightsource);
+    public Requirements(SlayerEquipment[] itemArray, Starter starter) {
+        this(itemArray, null, starter, null);
     }
 
-    public Requirements(SlayerItem[] itemArray, Finisher finisher, Starter starter,
-                        EquipmentItems[] equipmentArray) {
-        this(itemArray, finisher, starter, equipmentArray, null);
-    }
-
-    public Requirements(SlayerItem[] itemArray, Finisher finisher, Starter starter) {
-        this(itemArray, finisher, starter, null, null);
-    }
-
-    public Requirements(SlayerItem[] itemArray, Finisher finisher) {
-        this(itemArray, finisher, null, null, null);
-    }
-
-    public Requirements(SlayerItem item, Finisher finisher) {
-        this(new SlayerItem[]{item}, finisher, null, null, null);
-    }
-
-    public Requirements(SlayerItem[] itemArray, Starter starter) {
-        this(itemArray, null, starter, null, null);
-    }
-
-    public Requirements(SlayerItem item, Starter starter) {
-        this(new SlayerItem[]{item}, null, starter, null, null);
+    public Requirements(SlayerEquipment item, Starter starter) {
+        this(new SlayerEquipment[]{item}, null, starter, null);
     }
 
     public Requirements(CombatStyle style) {
-        this(null, null, null, null, style);
+        this(null, null, null, style);
     }
 
-    public Requirements(EquipmentItems[] equipmentArray, CombatStyle style) {
-        this(null, null, null, equipmentArray, style);
+    public Requirements(SlayerEquipment[] itemArray) {
+        this(itemArray, null, null, null);
     }
 
-    public Requirements(EquipmentItems[] equipmentArray) {
-        this(null, null, null, equipmentArray, null);
+    public Requirements(SlayerEquipment item) {
+        this(new SlayerEquipment[]{item}, null, null, null);
     }
 
-    public Requirements(EquipmentItems equipment) {
-        this(null, null, null, new EquipmentItems[]{equipment}, null);
-    }
+    public Requirements(SlayerEquipment[] slayerEquipments, CombatStyle combatStyle) {
+		this (slayerEquipments, null, null, combatStyle);
+	}
 
-    public Requirements(SlayerItem[] itemArray) {
-        this(itemArray, null, null, null, null);
-    }
+	public Requirements(boolean b) {
+		this (null, null, null, b);
+	}
 
-    public Requirements(SlayerItem item) {
-        this(new SlayerItem[]{item}, null, null, null, null);
-    }
-
-    public SlayerItem[] getItems() {
-        SlayerItem[] itemArray = null;
+	public SlayerEquipment[] getItems() {
+        SlayerEquipment[] itemArray = null;
         this.items.toArray(itemArray);
         return itemArray;
     }
@@ -150,12 +117,6 @@ public class Requirements {
 
     public Starter getStarter() {
         return this.starter;
-    }
-
-    public EquipmentItems[] getEquipment() {
-        EquipmentItems[] equipmentArray = null;
-        this.equipments.toArray(equipmentArray);
-        return equipmentArray;
     }
 
     public CombatStyle getCombatStyle() {

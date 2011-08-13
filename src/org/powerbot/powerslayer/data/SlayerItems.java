@@ -10,21 +10,12 @@ import org.rsbot.script.wrappers.InterfaceComponent;
 
 public class SlayerItems {
 	static SlayerEquipment[] slayerEquipment;
-	boolean elementalWorkshopIFinished = false;
-	boolean elementalWorkshopIIFinished = false;
-	boolean elementalWorkshopIIIFinished = false;
-	boolean elementalWorkshopIVFinished = false;
-	boolean pathOfGlouphrieFinished = false;
-	boolean smokingKillsFinished = false;
-	int QUEST_INTERFACE = 190;
-	int HIDE_FINISHED_BUTTON = 12;
-	int QUEST_LIST = 18;
-	int ELEMENTAL_WORKSHOP_I = 37;
-	int ELEMENTAL_WORKSHOP_II = 38;
-	int ELEMENTAL_WORKSHOP_III = 172;
-	int ELEMENTAL_WORKSHOP_IV = 180;
-	int PATH_OF_GLOUPHRIE = 127;
-	int SMOKING_KILLS = 138;
+	static boolean elementalWorkshopIFinished = false, elementalWorkshopIIFinished = false, elementalWorkshopIIIFinished = false,
+		elementalWorkshopIVFinished = false, pathOfGlouphrieFinished = false, smokingKillsFinished = false;
+	int QUEST_INTERFACE = 190, HIDE_FINISHED_BUTTON = 12, QUEST_LIST = 18;
+	int ELEMENTAL_WORKSHOP_I = 37, ELEMENTAL_WORKSHOP_II = 38,
+		ELEMENTAL_WORKSHOP_III = 172, ELEMENTAL_WORKSHOP_IV = 180, PATH_OF_GLOUPHRIE = 127, SMOKING_KILLS = 138;
+	int MOUSE_INTERFACE = 261, BUTTON_CHANGER = 6; 
 	
 	public SlayerItems() {
 		slayerEquipment = slayerEquipmentArray();
@@ -51,6 +42,7 @@ public class SlayerItems {
 		Full_Slayer_Helmet4e5 (-1, Equipment.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20}, new int[] {15496}),
 		Fungicide (10, -1, new int[] {Skills.SLAYER, 1}, new int[] {7432}),
 		Fungicide_Spray (300, -1, new int[] {Skills.SLAYER, 57}, new int[] {7421, 7422, 7423, 7424, 7425, 7426, 7427, 7428, 7429, 7430, 7431}),
+		Holy_Symbol (-1, Equipment.NECK, new int[] {Skills.SLAYER, 1}, new int[] {1718, 1719, 4682}),
 		Ice_Cooler (1, -1 ,new int[] {Skills.SLAYER, 1}, new int[] {6696}),
 		Insulated_Boots (200, Equipment.FEET, new int[] {Skills.SLAYER, 37}, new int[] {7159, 7161}),
 		LeafBladed_Spear (31000, Equipment.WEAPON /*+ Equipment.SHIELD*/, new int[] {Skills.SLAYER, 55, Skills.ATTACK, 50}, new int[] {4158, 4159}),
@@ -71,12 +63,14 @@ public class SlayerItems {
 		Spiny_Helmet (650, Equipment.HELMET, new int[] {Skills.SLAYER, 1, Skills.DEFENSE, 5}, new int[] {4551, 4552}),
 		Super_Fishing_Explosive (-1, -1, new int[] {Skills.SLAYER, 32}, new int[] {12633}),
 		Unlit_Bug_Lantern (200, Equipment.SHIELD, new int[] {Skills.SLAYER, 33}, new int[] {7051}),
+		Water_Skin (-1, -1, new int[] {Skills.SLAYER, 1}, new int[] {1823, 1825, 1827, 1829, 1831}),
 		Witchwood_Icon (900, Equipment.NECK, new int[] {Skills.SLAYER, 58}, new int[] {8923});
 		
 		int itemCost = -1;
 		int equipSlot = -1;
 		int [] requirements = {-1};
 		int[] IDs;
+		int amount = 1;
 		
 		
 		SlayerEquipment (int Cost, int equipmentSlot, int[] Requirements, int[] IDList) {
@@ -95,6 +89,16 @@ public class SlayerItems {
 			}
 		}
 		
+		SlayerEquipment (SlayerEquipment equipmentEnum, int Amount) {
+			if (equipmentEnum != null) {
+				itemCost = equipmentEnum.itemCost;
+				requirements = equipmentEnum.requirements;
+				equipSlot = equipmentEnum.equipSlot;
+				IDs = equipmentEnum.IDs;
+				amount = Amount;
+			}
+		}
+		
 		SlayerEquipment (int itemID) {
 			this(getSlayerEquipment(itemID));
 		}
@@ -103,28 +107,31 @@ public class SlayerItems {
 			this(getSlayerEquipment(itemName));
 		}
 		
-		boolean availableAtMaster() {
+		public int amount() {
+			return amount;
+		}
+		
+		public boolean availableAtMaster() {
 			return itemCost != -1;
 		}
 		
-		int cost() {
+		public int cost() {
 			return itemCost;
 		}
 		
-		boolean usable() {
-			int length = requirements.length;
-			if (length % 2 != 0)
-				return false;
-			
-			
-			for (int i = 0; i < length; i += 2) {
-				if (Skills.getLevel(requirements[i]) < requirements[i + 1])
-					return false;
-			}
-			return true;
+		public boolean equipable() {
+			return usable() && equipSlot != -1;
 		}
 		
-		String getName() {
+		public int equipSlot() {
+			return equipSlot;
+		}
+		
+		public int[] iDs() {
+			return IDs;
+		}
+		
+		public String getName() {
 			String enumString = this.toString();
 			StringBuilder t = new StringBuilder();
 			boolean upperCase = true;
@@ -154,20 +161,34 @@ public class SlayerItems {
 			return t.toString();
 		}
 		
-		boolean canEquip() {
-			return usable() && equipSlot != -1;
-		}
-		
-		int getSlot() {
-			return equipSlot;
-		}
-		
-		int[] IDList() {
-			return IDs;
+		public boolean usable() {
+			int length = requirements.length;
+			if (length % 2 != 0)
+				return false;
+			SlayerEquipment current = this;
+			if (current.equals(Crystal_Chime))
+				return pathOfGlouphrieFinished;
+			if (current.equals(Elemental_Shield))
+				return elementalWorkshopIFinished;
+			if (current.equals(Masked_Earmuffs) || current.getName().contains("Slayer Helmet")) {
+				if (!smokingKillsFinished)
+					return false;
+			} else if (current.equals(Mind_Shield)) {
+					return false;
+			} else if (current.equals(Body_Shield)) {
+				if (!elementalWorkshopIIFinished) 
+					return false;
+			}
+			for (int i = 0; i < length; i += 2) {
+				if (Skills.getLevel(requirements[i]) < requirements[i + 1])
+					return false;
+			}
+			return true;
 		}
 	}
 
 	private void getQuestsFinished() {
+		checkMouseButtons();
 		Interface quests = Interfaces.get(QUEST_INTERFACE);
 		InterfaceComponent hideButton, questList;
 		if (quests != null) {
@@ -214,15 +235,47 @@ public class SlayerItems {
 				elementalWorkshopIVFinished = questList.getComponent(ELEMENTAL_WORKSHOP_IV).getRelativeX() == 0;
 				pathOfGlouphrieFinished = questList.getComponent(PATH_OF_GLOUPHRIE).getRelativeX() == 0;
 				smokingKillsFinished = questList.getComponent(SMOKING_KILLS).getRelativeX() == 0;
-				return;
 			}
 		}
-		return;
+	}
+
+	private void checkMouseButtons() {
+		Interface mouse = Interfaces.get(MOUSE_INTERFACE);
+		InterfaceComponent mouseButtons;
+		if (mouse != null) {
+			mouseButtons = mouse.getComponent(BUTTON_CHANGER);
+			if (mouseButtons.getTextureID() == 762) 
+				return;
+		}
+		for (int i = 0; i < 6; i++) {
+			Game.openTab(Game.Tab.OPTIONS);
+			Script.sleep (600);
+			if (!Game.isLoggedIn())  
+				return;
+			if (Game.getTab().equals(Game.Tab.OPTIONS))
+				break;
+			if (i == 5) 
+				return;
+		}
+		mouse = Interfaces.get(MOUSE_INTERFACE);
+		if (mouse != null) {
+			mouseButtons = mouse.getComponent(BUTTON_CHANGER);
+			if (mouseButtons.getTextureID() != 762) {
+				for (int i = 0; i < 5; i++) {
+					mouseButtons.click();
+					Script.sleep (1000);
+					if (!Game.isLoggedIn())  
+						return;
+					if (Interfaces.get(QUEST_INTERFACE).getComponent(HIDE_FINISHED_BUTTON).getTextureID() == 699)
+						break;
+				}
+			}
+		}
 	}
 
 	static SlayerEquipment getSlayerEquipment (int itemID) {
 		for (SlayerEquipment currEquip: slayerEquipment) {
-			for (int currInt: currEquip.IDList()) {
+			for (int currInt: currEquip.iDs()) {
 				if (currInt == itemID)
 					return currEquip;
 			}
