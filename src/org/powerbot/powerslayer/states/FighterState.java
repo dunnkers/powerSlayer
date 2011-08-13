@@ -60,6 +60,10 @@ public class FighterState extends State {
             Prayer.setQuickPrayer(true);
         }
 
+	     if(methods.fighter.loot.onlyTakeLootFromKilled && methods.fighter.npcs.lastClickedNPC != null) {
+				methods.fighter.npcs.sleepWhileNpcIsDying(methods.fighter.npcs.lastClickedNPC);
+		 }
+
         for (LoopAction a : loopActions)
             if (a != null && a.activate())
                 return a.loop();

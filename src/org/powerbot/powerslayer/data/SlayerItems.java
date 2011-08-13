@@ -9,7 +9,7 @@ import org.rsbot.script.wrappers.Interface;
 import org.rsbot.script.wrappers.InterfaceComponent;
 
 public class SlayerItems {
-	static SlayerEquipment[] slayerEquipment;
+	static SlayerEquipment[] slayerEquipment = slayerEquipmentArray();
 	static boolean elementalWorkshopIFinished = false, elementalWorkshopIIFinished = false, elementalWorkshopIIIFinished = false,
 		elementalWorkshopIVFinished = false, pathOfGlouphrieFinished = false, smokingKillsFinished = false;
 	int QUEST_INTERFACE = 190, HIDE_FINISHED_BUTTON = 12, QUEST_LIST = 18;
@@ -291,8 +291,8 @@ public class SlayerItems {
 		return null;
 	}
 	
-	SlayerEquipment[] slayerEquipmentArray() {
-		SlayerEquipment[] equipmentList = { SlayerEquipment.AntiDragon_Shield,
+	static SlayerEquipment[] slayerEquipmentArray() {
+		return new SlayerEquipment[] { SlayerEquipment.AntiDragon_Shield,
 				SlayerEquipment.Bag_Of_Salt, SlayerEquipment.Body_Shield,
 				SlayerEquipment.BroadTipped_Bolts,SlayerEquipment.Broad_Arrows, 
 				SlayerEquipment.Crystal_Chime, SlayerEquipment.Dragonfire_Shield,
@@ -312,6 +312,5 @@ public class SlayerItems {
 				SlayerEquipment.Slayer_Staff, SlayerEquipment.Spiked_Helmet,
 				SlayerEquipment.Spiny_Helmet, SlayerEquipment.Super_Fishing_Explosive,
 				SlayerEquipment.Unlit_Bug_Lantern, SlayerEquipment.Witchwood_Icon };
-		return equipmentList;
 	}
 }

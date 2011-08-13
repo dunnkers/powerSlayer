@@ -1,31 +1,38 @@
 package org.powerbot.powerslayer.wrappers;
 
-import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
-import org.powerbot.powerslayer.data.SlayerMaster;
+import org.powerbot.powerslayer.data.MonsterLocations;
+import org.rsbot.script.methods.Calculations;
 import org.rsbot.script.wrappers.Tile;
 
 public class LocationProfile {
-	
-	Tile playerLocation;
-	Tile chosenLocation;
-	Tile[] tiles;
-	int combatLevel;
-	SlayerEquipment requiredEquipment;
-	SlayerMaster master;
+
+	private MonsterLocations[] locations;
 	
 	
 	/*	TODO Make an algorithm that returns a tile based on:
 	 * 		1. Current Location
 	 * 		2. Combat level
 	 * 		3. Equipment needed to go in
-	 * 		4. Current Slayer Master
-	 * 		
-	 * 	TODO Add in other effects of area
-	 * 		1. Extra equipment
-	 * 		2. Any more you can come up with
 	 */
-	LocationProfile (Tile... Tiles) {
-		
+	LocationProfile (MonsterLocations... locations) {
+		this.locations = locations;
+	}
+
+	public Tile getNearestLocationFromTile(Tile tile) {
+		Tile closest = null;
+		for(MonsterLocations location : locations) {
+			if (closest == null || Calculations.distanceTo(location.getTile()) < Calculations.distanceTo(closest))
+				closest = location.getTile();
+		}
+		return closest;
+	}
+
+	public Tile getBestLocation() {
+		return null;
+	}
+
+	public MonsterLocations[] getLocations() {
+		return locations;
 	}
 
 }

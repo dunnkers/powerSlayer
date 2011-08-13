@@ -1,10 +1,12 @@
 package org.powerbot.powerslayer.data;
 
+import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.methods.CombatStyle;
 import org.powerbot.powerslayer.methods.CombatStyle.Style;
-import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
-import org.powerbot.powerslayer.wrappers.*;
-import org.rsbot.script.methods.Equipment;
+import org.powerbot.powerslayer.wrappers.Finisher;
+import org.powerbot.powerslayer.wrappers.MonsterProfile;
+import org.powerbot.powerslayer.wrappers.Requirements;
+import org.powerbot.powerslayer.wrappers.Starter;
 import org.rsbot.script.wrappers.Tile;
 
 
@@ -15,10 +17,12 @@ public enum Monsters {
     ABBERANT_SPECTRE
     	("Aberrant Spectre", new Requirements(new SlayerEquipment[] {SlayerEquipment.Nosepeg, SlayerEquipment.Slayer_Helmet}),
     	new CombatStyle(Style.MAGIC), new Tile(3418, 3549, 1)),
-    ABYSSAL_DEMON("Abyssal Demon", new CombatStyle(Style.MELEE), new Tile(
-            3418, 3567, 2)),
-    AQUANITE("Aquanite", new MonsterProfile(new CombatStyle(Style.MAGIC)), new Tile(
-            2715, 9973)),
+    ABYSSAL_DEMON
+		("Abyssal Demon", new CombatStyle(Style.MELEE), new Tile(
+        3418, 3567, 2)),
+    AQUANITE
+		("Aquanite", new MonsterProfile(new CombatStyle(Style.MAGIC)), new Tile(
+        2715, 9973)),
     ANKOU
     	("Ankou", new CombatStyle(Style.MELEE), new Tile(2326, 5199)),
     BANSHEE
