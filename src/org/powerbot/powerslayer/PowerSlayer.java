@@ -2,6 +2,7 @@ package org.powerbot.powerslayer;
 
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
+import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.states.*;
 import org.powerbot.powerslayer.wrappers.*;
@@ -74,122 +75,78 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
     }
 
 	// TODO 90% of these need rewriting and classification
-    public boolean performAction(SlayerItem items, String action) {
-        for (Item item : Inventory.getItems()) {
-            for (String name : items.getNames()) {
-                if (item.getName().equalsIgnoreCase(name)) {
-                    return item.interact(action);
-                }
-            }
-        }
-        return false;
+    public boolean performAction(SlayerEquipment items, String action) {
+    	for (Item item : Inventory.getItems()) {
+    		if (item.getName().equalsIgnoreCase(items.getName())) {
+    			return item.interact(action);
+    		}
+    	}
+    	return false;
     }
 
-    public boolean isInInvent(SlayerItem items) {
-        for (Item item : Inventory.getItems()) {
-            for (String name : items.getNames()) {
-                if (item.getName().equalsIgnoreCase(name)) {
-                    if (Inventory.getCount(true, item.getID()) >= items.getAmount())
-                        return true;
-                }
-            }
-        }
-        return false;
+    public boolean isInInvent(SlayerEquipment items) {
+    	for (Item item : Inventory.getItems()) {
+    		if (item.getName().equalsIgnoreCase(items.getName())) {
+    			if (Inventory.getCount(true, item.getID()) >= items.amount())
+    				return true;
+    		}
+    	}
+    	return false;
     }
 
-    public boolean isInBank(SlayerItem items) {
-        for (Item item : Bank.getItems()) {
-            for (String name : items.getNames()) {
-                if (item.getName().equalsIgnoreCase(name)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public boolean isInBank(SlayerEquipment items) {
+    	for (Item item : Bank.getItems()) {
+    		if (item.getName().equalsIgnoreCase(items.getName())) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
-    public boolean isEquipped(SlayerItem item) {
-        for (Item i : Equipment.getItems()) {
-            for (String name : item.getNames()) {
-                if (i.getName().equalsIgnoreCase(name)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public boolean isEquipped(SlayerEquipment item) {
+    	for (Item i : Equipment.getItems()) {
+    		if (i.getName().equalsIgnoreCase(item.getName())) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
 
-    public boolean isInInvent(EquipmentItems equip) {
-        for (Item item : Inventory.getItems()) {
-            for (String name : equip.getNames()) {
-                if (item.getName().equalsIgnoreCase(name)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public String willRemove(SlayerEquipment item) {
+        return Equipment.getItem(item.equipSlot()).getName();
     }
 
-    public boolean isEquipped(EquipmentItems equip) {
-        for (Item item : Equipment.getItems()) {
-            for (String name : equip.getNames()) {
-                if (item.getName().equalsIgnoreCase(name)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean isInBank(EquipmentItems equip) {
-        for (Item item : Bank.getItems()) {
-            for (String name : equip.getNames()) {
-                if (item.getName().equalsIgnoreCase(name)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public String willRemove(EquipmentItems equip) {
-        return Equipment.getItem(equip.getSlot()).getName();
-    }
-
-    public void equip(EquipmentItems equip) {
-        for (Item item : Inventory.getItems()) {
-            for (String name : equip.getNames()) {
-                if (item.getName().equalsIgnoreCase(name)) {
-                    item.click(true);
-                    return;
-                }
-            }
-        }
+    public void equip(SlayerEquipment equip) {
+    	for (Item item : Inventory.getItems()) {
+    		if (item.getName().equalsIgnoreCase(equip.getName())) {
+    			item.click(true);
+    			return;
+    		}
+    	}
     }
 
     public boolean isFullyEquipped(Requirements req) {
-        for (EquipmentItems e : req.getEquipment()) {
-            if (!isEquipped(e)) {
-                if (isInInvent(e)) {
-                    for (EquipmentItems r : req.getEquipment()) {
-                        for (String name : r.getNames()) {
-                            if (willRemove(e).equals(name)) {
-                                return false;
-                            }
-                        }
-                    }
-                    equip(e);
-                    if (!isEquipped(e)) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+    	for (SlayerEquipment e : req.getEquipment()) {
+    		if (!isEquipped(e)) {
+    			if (isInInvent(e)) {
+    				for (SlayerEquipment r : req.getEquipment()) {
+    					if (willRemove(e).equals(r.getName())) {
+    						return false;
+    					}
+
+    				}
+    				equip(e);
+    				if (!isEquipped(e)) {
+    					return false;
+    				}
+    			}
+    		}
+    	}
+    	return true;
     }
 
     public boolean inventReady(Requirements req) {
-        for (SlayerItem i : req.getItems()) {
+        for (SlayerEquipment i : req.getEquipment()) {
             if (!isInInvent(i)) {
                 return false;
             }
@@ -199,22 +156,18 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 
     public boolean isInInvent(Finisher fin) {
         for (Item item : Inventory.getItems()) {
-            for (String name : fin.getNames()) {
-                if (item.getName().equalsIgnoreCase(name)) {
+                if (item.getName().equalsIgnoreCase(fin.name())) {
                     return true;
                 }
-            }
         }
         return false;
     }
 
     public boolean isInBank(Finisher fin) {
         for (Item item : Bank.getItems()) {
-            for (String name : fin.getNames()) {
-                if (item.getName().equalsIgnoreCase(name)) {
+                if (item.getName().equalsIgnoreCase(fin.name())) {
                     return true;
                 }
-            }
         }
         return false;
     }

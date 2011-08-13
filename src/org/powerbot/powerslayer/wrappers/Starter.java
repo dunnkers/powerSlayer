@@ -2,7 +2,7 @@ package org.powerbot.powerslayer.wrappers;
 
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 
-public class Starter extends SlayerItem {
+public class Starter {
 	//TODO: Add methods
 	String[] itemNames;
 	SlayerEquipment starter;

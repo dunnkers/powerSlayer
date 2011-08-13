@@ -3,7 +3,6 @@ package org.powerbot.powerslayer.states;
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
-import org.powerbot.powerslayer.wrappers.SlayerItem;
 import org.rsbot.script.methods.*;
 import org.rsbot.script.wrappers.GroundItem;
 import org.rsbot.script.wrappers.Item;
@@ -206,7 +205,7 @@ public class FighterState extends State {
     }
 
     public boolean checkItems() {
-        for (SlayerEquipment i : methods.parent.currentTask.getRequirements().getItems()) {
+        for (SlayerEquipment i : methods.parent.currentTask.getRequirements().getEquipment()) {
             if (!isInInvent(i)) {
                 return false;
             }
