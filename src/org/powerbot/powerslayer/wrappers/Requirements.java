@@ -105,7 +105,7 @@ public class Requirements {
 		this (null, null, null, b);
 	}
 
-	public SlayerEquipment[] getItems() {
+	public SlayerEquipment[] getEquipment() {
         SlayerEquipment[] itemArray = null;
         this.items.toArray(itemArray);
         return itemArray;
