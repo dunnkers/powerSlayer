@@ -163,6 +163,7 @@ public class FighterState extends State {
 		}
 
 
+		@SuppressWarnings("unused")
 		private class LootLoop implements LoopAction {
 
 			private GroundItem loot = null;

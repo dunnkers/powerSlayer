@@ -347,7 +347,8 @@ public class UniversalFighter extends DMethodProvider {
         }
 
 
-	    private void sleepWhileNpcIsDying(NPC t) {
+	    @SuppressWarnings("unused")
+		private void sleepWhileNpcIsDying(NPC t) {
 			if(npcs.lastClickedNPC.isDead()) {
 				GroundItem[] GIs = GroundItems.getAllAt(t.getLocation());
 				long start = System.currentTimeMillis();
@@ -836,7 +837,7 @@ public class UniversalFighter extends DMethodProvider {
 			}
 		}
 
-		@SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
+		//Boolean Method is always inverted
 		private boolean NPCisOnBadTile(NPC t) {
 			for(Tile badTile: badTiles) {
 				if(t.getLocation().getX() == badTile.getX() &&

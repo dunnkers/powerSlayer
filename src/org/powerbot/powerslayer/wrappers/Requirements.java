@@ -2,7 +2,6 @@ package org.powerbot.powerslayer.wrappers;
 
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.methods.CombatStyle;
-import org.rsbot.script.wrappers.Tile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
