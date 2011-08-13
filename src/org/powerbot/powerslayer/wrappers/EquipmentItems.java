@@ -1,5 +1,7 @@
 package org.powerbot.powerslayer.wrappers;
 
+import org.powerbot.powerslayer.data.SlayerItems;
+
 public class EquipmentItems {
     private String[] names;
     private int slot;

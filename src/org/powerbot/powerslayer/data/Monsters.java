@@ -2,7 +2,12 @@ package org.powerbot.powerslayer.data;
 
 import org.powerbot.powerslayer.methods.CombatStyle;
 import org.powerbot.powerslayer.methods.CombatStyle.Style;
-import org.powerbot.powerslayer.wrappers.*;
+import org.powerbot.powerslayer.wrappers.EquipmentItems;
+import org.powerbot.powerslayer.wrappers.Finisher;
+import org.powerbot.powerslayer.wrappers.MonsterProfile;
+import org.powerbot.powerslayer.wrappers.Requirements;
+import org.powerbot.powerslayer.wrappers.SlayerItem;
+import org.powerbot.powerslayer.wrappers.Starter;
 import org.rsbot.script.methods.Equipment;
 import org.rsbot.script.wrappers.Tile;
 
@@ -149,7 +154,7 @@ public enum Monsters {
     SPIRITUAL_WARRIOR("Spiritual warrior", new Tile(0, 0, 0)),
     STEEL_DRAGON("Steel dragon", null, new CombatStyle(Style.MELEE,
             Style.RANGED_DRAGONFIRE), new Tile(0, 0, 0)),
-    SUPAH("Suquh", new Tile(0, 0, 0)),
+    SUQAH("Suquh", new Tile(0, 0, 0)),
     TROLL("Troll", new Tile(0, 0, 0)),
     TUROTH("Turoth", new Requirements(new EquipmentItems(new String[]{
             "Leaf-bladed sword", "Leaf-bladed spear"}, Equipment.WEAPON)), new Tile(
