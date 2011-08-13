@@ -11,7 +11,7 @@ import org.rsbot.script.wrappers.Tile;
 
 
 public enum Monsters {
-    // TODO Add locations
+    // TODO Convert Locations to MonsterLocations and fix code on top of the framework
 	// TODO Add Loots?
 	// TODO Add SlayerItem groups
     ABBERANT_SPECTRE

@@ -10,6 +10,7 @@ public class Task {
     }
 
     public Requirements getRequirements() {
+	    //TODO: Convert over to both locationProfile and monster requirements
         return monster.getRequirements();
     }
 

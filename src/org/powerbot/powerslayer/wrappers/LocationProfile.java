@@ -14,7 +14,7 @@ public class LocationProfile {
 	 * 		2. Combat level
 	 * 		3. Equipment needed to go in
 	 */
-	LocationProfile (MonsterLocations... locations) {
+	public LocationProfile(MonsterLocations... locations) {
 		this.locations = locations;
 	}
 
