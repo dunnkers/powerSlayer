@@ -2,6 +2,7 @@ package org.powerbot.powerslayer.states;
 
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
+import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.wrappers.SlayerItem;
 import org.rsbot.script.methods.*;
 import org.rsbot.script.wrappers.GroundItem;
@@ -205,7 +206,7 @@ public class FighterState extends State {
     }
 
     public boolean checkItems() {
-        for (SlayerItem i : methods.parent.currentTask.getRequirements().getItems()) {
+        for (SlayerEquipment i : methods.parent.currentTask.getRequirements().getItems()) {
             if (!isInInvent(i)) {
                 return false;
             }
@@ -213,16 +214,15 @@ public class FighterState extends State {
         return true;
     }
 
-    private boolean isInInvent(SlayerItem items) {
-        for (Item item : Inventory.getItems()) {
-            for (String name : items.getNames()) {
-                if (item.getName().equalsIgnoreCase(name)) {
-                    if (Inventory.getCount(true, item.getID()) >= items.getAmount())
-                        return true;
-                }
-            }
-        }
-        return false;
+    private boolean isInInvent(SlayerEquipment i) {
+    	for (Item item : Inventory.getItems()) {
+    		if (item.getName().equalsIgnoreCase(i.getName())) {
+    			if (Inventory.getCount(true, item.getID()) >= i.amount())
+    				return true;
+    		}
+    	}
+
+    	return false;
     }
 
 }
