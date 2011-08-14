@@ -14,7 +14,6 @@ public class LocationProfile {
 	 * 		2. Combat level
 	 * 		3. Equipment needed to go in
 	 */
-
 	public LocationProfile(SlayerLocations... locations) {
 		this.locations = locations;
 	}
