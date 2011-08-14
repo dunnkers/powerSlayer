@@ -12,8 +12,8 @@ import org.rsbot.script.wrappers.Tile;
 
 public enum Monster {
     // TODO Convert Locations to MonsterLocations and fix code on top of the framework
-	// TODO Add Loots?
-	// TODO Add SlayerItem groups
+    // TODO Add Loots?
+    // TODO Add SlayerItem groups
     ABBERANT_SPECTRE
     	("Aberrant Spectre", new Requirements(new SlayerEquipment[] {SlayerEquipment.Nosepeg, SlayerEquipment.Slayer_Helmet}),
     	new CombatStyle(Style.MAGIC), new Tile(3418, 3549, 1)),
