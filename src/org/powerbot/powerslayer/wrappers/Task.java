@@ -1,12 +1,17 @@
 package org.powerbot.powerslayer.wrappers;
 
-import org.powerbot.powerslayer.data.Monsters;
+import org.powerbot.powerslayer.data.Monster;
+import org.powerbot.powerslayer.data.SlayerMaster;
 
 public class Task {
-    private Monsters monster;
+    private Monster monster;
+	private int amount;
+	private SlayerMaster master;
 
-    private Task(Monsters monster) {
+    public Task(Monster monster, int amount, SlayerMaster master) {
         this.monster = monster;
+	    this.amount = amount;
+	    this.master = master;
     }
 
     public Requirements getRequirements() {
@@ -14,7 +19,7 @@ public class Task {
         return monster.getRequirements();
     }
 
-    public Monsters getMonster() {
+    public Monster getMonster() {
         return monster;
     }
 }

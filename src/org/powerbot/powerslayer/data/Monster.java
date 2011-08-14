@@ -10,7 +10,7 @@ import org.powerbot.powerslayer.wrappers.Starter;
 import org.rsbot.script.wrappers.Tile;
 
 
-public enum Monsters {
+public enum Monster {
     // TODO Convert Locations to MonsterLocations and fix code on top of the framework
 	// TODO Add Loots?
 	// TODO Add SlayerItem groups
@@ -225,80 +225,80 @@ public enum Monsters {
     private Tile[] location;
     private MonsterProfile profile = null;
 
-    Monsters(String[] names, Requirements Requirements, Tile... location) {
+    Monster(String[] names, Requirements Requirements, Tile... location) {
         this.names = names;
         this.location = location;
         this.Requirements = Requirements;
     }
 
-    Monsters(String[] names, Requirements Requirements, MonsterProfile prof,
-             Tile... location) {
+    Monster(String[] names, Requirements Requirements, MonsterProfile prof,
+            Tile... location) {
         this.names = names;
         this.location = location;
         this.Requirements = Requirements;
         this.profile = prof;
     }
 
-    Monsters(String[] names, Requirements Requirements, CombatStyle prof,
-             Tile... location) {
+    Monster(String[] names, Requirements Requirements, CombatStyle prof,
+            Tile... location) {
         this.names = names;
         this.location = location;
         this.Requirements = Requirements;
         this.profile = new MonsterProfile(prof);
     }
 
-    Monsters(String[] names, MonsterProfile prof, Tile... location) {
+    Monster(String[] names, MonsterProfile prof, Tile... location) {
         this.names = names;
         this.location = location;
         this.Requirements = null;
         this.profile = prof;
     }
 
-    Monsters(String[] names, CombatStyle prof, Tile... location) {
+    Monster(String[] names, CombatStyle prof, Tile... location) {
         this.names = names;
         this.location = location;
         this.Requirements = null;
         this.profile = new MonsterProfile(prof);
     }
 
-    Monsters(String[] names, Tile... location) {
+    Monster(String[] names, Tile... location) {
         this.names = names;
         this.location = location;
         this.Requirements = null;
         this.profile = null;
     }
 
-    Monsters(String name, Tile... location) {
+    Monster(String name, Tile... location) {
         this.names = new String[]{name};
         this.location = location;
         this.Requirements = null;
         this.profile = null;
     }
 
-    Monsters(String name, Requirements Requirements, Tile... location) {
+    Monster(String name, Requirements Requirements, Tile... location) {
         this(new String[]{name}, Requirements, location);
     }
     
-    Monsters(String name, Requirements Requirements, Finisher finisher, Tile... location) {
+    Monster(String name, Requirements Requirements, Finisher finisher, Tile... location) {
         this(new String[]{name}, Requirements, location);
     }
 
-    Monsters(String name, Requirements Requirements, MonsterProfile prof,
-             Tile... location) {
+    Monster(String name, Requirements Requirements, MonsterProfile prof,
+            Tile... location) {
         this(new String[]{name}, Requirements, prof, location);
     }
 
-    Monsters(String name, Requirements Requirements, CombatStyle prof,
-             Tile... location) {
+    Monster(String name, Requirements Requirements, CombatStyle prof,
+            Tile... location) {
         this(new String[]{name}, Requirements, new MonsterProfile(prof),
                 location);
     }
 
-    Monsters(String name, MonsterProfile prof, Tile... location) {
+    Monster(String name, MonsterProfile prof, Tile... location) {
         this(new String[]{name}, null, prof, location);
     }
 
-    Monsters(String name, CombatStyle prof, Tile... location) {
+    Monster(String name, CombatStyle prof, Tile... location) {
         this(new String[]{name}, null, new MonsterProfile(prof), location);
     }
 
