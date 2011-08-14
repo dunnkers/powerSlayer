@@ -69,6 +69,6 @@ public class CombatStyle {
     }
 
     public static enum Style {
-        MELEE, MAGIC, RANGE, DRAGONFIRE, RANGED_DRAGONFIRE, MAGICAL_MELEE
+        MELEE, MAGIC, RANGE, DRAGONFIRE, RANGED_DRAGONFIRE, MAGICAL_MELEE, MAGICAL_RANGE
     }
 }
