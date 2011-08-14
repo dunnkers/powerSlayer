@@ -16,7 +16,7 @@ public class Finisher {
         this (equipment, 1);
     }
     
-    public int amount() {
+    public int getAmount() {
 		return amount;
 	}
 	
@@ -24,27 +24,27 @@ public class Finisher {
 		return finisher.availableAtMaster();
 	}
 	
-	public int cost() {
-		return finisher.cost();
+	public int getCost() {
+		return finisher.getCost();
 	}
 	
-	public boolean equipable() {
-		return finisher.equipable();
+	public boolean isEquipable() {
+		return finisher.isEquipable();
 	}
 	
 	public int equipSlot() {
 		return finisher.equipSlot();
 	}
 	
-	public int[] iDs() {
-		return finisher.iDs();
+	public int[] getIDs() {
+		return finisher.getIDs();
 	}
 	
-	public String name() {
+	public String getName() {
 		return finisher.getName();
 	}
 	
-	public boolean usable() {
-		return finisher.usable();
+	public boolean isUsable() {
+		return finisher.isUsable();
 	}
 }

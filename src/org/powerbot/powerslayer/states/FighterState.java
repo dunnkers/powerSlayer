@@ -220,7 +220,7 @@ public class FighterState extends State {
     private boolean isInInvent(SlayerEquipment i) {
     	for (Item item : Inventory.getItems()) {
     		if (item.getName().equalsIgnoreCase(i.getName())) {
-    			if (Inventory.getCount(true, item.getID()) >= i.amount())
+    			if (Inventory.getCount(true, item.getID()) >= i.getAmount())
     				return true;
     		}
     	}

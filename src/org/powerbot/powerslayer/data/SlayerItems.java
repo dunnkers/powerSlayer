@@ -107,7 +107,7 @@ public class SlayerItems {
 			this(getSlayerEquipment(itemName));
 		}
 		
-		public int amount() {
+		public int getAmount() {
 			return amount;
 		}
 		
@@ -115,19 +115,19 @@ public class SlayerItems {
 			return itemCost != -1;
 		}
 		
-		public int cost() {
+		public int getCost() {
 			return itemCost;
 		}
 		
-		public boolean equipable() {
-			return usable() && equipSlot != -1;
+		public boolean isEquipable() {
+			return isUsable() && equipSlot != -1;
 		}
 		
 		public int equipSlot() {
 			return equipSlot;
 		}
 		
-		public int[] iDs() {
+		public int[] getIDs() {
 			return IDs;
 		}
 		
@@ -161,7 +161,7 @@ public class SlayerItems {
 			return t.toString();
 		}
 		
-		public boolean usable() {
+		public boolean isUsable() {
 			int length = requirements.length;
 			if (length % 2 != 0)
 				return false;
@@ -275,7 +275,7 @@ public class SlayerItems {
 
 	static SlayerEquipment getSlayerEquipment (int itemID) {
 		for (SlayerEquipment currEquip: slayerEquipment) {
-			for (int currInt: currEquip.iDs()) {
+			for (int currInt: currEquip.getIDs()) {
 				if (currInt == itemID)
 					return currEquip;
 			}

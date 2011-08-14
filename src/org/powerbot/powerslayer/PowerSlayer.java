@@ -90,7 +90,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
     public boolean isInInvent(SlayerEquipment items) {
     	for (Item item : Inventory.getItems()) {
     		if (item.getName().equalsIgnoreCase(items.getName())) {
-    			if (Inventory.getCount(true, item.getID()) >= items.amount())
+    			if (Inventory.getCount(true, item.getID()) >= items.getAmount())
     				return true;
     		}
     	}
@@ -159,7 +159,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 
     public boolean isInInvent(Finisher fin) {
         for (Item item : Inventory.getItems()) {
-                if (item.getName().equalsIgnoreCase(fin.name())) {
+                if (item.getName().equalsIgnoreCase(fin.getName())) {
                     return true;
                 }
         }
@@ -168,7 +168,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 
     public boolean isInBank(Finisher fin) {
         for (Item item : Bank.getItems()) {
-                if (item.getName().equalsIgnoreCase(fin.name())) {
+                if (item.getName().equalsIgnoreCase(fin.getName())) {
                     return true;
                 }
         }

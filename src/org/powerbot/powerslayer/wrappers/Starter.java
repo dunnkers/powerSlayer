@@ -22,7 +22,7 @@ public class Starter {
     	return itemNames;
     }
     
-    public int amount() {
+    public int getAmount() {
 		return amount;
 	}
 	
@@ -30,27 +30,27 @@ public class Starter {
 		return starter.availableAtMaster();
 	}
 	
-	public int cost() {
-		return starter.cost();
+	public int getCost() {
+		return starter.getCost();
 	}
 	
-	public boolean equipable() {
-		return starter.equipable();
+	public boolean isEquipable() {
+		return starter.isEquipable();
 	}
 	
 	public int equipSlot() {
 		return starter.equipSlot();
 	}
 	
-	public int[] iDs() {
-		return starter.iDs();
+	public int[] getIDs() {
+		return starter.getIDs();
 	}
 	
-	public String name() {
+	public String getName() {
 		return starter.getName();
 	}
 	
-	public boolean usable() {
-		return starter.usable();
+	public boolean isUsable() {
+		return starter.isUsable();
 	}
 }

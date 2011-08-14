@@ -328,7 +328,7 @@ public class UniversalFighter extends DMethodProvider {
         }
 
         public boolean useFinisher(NPC monster) {
-            String s = methods.parent.currentTask.getRequirements().getFinisher().name();
+            String s = methods.parent.currentTask.getRequirements().getFinisher().getName();
                 for (Item inventItem : Inventory.getItems()) {
                     if (s.equalsIgnoreCase(inventItem.getName())) {
                         if (Inventory.selectItem(inventItem.getID())) {
@@ -748,7 +748,7 @@ public class UniversalFighter extends DMethodProvider {
 				if (Calculations.distanceTo(t.getLocation()) > 25) {
 					return false;
 				}
-				//Check ID/name
+				//Check ID/getName
 				boolean good = false;
 				String name = t.getItem().getName();
 				for (String s : lootNames) {
