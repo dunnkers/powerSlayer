@@ -159,7 +159,7 @@ public enum Monster {
     	new Finisher(SlayerEquipment.Fungicide_Spray)), new Tile(0, 0, 0)),
     NECHRYAEL
     	("Nechryael", new Tile(3441, 3567, 2)),
-    // TODO Needs nosepeg for walking past spectres...
+    // TODO Needs nosepeg for walking past spectres...   (Add in location?)
     OGRE
     	("Ogre", new Tile(0, 0, 0)),
     OTHERWORLDLY_BEINGS
@@ -171,7 +171,6 @@ public enum Monster {
     	new Finisher(SlayerEquipment.Bag_Of_Salt)), new Tile(2798, 10019, 0)),
     SCABARITES
     	(" ", new Tile(0, 0, 0)),
-    // TODO find the best scabarites
     SCORPION
     	("Scorpion", new Tile(0, 0, 0)),
     SEA_SNAKE
