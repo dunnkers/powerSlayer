@@ -16,6 +16,8 @@ public class SlayerItems {
 	int ELEMENTAL_WORKSHOP_I = 37, ELEMENTAL_WORKSHOP_II = 38,
 		ELEMENTAL_WORKSHOP_III = 172, ELEMENTAL_WORKSHOP_IV = 180, PATH_OF_GLOUPHRIE = 127, SMOKING_KILLS = 138;
 	int MOUSE_INTERFACE = 261, BUTTON_CHANGER = 6; 
+	public static SlayerEquipment[] slayerHelmets = {SlayerEquipment.Full_Slayer_Helmet4charged5, SlayerEquipment.Full_Slayer_Helmet4e5, SlayerEquipment.Full_Slayer_Helmet, 
+			SlayerEquipment.Slayer_Helmet_4charged5, SlayerEquipment.Slayer_Helmet_4e5, SlayerEquipment.Slayer_Helmet};
 	
 	public SlayerItems() {
 		slayerEquipment = slayerEquipmentArray();
@@ -29,6 +31,7 @@ public class SlayerItems {
 		Body_Shield (-1, Equipment.SHIELD, new int[] {Skills.DEFENSE, 33}, new int[] {18691, 18692}),
 		BroadTipped_Bolts (-1, 38, new int[] {Skills.SLAYER, 55, Skills.RANGE, 50}, new int[] {13280}),
 		Broad_Arrows (90, Equipment.AMMO, new int[] {Skills.SLAYER, 55, Skills.RANGE, 50}, new int[] {4150, 4160, 4172, 4173, 4174, 4175}),
+		Bullseye_Lantern (-1, -1, new int[] {Skills.FIREMAKING, 49}, new int[] {4544, 4545, 4546, 4547, 4548, 4549, 4550}),
 		Crystal_Chime (-1, -1, new int[] {Skills.SLAYER, 1}, new int[] {11749}),
 		Dragonfire_Shield (-1, Equipment.SHIELD, new int[] {Skills.DEFENSE, 75}, new int[] {11283, 11284, 11285}),
 		Earmuffs (200, Equipment.HELMET, new int[] {Skills.SLAYER, 15}, new int[] {4166, 4167}),
@@ -53,6 +56,8 @@ public class SlayerItems {
 		Mirror_Shield (5000, Equipment.SHIELD, new int[] {Skills.SLAYER, 15, Skills.DEFENSE, 20}, new int[] {4156, 4157}),
 		Nosepeg (200, Equipment.HELMET, new int[] {Skills.SLAYER, 60}, new int[] {4168, 4169}),
 		Rock_Hammer (500, -1, new int[] {Skills.SLAYER, 1}, new int[] {4162, 4163}),
+		Rope (-1, -1, new int[] {Skills.SLAYER, 1}, new int[] {954}),
+		Seers_Headband (-1, -1, new int[] {Skills.SLAYER, 1}, new int[] {14631, 14662, 14663}),
 		Slayer_Bell (150, -1, new int[] {Skills.SLAYER, 30}, new int[] {10952, 10953}),
 		Slayer_Gloves (200, Equipment.HANDS, new int[] {Skills.SLAYER, 17}, new int[] {6708, 6720}),
 		Slayer_Helmet (-1, Equipment.HELMET, new int[] {Skills.SUMMONING, 20, Skills.DEFENSE, 10}, new int[] {13263}),
@@ -62,6 +67,7 @@ public class SlayerItems {
 		Spiked_Helmet (-1, Equipment.HELMET, new int[] {Skills.DEFENSE, 5}, new int[] {13105, 13106, 13168}),
 		Spiny_Helmet (650, Equipment.HELMET, new int[] {Skills.SLAYER, 1, Skills.DEFENSE, 5}, new int[] {4551, 4552}),
 		Super_Fishing_Explosive (-1, -1, new int[] {Skills.SLAYER, 32}, new int[] {12633}),
+		Tinderbox (-1, -1, new int[] {Skills.SLAYER, 1}, new int[] {590}),
 		Unlit_Bug_Lantern (200, Equipment.SHIELD, new int[] {Skills.SLAYER, 33}, new int[] {7051}),
 		Water_Skin (-1, -1, new int[] {Skills.SLAYER, 1}, new int[] {1823, 1825, 1827, 1829, 1831}),
 		Witchwood_Icon (900, Equipment.NECK, new int[] {Skills.SLAYER, 58}, new int[] {8923});
