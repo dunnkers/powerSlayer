@@ -328,7 +328,7 @@ public class UniversalFighter extends DMethodProvider {
         }
 
         public boolean useFinisher(NPC monster) {
-            String s = methods.parent.currentTask.getRequirements().getFinisher().name();
+            String s = methods.parent.currentTask.getRequirements().getFinisher().getName();
                 for (Item inventItem : Inventory.getItems()) {
                     if (s.equalsIgnoreCase(inventItem.getName())) {
                         if (Inventory.selectItem(inventItem.getID())) {
@@ -347,8 +347,7 @@ public class UniversalFighter extends DMethodProvider {
         }
 
 
-	    @SuppressWarnings("unused")
-		private void sleepWhileNpcIsDying(NPC t) {
+	    public void sleepWhileNpcIsDying(NPC t) {
 			if(npcs.lastClickedNPC.isDead()) {
 				GroundItem[] GIs = GroundItems.getAllAt(t.getLocation());
 				long start = System.currentTimeMillis();
@@ -749,7 +748,7 @@ public class UniversalFighter extends DMethodProvider {
 				if (Calculations.distanceTo(t.getLocation()) > 25) {
 					return false;
 				}
-				//Check ID/name
+				//Check ID/getName
 				boolean good = false;
 				String name = t.getItem().getName();
 				for (String s : lootNames) {
@@ -816,7 +815,7 @@ public class UniversalFighter extends DMethodProvider {
 					if (tilesWithinRadius.size() > 1){
 						tilesWithinRadius.add(tile);
 						Area temp = new Area(tilesWithinRadius.toArray(new Tile[tilesWithinRadius.size()]));
-						Tile[] areaTiles = temp.getTiles();
+						Tile[] areaTiles = temp.getTileArray();
 						for(Tile tileToAdd : areaTiles) {
 							if(!badTiles.contains(tileToAdd)) {
 								badTiles.add(tileToAdd);
@@ -837,7 +836,7 @@ public class UniversalFighter extends DMethodProvider {
 			}
 		}
 
-		//Boolean Method is always inverted
+		@SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
 		private boolean NPCisOnBadTile(NPC t) {
 			for(Tile badTile: badTiles) {
 				if(t.getLocation().getX() == badTile.getX() &&

@@ -1,15 +1,11 @@
 package org.powerbot.powerslayer.common;
 
-import java.awt.Color;
+import org.rsbot.script.methods.Players;
+import org.rsbot.script.wrappers.*;
+
+import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.rsbot.script.methods.Players;
-import org.rsbot.script.wrappers.GameObject;
-import org.rsbot.script.wrappers.GroundItem;
-import org.rsbot.script.wrappers.NPC;
-import org.rsbot.script.wrappers.Player;
-import org.rsbot.script.wrappers.Tile;
 
 public abstract class DMethodProvider {
     public MethodBase methods;
@@ -105,7 +101,7 @@ public abstract class DMethodProvider {
     }
 
     /**
-     * Pauses execution for a random amount of time between two values.
+     * Pauses execution for a random getAmount of time between two values.
      *
      * @param minSleep The minimum time to sleep.
      * @param maxSleep The maximum time to sleep.

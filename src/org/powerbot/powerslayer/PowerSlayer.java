@@ -5,7 +5,10 @@ import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.states.*;
-import org.powerbot.powerslayer.wrappers.*;
+import org.powerbot.powerslayer.wrappers.Finisher;
+import org.powerbot.powerslayer.wrappers.Requirements;
+import org.powerbot.powerslayer.wrappers.Starter;
+import org.powerbot.powerslayer.wrappers.Task;
 import org.rsbot.event.events.MessageEvent;
 import org.rsbot.event.listeners.MessageListener;
 import org.rsbot.event.listeners.PaintListener;
@@ -87,7 +90,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
     public boolean isInInvent(SlayerEquipment items) {
     	for (Item item : Inventory.getItems()) {
     		if (item.getName().equalsIgnoreCase(items.getName())) {
-    			if (Inventory.getCount(true, item.getID()) >= items.amount())
+    			if (Inventory.getCount(true, item.getID()) >= items.getAmount())
     				return true;
     		}
     	}
@@ -156,7 +159,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 
     public boolean isInInvent(Finisher fin) {
         for (Item item : Inventory.getItems()) {
-                if (item.getName().equalsIgnoreCase(fin.name())) {
+                if (item.getName().equalsIgnoreCase(fin.getName())) {
                     return true;
                 }
         }
@@ -165,7 +168,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 
     public boolean isInBank(Finisher fin) {
         for (Item item : Bank.getItems()) {
-                if (item.getName().equalsIgnoreCase(fin.name())) {
+                if (item.getName().equalsIgnoreCase(fin.getName())) {
                     return true;
                 }
         }
@@ -327,48 +330,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 
 
     public void mouseExited(MouseEvent e) {
-    }
-
-
-
-
-
-    /**
-     * Gets the rune count, including staves
-     *
-     * @param rune the Rune
-     * @return rune count
-     */
-    public int getRuneCount(Rune rune) {
-        if (rune.isElemental()) {
-            String wepName = Equipment
-                    .getItem(org.rsbot.script.methods.Equipment.WEAPON) != null ? Equipment
-                    .getItem(org.rsbot.script.methods.Equipment.WEAPON)
-                    .getName() : "";
-            if (rune == Rune.WATER) {
-                String shieldName = Equipment
-                        .getItem(org.rsbot.script.methods.Equipment.SHIELD) != null ? Equipment
-                        .getItem(org.rsbot.script.methods.Equipment.SHIELD)
-                        .getName() : "";
-                if (shieldName != null
-                        && shieldName.trim().equalsIgnoreCase("tome of frost"))
-                    return Integer.MAX_VALUE;
-            }
-            if (wepName != null && wepName.toLowerCase().contains("staff")) {
-                if (wepName.toLowerCase().contains(rune.name().toLowerCase()))
-                    return Integer.MAX_VALUE;
-                if (wepName.toLowerCase().contains("dust")
-                        && (rune == Rune.AIR || rune == Rune.EARTH))
-                    return Integer.MAX_VALUE;
-                if (wepName.toLowerCase().contains("lava")
-                        && (rune == Rune.EARTH || rune == Rune.FIRE))
-                    return Integer.MAX_VALUE;
-                if (wepName.toLowerCase().contains("steam")
-                        && (rune == Rune.WATER || rune == Rune.FIRE))
-                    return Integer.MAX_VALUE;
-            }
-        }
-        return Inventory.getCount(true, rune.getItemIDs());
     }
 
     public void initalizeMethodBase() {

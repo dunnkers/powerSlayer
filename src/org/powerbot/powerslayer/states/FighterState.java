@@ -60,6 +60,10 @@ public class FighterState extends State {
             Prayer.setQuickPrayer(true);
         }
 
+	     if(methods.fighter.loot.onlyTakeLootFromKilled && methods.fighter.npcs.lastClickedNPC != null) {
+				methods.fighter.npcs.sleepWhileNpcIsDying(methods.fighter.npcs.lastClickedNPC);
+		 }
+
         for (LoopAction a : loopActions)
             if (a != null && a.activate())
                 return a.loop();
@@ -163,7 +167,6 @@ public class FighterState extends State {
 		}
 
 
-		@SuppressWarnings("unused")
 		private class LootLoop implements LoopAction {
 
 			private GroundItem loot = null;
@@ -217,7 +220,7 @@ public class FighterState extends State {
     private boolean isInInvent(SlayerEquipment i) {
     	for (Item item : Inventory.getItems()) {
     		if (item.getName().equalsIgnoreCase(i.getName())) {
-    			if (Inventory.getCount(true, item.getID()) >= i.amount())
+    			if (Inventory.getCount(true, item.getID()) >= i.getAmount())
     				return true;
     		}
     	}
