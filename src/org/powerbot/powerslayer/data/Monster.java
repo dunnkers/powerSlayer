@@ -18,16 +18,16 @@ public enum Monster {
 	// TODO Add Slayer Monster groups: Dagannoth, Kalphite, Dog, Monkey, Scabarites, Sea Snake, Shade, Spider, Troll, Wolf
     ABBERANT_SPECTRE
     	("Aberrant Spectre", new Requirements(new SlayerEquipment[] {SlayerEquipment.Nosepeg, SlayerEquipment.Slayer_Helmet}),
-    	new CombatStyle(Style.MAGIC), new Tile (3418, 3549, 1)),
+    		new MonsterProfile (new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.UNDEAD}), new Tile (3418, 3549, 1)),
     ABYSSAL_DEMON
-		("Abyssal Demon", new CombatStyle(Style.MELEE), new Tile(3418, 3567, 2)),
+		("Abyssal Demon", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SILVERLIGHT, Weakness.DARKLIGHT}), new Tile(3418, 3567, 2)),
     AQUANITE
-		("Aquanite", new MonsterProfile(new CombatStyle(Style.MAGIC)), new Tile(2715, 9973)),
+		("Aquanite", new MonsterProfile (new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.STAB, Weakness.RANGE}), new Tile(2715, 9973)),
     ANKOU
-    	("Ankou", new CombatStyle(Style.MELEE), new Tile(2326, 5199)),
+    	("Ankou", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.UNDEAD, Weakness.STAB, Weakness.RANGE, Weakness.MAGIC}), new Tile(2326, 5199)),
     BANSHEE
-    	("Banshee", new Requirements(new SlayerEquipment[] {SlayerEquipment.Earmuffs, SlayerEquipment.Masked_Earmuffs, SlayerEquipment.Slayer_Helmet}, 
-    	new CombatStyle(Style.MAGICAL_MELEE)), new Tile(3441, 3546)), 
+    	("Banshee", new Requirements(new SlayerEquipment[] {SlayerEquipment.Earmuffs, SlayerEquipment.Masked_Earmuffs, SlayerEquipment.Slayer_Helmet}), 
+    	new MonsterProfile (new CombatStyle (Style.MAGICAL_MELEE), new Weakness[] {Weakness.UNDEAD}),  new Tile(3441, 3546)), 
     BASILISK
     	("Basilisk", new Requirements(new SlayerEquipment[] {SlayerEquipment.Mirror_Shield}),
     	new CombatStyle(Style.MELEE), new Tile(2742, 10010)),
