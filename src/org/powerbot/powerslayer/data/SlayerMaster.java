@@ -1,7 +1,6 @@
 package org.powerbot.powerslayer.data;
 
 import org.rsbot.script.wrappers.Tile;
-@SuppressWarnings ("unused")
 
 public enum SlayerMaster {
     // TODO Add other slayer masters + locations

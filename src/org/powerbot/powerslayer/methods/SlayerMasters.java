@@ -2,7 +2,7 @@ package org.powerbot.powerslayer.methods;
 
 import org.powerbot.powerslayer.common.DMethodProvider;
 import org.powerbot.powerslayer.common.MethodBase;
-import org.powerbot.powerslayer.data.Monster;
+import org.powerbot.powerslayer.data.Monsters.Monster;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.wrappers.Task;
 import org.rsbot.script.methods.Interfaces;
