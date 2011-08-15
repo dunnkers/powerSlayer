@@ -815,7 +815,7 @@ public class UniversalFighter extends DMethodProvider {
 					if (tilesWithinRadius.size() > 1){
 						tilesWithinRadius.add(tile);
 						Area temp = new Area(tilesWithinRadius.toArray(new Tile[tilesWithinRadius.size()]));
-						Tile[] areaTiles = temp.getTiles();
+						Tile[] areaTiles = temp.getTileArray();
 						for(Tile tileToAdd : areaTiles) {
 							if(!badTiles.contains(tileToAdd)) {
 								badTiles.add(tileToAdd);
