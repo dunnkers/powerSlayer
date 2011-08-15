@@ -24,7 +24,8 @@ public class SlayerItems {
 		getQuestsFinished();
 	}
 	
-	//TODO: Add in Chaos Shield and Cosmic Shield
+	//TODO: Add in Chaos Shield, Gadderhammer, Keris, Balmung, and Cosmic Shield
+	//TODO: Add in 2-handed Item support & Optional support
 	public static enum SlayerEquipment {
 		AntiDragon_Shield (-1, Equipment.SHIELD, new int[] {Skills.DEFENSE, 0}, new int[] {1540, 1541, 8282, 16933, 16934}),
 		Bag_Of_Salt (10, -1, new int[] {Skills.SLAYER, 1}, new int[] {4161}),

@@ -12,7 +12,7 @@ public class MonsterProfile {
     //TODO: Fix MonsterProfile class.  Add in IDs of monsters, max hit.
     
     public static enum Weakness {
-        STAB, CRUSH, SLASH, MELEE, MAGIC, MAGIC_WATER, RANGE, UNDEAD, DEMONIC, SILVERLIGHT, DARKLIGHT, DORGESHUUN, MAGIC_FIRE
+        STAB, CRUSH, SLASH, MELEE, MAGIC, MAGIC_WATER, RANGE, UNDEAD, DEMONIC, SILVERLIGHT, DARKLIGHT, DORGESHUUN, MAGIC_FIRE, POISON
     }
 
     public MonsterProfile(CombatStyle style) {

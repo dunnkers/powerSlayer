@@ -1,6 +1,6 @@
 package org.powerbot.powerslayer.wrappers;
 
-import org.powerbot.powerslayer.data.Monster;
+import org.powerbot.powerslayer.data.Monsters.Monster;
 import org.powerbot.powerslayer.data.SlayerMaster;
 
 public class Task {
