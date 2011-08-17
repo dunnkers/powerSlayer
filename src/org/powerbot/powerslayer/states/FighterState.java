@@ -2,11 +2,13 @@ package org.powerbot.powerslayer.states;
 
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
+import org.powerbot.powerslayer.data.Monsters.Monster;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.rsbot.script.methods.*;
 import org.rsbot.script.wrappers.GroundItem;
 import org.rsbot.script.wrappers.Item;
 import org.rsbot.script.wrappers.NPC;
+import org.rsbot.script.wrappers.Tile;
 
 //TODO: Zalgo2462 Touch up State
 public class FighterState extends State {
@@ -150,8 +152,10 @@ public class FighterState extends State {
 						return random(0, 200);
 					}
 				} else {
-					if (Calculations.distanceTo(methods.fighter.tiles.getNearestTile(methods.parent.currentTask.getMonster().getLocation())) > 10) {
-						Walking.walkTileMM(Walking.getClosestTileOnMap(methods.fighter.tiles.getNearestTile(methods.parent.currentTask.getMonster().getLocation())));
+					String[] currMonster = methods.parent.currentTask.getMonster().getNames();
+					Tile currTile = NPCs.getNearest(currMonster).getLocation();
+					if (Calculations.distanceTo(currTile) > 10) {
+						Walking.walkTileMM(Walking.getClosestTileOnMap(currTile));
 						waitWhileMoving();
 					} else {
 						methods.fighter.antiban();
