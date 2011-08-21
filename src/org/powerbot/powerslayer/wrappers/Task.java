@@ -22,4 +22,12 @@ public class Task {
     public Monster getMonster() {
         return monster;
     }
+    
+    public int getAmount() {
+    	return amount;
+    }
+    
+    public SlayerMaster getMaster() {
+    	return master;
+    }
 }

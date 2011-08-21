@@ -1,6 +1,7 @@
 package org.powerbot.powerslayer.wrappers;
 
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
+import org.rsbot.script.methods.tabs.Equipment;
 
 public class Starter {
 	//TODO: Add methods
@@ -38,7 +39,7 @@ public class Starter {
 		return starter.isEquipable();
 	}
 	
-	public int equipSlot() {
+	public Equipment.Slot equipSlot() {
 		return starter.equipSlot();
 	}
 	

@@ -1,16 +1,35 @@
 package org.powerbot.powerslayer.methods;
 
-import org.powerbot.powerslayer.common.DMethodProvider;
-import org.powerbot.powerslayer.common.MethodBase;
-import org.rsbot.script.methods.*;
-import org.rsbot.script.methods.Menu;
-import org.rsbot.script.util.Filter;
-import org.rsbot.script.wrappers.*;
-import org.rsbot.script.wrappers.Character;
-
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.powerbot.powerslayer.common.DMethodProvider;
+import org.powerbot.powerslayer.common.MethodBase;
+import org.rsbot.script.methods.Calculations;
+import org.rsbot.script.methods.Camera;
+import org.rsbot.script.methods.Game;
+import org.rsbot.script.methods.GroundItems;
+import org.rsbot.script.methods.Interfaces;
+import org.rsbot.script.methods.Menu;
+import org.rsbot.script.methods.Mouse;
+import org.rsbot.script.methods.NPCs;
+import org.rsbot.script.methods.Players;
+import org.rsbot.script.methods.Skills;
+import org.rsbot.script.methods.Walking;
+import org.rsbot.script.methods.tabs.Combat;
+import org.rsbot.script.methods.tabs.Inventory;
+import org.rsbot.script.methods.tabs.Prayer;
+import org.rsbot.script.util.Filter;
+import org.rsbot.script.wrappers.Area;
+import org.rsbot.script.wrappers.Character;
+import org.rsbot.script.wrappers.GameModel;
+import org.rsbot.script.wrappers.GroundItem;
+import org.rsbot.script.wrappers.Item;
+import org.rsbot.script.wrappers.NPC;
+import org.rsbot.script.wrappers.Player;
+import org.rsbot.script.wrappers.Tile;
 
 //TODO: Zalgo2462 Touch up
 public class UniversalFighter extends DMethodProvider {
@@ -140,7 +159,7 @@ public class UniversalFighter extends DMethodProvider {
                 for (int i = 0; i < weapons.length; i++) {
                     for (int j = 0; j < weapons[i].length; j++) {
                         if (weapons[i][j].equalsIgnoreCase(weapon)) {
-                            return Combat.getSpecialBarEnergy() >= amountUsage[i];
+                            return Combat.getSpecialEnergy() >= amountUsage[i];
                         }
                     }
                 }
@@ -311,7 +330,7 @@ public class UniversalFighter extends DMethodProvider {
             for (String s : methods.parent.currentTask.getRequirements().getStarter().getNames()) {
                 for (Item inventItem : Inventory.getItems()) {
                     if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (Inventory.selectItem(inventItem.getID())) {
+                        if (Inventory.getItem(inventItem.getID()).click(true)) {
                             if (monster != null) {
                                 if (!monster.isOnScreen()) {
                                     Camera.turnTo(monster);
@@ -331,7 +350,7 @@ public class UniversalFighter extends DMethodProvider {
             String s = methods.parent.currentTask.getRequirements().getFinisher().getName();
                 for (Item inventItem : Inventory.getItems()) {
                     if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (Inventory.selectItem(inventItem.getID())) {
+                        if (Inventory.getItem(inventItem.getID()).click(true)) {
                             if (monster != null) {
                                 if (!monster.isOnScreen()) {
                                     Camera.turnTo(monster);
@@ -577,10 +596,10 @@ public class UniversalFighter extends DMethodProvider {
 			}
 
 			if(shouldUsePrayerPot() && potions.get("PRAYER").length != 0 && setQuickPrayer) {
-				int current = Prayer.getPrayerLeft();
+				int current = Prayer.getRemainingPoints();
 				if(potions.get("PRAYER")[0].click(true)) {
 					long time = System.currentTimeMillis();
-					while(Prayer.getPrayerLeft() == current && System.currentTimeMillis() - time < 10000) {
+					while(Prayer.getRemainingPoints() == current && System.currentTimeMillis() - time < 10000) {
 						sleep(random(200, 500));
 					}
 				}
@@ -641,7 +660,7 @@ public class UniversalFighter extends DMethodProvider {
 				}
 			}
 
-			if(Combat.isPoisoned() && potions.get("ANTIPOISON").length != 0) {
+			if (Combat.isPoisoned() && potions.get("ANTIPOISON").length != 0) {
 				potions.get("ANTIPOISON")[0].click(true);
 			}
 		}
@@ -652,7 +671,7 @@ public class UniversalFighter extends DMethodProvider {
 		}
 
 		private boolean shouldUsePrayerPot() {
-			 return (Skills.getAbsoluteLevel(Skills.PRAYER) - Prayer.getPrayerLeft()) > (7+Math.floor(Skills.getAbsoluteLevel(Skills.PRAYER)/4));
+			 return (Skills.getAbsoluteLevel(Skills.PRAYER) - Prayer.getRemainingPoints()) > (7+Math.floor(Skills.getAbsoluteLevel(Skills.PRAYER)/4));
 		}
 
 		private Item[] getRealItems(int[] ids) {
@@ -815,7 +834,7 @@ public class UniversalFighter extends DMethodProvider {
 					if (tilesWithinRadius.size() > 1){
 						tilesWithinRadius.add(tile);
 						Area temp = new Area(tilesWithinRadius.toArray(new Tile[tilesWithinRadius.size()]));
-						Tile[] areaTiles = temp.getTiles();
+						Tile[] areaTiles = temp.getTileArray();
 						for(Tile tileToAdd : areaTiles) {
 							if(!badTiles.contains(tileToAdd)) {
 								badTiles.add(tileToAdd);

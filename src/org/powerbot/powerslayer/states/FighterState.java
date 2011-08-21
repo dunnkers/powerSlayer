@@ -2,9 +2,16 @@ package org.powerbot.powerslayer.states;
 
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
-import org.powerbot.powerslayer.data.Monsters.Monster;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
-import org.rsbot.script.methods.*;
+import org.rsbot.script.methods.Calculations;
+import org.rsbot.script.methods.Game;
+import org.rsbot.script.methods.Interfaces;
+import org.rsbot.script.methods.NPCs;
+import org.rsbot.script.methods.Settings;
+import org.rsbot.script.methods.Walking;
+import org.rsbot.script.methods.tabs.Combat;
+import org.rsbot.script.methods.tabs.Inventory;
+import org.rsbot.script.methods.tabs.Prayer;
 import org.rsbot.script.wrappers.GroundItem;
 import org.rsbot.script.wrappers.Item;
 import org.rsbot.script.wrappers.NPC;
@@ -32,9 +39,9 @@ public class FighterState extends State {
             Interfaces.clickContinue();
             return random(1200, 1600);
         }
-        if (Game.getTab() != Game.Tab.INVENTORY) {
+        if (Game.getCurrentTab() != Game.Tabs.INVENTORY) {
             methods.parent.paint.Current = "Opening Inventory";
-            Game.openTab(Game.Tab.INVENTORY);
+            Game.openTab(Game.Tabs.INVENTORY);
             return random(700, 1500);
         }
         if (methods.fighter.eat.needEat()) {
@@ -58,8 +65,8 @@ public class FighterState extends State {
 
         methods.fighter.pot.usePotions();
 
-		if(methods.fighter.pot.getPotions().get("PRAYER").length != 0 && !Prayer.isQuickPrayerOn() &&  methods.fighter.pot.setQuickPrayer) {
-            Prayer.setQuickPrayer(true);
+		if(methods.fighter.pot.getPotions().get("PRAYER").length != 0 && !Prayer.isQuickPrayersActive() &&  methods.fighter.pot.setQuickPrayer) {
+            Prayer.toggleQuickPrayers(true);
         }
 
 	     if(methods.fighter.loot.onlyTakeLootFromKilled && methods.fighter.npcs.lastClickedNPC != null) {
@@ -103,7 +110,7 @@ public class FighterState extends State {
 
 					if( methods.fighter.npcs.useSpecial() && !Combat.isSpecialEnabled() && !methods.fighter.npcs.getInteracting().isDead()) {
 						sleep(random(500, 1000));
-						Combat.setSpecialAttack(true);
+						Combat.setSpecial(true);
 					}
 
 
@@ -171,6 +178,7 @@ public class FighterState extends State {
 		}
 
 
+		@SuppressWarnings("unused")
 		private class LootLoop implements LoopAction {
 
 			private GroundItem loot = null;

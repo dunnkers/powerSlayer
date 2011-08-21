@@ -7,8 +7,8 @@ import org.powerbot.powerslayer.data.Monsters.Monster;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.wrappers.Task;
 import org.rsbot.script.methods.Calculations;
-import org.rsbot.script.methods.Equipment;
 import org.rsbot.script.methods.NPCs;
+import org.rsbot.script.methods.tabs.Equipment;
 import org.rsbot.script.wrappers.Item;
 import org.rsbot.script.wrappers.Tile;
 
