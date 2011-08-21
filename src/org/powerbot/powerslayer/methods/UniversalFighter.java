@@ -16,6 +16,7 @@ import org.rsbot.script.methods.Menu;
 import org.rsbot.script.methods.Mouse;
 import org.rsbot.script.methods.NPCs;
 import org.rsbot.script.methods.Players;
+import org.rsbot.script.methods.Settings;
 import org.rsbot.script.methods.Skills;
 import org.rsbot.script.methods.Walking;
 import org.rsbot.script.methods.tabs.Combat;
@@ -660,7 +661,7 @@ public class UniversalFighter extends DMethodProvider {
 				}
 			}
 
-			if (Combat.isPoisoned() && potions.get("ANTIPOISON").length != 0) {
+			if (isPoisoned() && potions.get("ANTIPOISON").length != 0) {
 				potions.get("ANTIPOISON")[0].click(true);
 			}
 		}
@@ -721,7 +722,7 @@ public class UniversalFighter extends DMethodProvider {
 				for (int i = 0; i < 5; i++) {
 					if (Menu.isOpen())
 						Mouse.moveRandomly(300, 500);
-					Point p = Calculations.tileToScreen(item.getLocation(), random(0.48, 0.52), random(0.48, 0.52), 0);
+					Point p = item.getLocation().toScreen(random(0.48, 0.52), random(0.48, 0.52), 0);
 					if (!Calculations.pointOnScreen(p))
 						continue;
 					Mouse.move(p, 3, 3);
@@ -865,6 +866,11 @@ public class UniversalFighter extends DMethodProvider {
 			}
 			return false;
 		}
+		
+
 	}
 
+	private boolean isPoisoned() {
+		return Settings.get(102) > 0 || Interfaces.getComponent(748, 4).getTextureID() == 1801;
+	}
 }
