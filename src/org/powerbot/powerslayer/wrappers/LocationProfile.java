@@ -1,12 +1,12 @@
 package org.powerbot.powerslayer.wrappers;
 
-import org.powerbot.powerslayer.data.SlayerLocations;
+import org.powerbot.powerslayer.data.MonsterLocation;
 import org.rsbot.script.methods.Calculations;
 import org.rsbot.script.wrappers.Tile;
 
 public class LocationProfile {
 
-	private SlayerLocations[] locations;
+	private MonsterLocation[] locations;
 	
 	
 	/*	TODO Make an algorithm that returns a tile based on:
@@ -14,13 +14,13 @@ public class LocationProfile {
 	 * 		2. Combat level
 	 * 		3. Equipment needed to go in
 	 */
-	public LocationProfile(SlayerLocations... locations) {
+	public LocationProfile(MonsterLocation... locations) {
 		this.locations = locations;
 	}
 
 	public Tile getNearestLocationFromTile(Tile tile) {
 		Tile closest = null;
-		for(SlayerLocations location : locations) {
+		for(MonsterLocation location : locations) {
 			if (closest == null || Calculations.distanceTo(location.getTile()) < Calculations.distanceTo(closest))
 				closest = location.getTile();
 		}
@@ -31,7 +31,7 @@ public class LocationProfile {
 		return null;
 	}
 
-	public SlayerLocations[] getLocations() {
+	public MonsterLocation[] getLocations() {
 		return locations;
 	}
 

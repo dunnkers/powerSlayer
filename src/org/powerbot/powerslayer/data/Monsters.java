@@ -18,393 +18,485 @@ public class Monsters {
 		//	TODO: Add in Slayer levels for monsters that are part of a group
 		ABBERANT_SPECTRE
 			("Aberrant Spectre", new Requirements(new SlayerEquipment[] {SlayerEquipment.Nosepeg, SlayerEquipment.Slayer_Helmet}),
-			new MonsterProfile (new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.UNDEAD}), new Tile (3418, 3549, 1)),
+			new MonsterProfile (new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.UNDEAD}), new MonsterLocation(null, new Tile (3418, 3549, 1))),
 		ABYSSAL_DEMON
-			("Abyssal Demon", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SILVERLIGHT, Weakness.DARKLIGHT}), new Tile(3418, 3567, 2)),
+			("Abyssal Demon", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SILVERLIGHT, Weakness.DARKLIGHT}), 
+			new MonsterLocation (null, new Tile(3418, 3567, 2))),
 		AQUANITE
-			("Aquanite", new MonsterProfile (new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.STAB, Weakness.RANGE}), new Tile(2715, 9973)),
+			("Aquanite", new MonsterProfile (new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.STAB, Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(2715, 9973))),
 		ANKOU
-			("Ankou", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.UNDEAD, Weakness.STAB, Weakness.RANGE, Weakness.MAGIC}), new Tile(2326, 5199)),
+			("Ankou", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.UNDEAD, Weakness.STAB, Weakness.RANGE, Weakness.MAGIC}), 
+			new MonsterLocation (null, new Tile(2326, 5199))),
 		ASYN_SHADE
-			("Asyn shade", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), new Tile(0, 0, 0)),
+			("Asyn shade", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		BANSHEE
 			("Banshee", new Requirements(new SlayerEquipment[] {SlayerEquipment.Earmuffs, SlayerEquipment.Masked_Earmuffs, SlayerEquipment.Slayer_Helmet}), 
-			new MonsterProfile (new CombatStyle (Style.MAGICAL_MELEE), new Weakness[] {Weakness.UNDEAD}),  new Tile(3441, 3546)), 
+			new MonsterProfile (new CombatStyle (Style.MAGICAL_MELEE), new Weakness[] {Weakness.UNDEAD}),  
+			new MonsterLocation (null, new Tile(3441, 3546))), 
 		BASILISK
 			("Basilisk", new Requirements(new SlayerEquipment[] {SlayerEquipment.Mirror_Shield}),
-			new CombatStyle(Style.MELEE), new Tile(2742, 10010)),
+			new MonsterProfile (new CombatStyle(Style.MELEE)), new MonsterLocation (null, new Tile(2742, 10010))),
 		BAT
-			("Bat", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB, Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Bat", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB, Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		BEAR
-			("Black bear", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC}), new Tile(0, 0, 0)),
+			("Black bear", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		BIRD
-			("Chicken", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {}),new Tile(0, 0, 0)),
+			("Chicken", new MonsterProfile (new CombatStyle (Style.MELEE), null), new MonsterLocation (null, new Tile(0, 0, 0))),
 		BLACK_DEMON
-			("Black demon", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.DEMONIC}), new Tile(0, 0, 0)),
+			("Black demon", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.DEMONIC}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		BLACK_DRAGON
-			("Black dragon", new MonsterProfile (new CombatStyle(Style.MELEE, Style.DRAGONFIRE), new Weakness[] {Weakness.STAB, Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Black dragon", new Requirements (new SlayerEquipment[] {SlayerEquipment.AntiDragon_Shield}),
+			new MonsterProfile (new CombatStyle(Style.MELEE, Style.DRAGONFIRE), new Weakness[] {Weakness.STAB, Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		BLOODVELD
-			("Bloodveld", new MonsterProfile(new CombatStyle(Style.MAGICAL_MELEE), new Weakness[] {Weakness.SLASH, Weakness.RANGE, Weakness.SILVERLIGHT, Weakness.DARKLIGHT}), new Tile(3420, 3564, 1)),
+			("Bloodveld", new MonsterProfile(new CombatStyle(Style.MAGICAL_MELEE), new Weakness[] {Weakness.SLASH, Weakness.RANGE, Weakness.SILVERLIGHT, Weakness.DARKLIGHT}), 
+			new MonsterLocation (null, new Tile(3420, 3564, 1))),
 		BLUE_DRAGON
-			("Blue dragon", new MonsterProfile (new CombatStyle(Style.MELEE, Style.DRAGONFIRE), new Weakness[] {Weakness.STAB, Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Blue dragon", new MonsterProfile (new CombatStyle(Style.MELEE, Style.DRAGONFIRE), new Weakness[] {Weakness.STAB, Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		BRINE_RAT
-			("Brine rat", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.STAB}), new Tile(0, 0, 0)),
+			("Brine rat", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		BRONZE_DRAGON
-			("Bronze dragon", new MonsterProfile(new CombatStyle(Style.MELEE,Style.RANGED_DRAGONFIRE), new Weakness[] {Weakness.MAGIC, Weakness.STAB}), new Tile(0, 0, 0)),
+			("Bronze dragon", new MonsterProfile(new CombatStyle(Style.MELEE,Style.RANGED_DRAGONFIRE), new Weakness[] {Weakness.MAGIC, Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		CATABLEPON
-			("Catablepon", new MonsterProfile (new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.CRUSH, Weakness.RANGE}), new Tile(2153, 5253), 
-			new Tile(2161, 5282), new Tile(2166, 5303), new Tile(2122, 5299)),
+			("Catablepon", new MonsterProfile (new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.CRUSH, Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(2153, 5253)), new MonsterLocation (null, new Tile(2161, 5282)), 
+			new MonsterLocation (null, new Tile(2166, 5303)), new MonsterLocation (null, new Tile(2122, 5299))),
 		CAVE_BUG
-			("Cave bug", new Requirements(true), new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC}), new Tile(0, 0, 0)),
+			("Cave bug", new Requirements(true), new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		CAVE_CRAWLER
-			("Cave crawler", null, new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.SLASH, Weakness.DORGESHUUN},true), new Tile(2787, 9997, 0)),
+			("Cave crawler", null, new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.SLASH, Weakness.DORGESHUUN}, true), 
+			new MonsterLocation (null, new Tile(2787, 9997, 0))),
 		CAVE_HORROR
-			("Cave horror", new Requirements(new SlayerEquipment[] {SlayerEquipment.Witchwood_Icon}, true), new MonsterProfile(new CombatStyle (Style.MELEE, Style.MAGICAL_MELEE), new Weakness[] {Weakness.RANGE, Weakness.STAB}), new Tile(0, 0, 0)),
+			("Cave horror", new Requirements(new SlayerEquipment[] {SlayerEquipment.Witchwood_Icon}, true), 
+			new MonsterProfile(new CombatStyle (Style.MELEE, Style.MAGICAL_MELEE), new Weakness[] {Weakness.RANGE, Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		CAVE_SLIME
-			("Cave slime", null, new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC}, true), new Tile(0, 0, 0)),
+			("Cave slime", null, new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC}, true), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		COCKATRICE
-			("Cockatrice", new Requirements(new SlayerEquipment[] {SlayerEquipment.Mirror_Shield}), new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH}),new Tile(2790, 10035)),
+			("Cockatrice", new Requirements(new SlayerEquipment[] {SlayerEquipment.Mirror_Shield}), 
+			new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH}),
+			new MonsterLocation (null, new Tile(2790, 10035))),
 		CORPSE_SPIDER
-			("Corpse spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Corpse spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		COW
-			("Cow", new MonsterProfile(new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}), new Tile(0, 0, 0)),
+			("Cow", new MonsterProfile(new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		CRAWLING_HAND
-			("Crawling hand", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.UNDEAD}), new Tile(3422, 3546)),
+			("Crawling hand", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.UNDEAD}), 
+			new MonsterLocation (null, new Tile(3422, 3546))),
 		CROCODILE
-			("Crocodile", new Requirements(new SlayerEquipment[] {SlayerEquipment.Water_Skin, SlayerEquipment.Ice_Cooler}, 
-			new Finisher(SlayerEquipment.Rock_Hammer)), new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}), new Tile(0, 0, 0)),
+			("Crocodile", new Requirements(new SlayerEquipment[] {SlayerEquipment.Water_Skin, SlayerEquipment.Ice_Cooler},  new Finisher(SlayerEquipment.Rock_Hammer)), 
+			new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		CRYPT_SPIDER
-			("Crypt spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Crypt spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//FIXME: Multiple locations with different Weaknesses based on location & level
 		DAGANNOTH
-			("Dagannoth", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}), new Tile(0, 0, 0)),
+			("Dagannoth", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		DAGANNOTH_GUARDIAN
-			("Dagannoth guardian", new MonsterProfile (new CombatStyle (Style.MELEE, Style.RANGE), new Weakness[] {Weakness.STAB}), new Tile(0, 0, 0)),
+			("Dagannoth guardian", new MonsterProfile (new CombatStyle (Style.MELEE, Style.RANGE), new Weakness[] {Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		DAGANNOTH_PRIME
-			("Dagannoth prime", new MonsterProfile (new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Dagannoth prime", new MonsterProfile (new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		DAGANNOTH_REX
-			("Dagannoth rex", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.MAGIC}), new Tile(0, 0, 0)),
+			("Dagannoth rex", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.MAGIC}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		DAGANNOTH_SPAWN
-			("Dagannoth spawn", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MELEE}), new Tile(0, 0, 0)),
+			("Dagannoth spawn", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MELEE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		DAGANNOTH_SUPREME
-			("Dagannoth spawn", new MonsterProfile (new CombatStyle (Style.RANGE), new Weakness[] {Weakness.SLASH, Weakness.MAGIC}), new Tile(0, 0, 0)),
+			("Dagannoth spawn", new MonsterProfile (new CombatStyle (Style.RANGE), new Weakness[] {Weakness.SLASH, Weakness.MAGIC}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		DARK_BEAST
-			("Dark beast", new MonsterProfile (new CombatStyle (Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Dark beast", new MonsterProfile (new CombatStyle (Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		// TODO Moruner Armour...
 		DEADLY_RED_SPIDER
-			("Deadly red spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH, Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Deadly red spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH, Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		DESERT_LIZARD
-			("Desert lizard", new Requirements(new SlayerEquipment[] {SlayerEquipment.Water_Skin}), new MonsterProfile (new CombatStyle (Style.MELEE) , new Weakness[] {Weakness.MAGIC})),
+			("Desert lizard", new Requirements(new SlayerEquipment[] {SlayerEquipment.Water_Skin}), new MonsterProfile (new CombatStyle (Style.MELEE) , new Weakness[] {Weakness.MAGIC}),
+			new MonsterLocation (null, new Tile (0, 0, 0))),
 		DESERT_WOLF
-			("Desert wolf", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Desert wolf", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		DIRE_WOLF
-			("Dire wolf", new MonsterProfile (new CombatStyle(Style.MELEE), null), new Tile(0, 0, 0)),
+			("Dire wolf", new MonsterProfile (new CombatStyle(Style.MELEE), null), new MonsterLocation (null, new Tile(0, 0, 0))),
 		DUST_DEVIL
 			("Dust devil", new Requirements(new SlayerEquipment[] {SlayerEquipment.Slayer_Helmet, SlayerEquipment.Face_Mask}), 
-			new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.STAB}),new Tile(0, 0,0)),
+			new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.STAB}),
+			new MonsterLocation (null, new Tile(0, 0,0))),
 		DWARF
-			("Dwarf", new MonsterProfile (new CombatStyle (Style.MELEE)), new Tile(0, 0, 0)),
+			("Dwarf", new MonsterProfile (new CombatStyle (Style.MELEE)), new MonsterLocation (null, new Tile(0, 0, 0))),
 		EARTH_WARRIOR
-			("Earth warrior", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC, Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Earth warrior", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC, Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ELF_WARRIOR
-			("Elf warrior", new MonsterProfile (new CombatStyle (Style.MELEE, Style.RANGE), new Weakness[] {Weakness.STAB, Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Elf warrior", new MonsterProfile (new CombatStyle (Style.MELEE, Style.RANGE), new Weakness[] {Weakness.STAB, Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		FENRIS_WOLF
-			("Fenris wolf", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.STAB}), new Tile(0, 0, 0)),
+			("Fenris wolf", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		FEVER_SPIDER
-			("Fever spider", new Requirements(new SlayerEquipment[] {SlayerEquipment.Slayer_Gloves}), new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Fever spider", new Requirements(new SlayerEquipment[] {SlayerEquipment.Slayer_Gloves}), 
+			new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		FIRE_GIANTS
-			("Fire giants", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB, Weakness.MAGIC_WATER}), new Tile(0, 0, 0)),
+			("Fire giants", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB, Weakness.MAGIC_WATER}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		FIYR_SHADE
-			("Fiyr shade", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), new Tile(0, 0, 0)),
+			("Fiyr shade", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		FLESH_CRAWLERS
-			("Flesh crawlers", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC, Weakness.MELEE}), new Tile(0, 0, 0)),
+			("Flesh crawlers", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC, Weakness.MELEE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		GARGOYLE
 			("Gargoyle", new Requirements(new SlayerEquipment[] {SlayerEquipment.Rock_Hammer}, new Finisher(SlayerEquipment.Rock_Hammer)), 
-			new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC, Weakness.CRUSH}), new Tile(3441, 3544, 2)),
+			new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC, Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(3441, 3544, 2))),
 		GHOST
-			("Ghost", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.UNDEAD, Weakness.MAGIC}), new Tile(0, 0, 0)),
+			("Ghost", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.UNDEAD, Weakness.MAGIC}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		GHOUL
-			("Ghoul", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MELEE}), new Tile(0, 0, 0)),
+			("Ghoul", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MELEE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		GIANT_CRYPT_SPIDER
-			("Giant crypt spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Giant crypt spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		GIANT_SPIDER
-			("Giant spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.SLASH, Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Giant spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.SLASH, Weakness.RANGE}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		GOBLIN
-			("Goblin", new MonsterProfile (new CombatStyle (Style.MELEE), null), new Tile(0, 0, 0)),
+			("Goblin", new MonsterProfile (new CombatStyle (Style.MELEE), null), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		GORAK
-			("Gorak", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Gorak", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		GREATER_DEMON
-			("Greater demon", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.DEMONIC}), new Tile(0, 0, 0)),
+			("Greater demon", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.DEMONIC}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		GREEN_DRAGON
-			("Green dragon", null, new MonsterProfile (new CombatStyle(Style.MELEE, Style.DRAGONFIRE), new Weakness[] {Weakness.MAGIC, Weakness.RANGE, Weakness.STAB}), new Tile(0, 0, 0)),
+			("Green dragon", null, new MonsterProfile (new CombatStyle(Style.MELEE, Style.DRAGONFIRE), new Weakness[] {Weakness.MAGIC, Weakness.RANGE, Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		GUARD_DOG
-			("Guard dog", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}), new Tile(0, 0, 0), new Tile(0, 0, 0)),
+			("Guard dog", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		HARPIE_BUG_SWARM
-			("Harpie Bug Swarm", new Requirements(new SlayerEquipment[] {SlayerEquipment.Lit_Bug_Lantern}), new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}),new Tile(0,0, 0)),
+			("Harpie Bug Swarm", new Requirements(new SlayerEquipment[] {SlayerEquipment.Lit_Bug_Lantern}), 
+			new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		HELLHOUND
-			("Hellhound", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.STAB, Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Hellhound", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.STAB, Weakness.SLASH}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		HILL_GIANT
-			("Hill giant", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}), new Tile(0, 0, 0)),
+			("Hill giant", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ICEFIEND
-			("Icefiend", new MonsterProfile (new CombatStyle (Style.MELEE, Style.MAGIC, Style.RANGE), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Icefiend", new MonsterProfile (new CombatStyle (Style.MELEE, Style.MAGIC, Style.RANGE), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ICE_GIANT
-			("Ice giant", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.CRUSH, Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Ice giant", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.CRUSH, Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ICE_TROLL
-			(new String[] {"Ice troll male", "Ice troll grunt"}, new MonsterProfile(new CombatStyle(Style.MELEE), null), new Tile(0, 0, 0)),
+			(new String[] {"Ice troll male", "Ice troll grunt"}, new MonsterProfile(new CombatStyle(Style.MELEE), null), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ICE_TROLL_FEMALE
-			("Ice troll female", new MonsterProfile(new CombatStyle(Style.RANGE), null), new Tile(0, 0, 0)),
+			("Ice troll female", new MonsterProfile(new CombatStyle(Style.RANGE), null), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ICE_TROLL_KING
-			("Ice troll female", new MonsterProfile(new CombatStyle(Style.RANGE, Style.MAGIC, Style.MELEE), new Weakness[] {Weakness.POISON, Weakness.STAB}), new Tile(0, 0, 0)),
+			("Ice troll female", new MonsterProfile(new CombatStyle(Style.RANGE, Style.MAGIC, Style.MELEE), new Weakness[] {Weakness.POISON, Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ICE_TROLL_RUNT
-			("Ice troll runt", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC_WATER}), new Tile(0, 0, 0)),
+			("Ice troll runt", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC_WATER}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ICE_WARRIOR
-			("Ice warrior", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.MAGIC_FIRE}), new Tile(0, 0, 0)),
+			("Ice warrior", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.MAGIC_FIRE}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ICE_WOLF
-			("Ice wolf", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC_FIRE}), new Tile(0, 0, 0)),
+			("Ice wolf", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC_FIRE}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		INFERNAL_MAGE
-			("Infernal mage", new MonsterProfile (new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.SLASH, Weakness.RANGE}), new Tile(3439, 3564, 1)),
+			("Infernal mage", new MonsterProfile (new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.SLASH, Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(3439, 3564, 1))),
 		IRON_DRAGON
-			("Iron dragon", null, new MonsterProfile (new CombatStyle(Style.MELEE, Style.RANGED_DRAGONFIRE), new Weakness[] {Weakness.STAB, Weakness.MAGIC_FIRE}), new Tile(0, 0, 0)),
+			("Iron dragon", null, new MonsterProfile (new CombatStyle(Style.MELEE, Style.RANGED_DRAGONFIRE), new Weakness[] {Weakness.STAB, Weakness.MAGIC_FIRE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ICE_SPIDER
-			("Ice spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.CRUSH, Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Ice spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.CRUSH, Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		JACKAL
-			("Jackal", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0), new Tile(0, 0, 0)),
+			("Jackal", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		JELLY
-			("Jelly", null, new MonsterProfile(new CombatStyle(Style.MAGICAL_MELEE), new Weakness[] {Weakness.SLASH, Weakness.CRUSH}), new Tile(2704, 10027)),
+			("Jelly", null, new MonsterProfile(new CombatStyle(Style.MAGICAL_MELEE), new Weakness[] {Weakness.SLASH, Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(2704, 10027))),
 		JUNGLE_HORROR
-			("Jungle horror", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Jungle horror", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.RANGE}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		JUNGLE_SPIDER
-			("Jungle spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Jungle spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		JUNGLE_WOLF
-			("Jungle wolf", new MonsterProfile (new CombatStyle(Style.MELEE), null), new Tile(0, 0, 0)),
+			("Jungle wolf", new MonsterProfile (new CombatStyle(Style.MELEE), null), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//FIXME: Add in Keris support
 		KALPHITE_GUARDIAN
-			("Kalphite guardian", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Kalphite guardian", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		KALPHITE_QUEEN
-			("Kalphite queen", new MonsterProfile (new CombatStyle (Style.MELEE, Style.MAGIC, Style.RANGE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Kalphite queen", new MonsterProfile (new CombatStyle (Style.MELEE, Style.MAGIC, Style.RANGE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		KALPHITE_SOLDIER
-			("Kalphite soldier", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Kalphite soldier", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		KALPHITE_WORKER
-			("Kalphite worker", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Kalphite worker", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		KILLERWATT
-			("Killerwatt", new Requirements(new SlayerEquipment[] {SlayerEquipment.Insulated_Boots}), new MonsterProfile (new CombatStyle (Style.MAGICAL_MELEE, Style.RANGE), new Weakness[] {Weakness.MELEE}), new Tile(0,0, 0)),
+			("Killerwatt", new Requirements(new SlayerEquipment[] {SlayerEquipment.Insulated_Boots}), 
+			new MonsterProfile (new CombatStyle (Style.MAGICAL_MELEE, Style.RANGE), new Weakness[] {Weakness.MELEE}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		KURASK
 			("Kurask", new Requirements(new SlayerEquipment[] {SlayerEquipment.LeafBladed_Spear, SlayerEquipment.LeafBladed_Sword}),
-			new MonsterProfile (new CombatStyle(Style.MELEE)), new Tile(2705, 9999)),
+			new MonsterProfile (new CombatStyle(Style.MELEE)), 
+			new MonsterLocation (null, new Tile(2705, 9999))),
 		LESSER_DEMON
-			("Lesser demon", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.DEMONIC}), new Tile(0, 0, 0)),
+			("Lesser demon", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.DEMONIC}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		LOAR_SHADE
-			("Loar shade", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), new Tile(0, 0, 0)),
+			("Loar shade", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		LOCUST_LANCER
-			("Locust lancer", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MELEE}), new Tile(0, 0, 0)),
+			("Locust lancer", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MELEE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		LOCUST_RANGER
-			("Locust ranger", new MonsterProfile(new CombatStyle(Style.RANGE), new Weakness[] {Weakness.MELEE}), new Tile(0, 0, 0)),
+			("Locust ranger", new MonsterProfile(new CombatStyle(Style.RANGE), new Weakness[] {Weakness.MELEE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//FIXME: Weakness changes depending on level, need to add Keris for Ranger and Rider
 		LOCUST_RIDER
-			("Locust rider", new MonsterProfile(new CombatStyle(Style.MELEE, Style.RANGE), null), new Tile(0, 0, 0)),
+			("Locust rider", new MonsterProfile(new CombatStyle(Style.MELEE, Style.RANGE), null), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		MITHRIL_DRAGON
-			("Mithril dragon", null, new MonsterProfile (new CombatStyle(Style.MELEE, Style.RANGED_DRAGONFIRE, Style.RANGE, Style.MAGIC), new Weakness[] {Weakness.MAGIC, Weakness.STAB}), new Tile(0, 0, 0)),
+			("Mithril dragon", new MonsterProfile (new CombatStyle(Style.MELEE, Style.RANGED_DRAGONFIRE, Style.RANGE, Style.MAGIC), new Weakness[] {Weakness.MAGIC, Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		MINOTAUR
-			("Minotaur", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Minotaur", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		MOGRE
-			("Mogre", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Mogre", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		// TODO get requirements
 		MOLANISK
 			("Molanisk", new Requirements(new SlayerEquipment[] {SlayerEquipment.Slayer_Bell}, new Starter(SlayerEquipment.Slayer_Bell)), 
-			new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.STAB}), new Tile(0, 0, 0)),
+			new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		MONKEY
-			("Monkey", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Monkey", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		MONKEY_ARCHER
-			("Monkey archer", new MonsterProfile(new CombatStyle(Style.RANGE), new Weakness[] {Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Monkey archer", new MonsterProfile(new CombatStyle(Style.RANGE), new Weakness[] {Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		MONKEY_GUARD
-			("Monkey guard", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.STAB, Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Monkey guard", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.STAB, Weakness.CRUSH}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		MONKEY_ZOMBIE
-			("Monkey zombie", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), new Tile(0, 0, 0)),
+			("Monkey zombie", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		MOSS_GIANT
-			("Moss giant", new MonsterProfile (new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.STAB}), new Tile(0, 0, 0)),
+			("Moss giant", new MonsterProfile (new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.STAB}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		MOUNTAIN_TROLL
-			("Mountain troll", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH, Weakness.POISON}), new Tile(0, 0, 0)),
+			("Mountain troll", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH, Weakness.POISON}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		MUTATED_ZYGOMITE
 			("Mutated zygomite", new Requirements(new SlayerEquipment[] {SlayerEquipment.Fungicide_Spray}, new Finisher(SlayerEquipment.Fungicide_Spray)), 
-			new MonsterProfile (new CombatStyle(Style.MAGICAL_MELEE, Style.MAGICAL_RANGE), new Weakness[] {Weakness.SLASH}), new Tile(0, 0, 0)),
+			new MonsterProfile (new CombatStyle(Style.MAGICAL_MELEE, Style.MAGICAL_RANGE), new Weakness[] {Weakness.SLASH}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		NECHRYAEL
-			("Nechryael", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.DEMONIC}), new Tile(3441, 3567, 2)),
+			("Nechryael", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.DEMONIC}), 
+			new MonsterLocation (null, new Tile(3441, 3567, 2))),
 		// TODO Needs nosepeg for walking past spectres...
 		OGRE
-			("Ogre", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.STAB}), new Tile(0, 0, 0)),
+			("Ogre", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.STAB}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		OTHERWORLDLY_BEINGS
-			("Otherworldly beings", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC}), new Tile(0, 0, 0)),
+			("Otherworldly beings", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		PHRIN_SHADE
-			("Phrin shade", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), new Tile(0, 0, 0)),
+			("Phrin shade", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		POISON_SPIDER
-			("Poison spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.MAGIC_FIRE}, true), new Tile(0, 0, 0)),
+			("Poison spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.MAGIC_FIRE}, true),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		PYREFIEND
-			("Pyrefiend", new MonsterProfile (new CombatStyle(Style.MAGICAL_MELEE), new Weakness[] {Weakness.MAGIC_WATER, Weakness.DARKLIGHT, Weakness.SILVERLIGHT, Weakness.STAB}), new Tile(2761, 10008)),
+			("Pyrefiend", new MonsterProfile (new CombatStyle(Style.MAGICAL_MELEE), new Weakness[] {Weakness.MAGIC_WATER, Weakness.DARKLIGHT, Weakness.SILVERLIGHT, Weakness.STAB}), 
+			new MonsterLocation (null, new Tile(2761, 10008))),
 		RIYL_SHADE
-			("Riyl shade", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}), new Tile(0, 0, 0)),
+			("Riyl shade", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.UNDEAD}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ROCK_SLUG
 			("Rock slug", new Requirements(new SlayerEquipment[] {SlayerEquipment.Bag_Of_Salt}, new Finisher(SlayerEquipment.Bag_Of_Salt)), 
-			new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}), new Tile(2798, 10019, 0)),
+			new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(2798, 10019, 0))),
 		SCABARAS_LANCER
-			("Scabaras lancer", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Scabaras lancer", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SCABARAS_MAGE
-			("Scabaras mage", new MonsterProfile(new CombatStyle(Style.MAGIC), null), new Tile(0, 0, 0)),
+			("Scabaras mage", new MonsterProfile(new CombatStyle(Style.MAGIC), null), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SCABARAS_RANGER
-			("Scabaras ranger", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MELEE}), new Tile(0, 0, 0)),
+			("Scabaras ranger", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MELEE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SCARAB_MAGE
-			("Scarab mage", new Requirements (new SlayerEquipment[] {SlayerEquipment.Tinderbox}), new MonsterProfile(new CombatStyle(Style.MAGIC), null), new Tile(0, 0, 0)),
+			("Scarab mage", new Requirements (new SlayerEquipment[] {SlayerEquipment.Tinderbox}), 
+			new MonsterProfile(new CombatStyle(Style.MAGIC), null), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SCORPION
-			("Scorpion", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Scorpion", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.CRUSH}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SEA_SNAKE_HATCHLING
-			("Sea snake hatchling", null, new MonsterProfile(new CombatStyle(Style.MELEE), true), new Tile(0, 0, 0)),
+			("Sea snake hatchling", null, new MonsterProfile(new CombatStyle(Style.MELEE), true),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SEA_SNAKE_YOUNG
-			("Sea snake young", null, new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.STAB} ,true), new Tile(0, 0, 0)),
+			("Sea snake young", null, new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.STAB} ,true),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SHADE
-			("Shade", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.UNDEAD}), new Tile(2361, 5213)),
+			("Shade", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.RANGE, Weakness.UNDEAD}), 
+			new MonsterLocation (null, new Tile(2361, 5213))),
 		SHADOW_SPIDER
-			("Shadow spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Shadow spider", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SHADOW_WARRIOR
-			("Shadow warrior", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Shadow warrior", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SKELETAL_WYVERN
 			("Skeletal wyvern", new Requirements(new SlayerEquipment[] {SlayerEquipment.Elemental_Shield, SlayerEquipment.Mind_Shield, SlayerEquipment.Body_Shield, SlayerEquipment.Dragonfire_Shield}),
-			new MonsterProfile (new CombatStyle(Style.MELEE, Style.RANGE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			new MonsterProfile (new CombatStyle(Style.MELEE, Style.RANGE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SKELETON
-			("Skeleton", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.UNDEAD}), new Tile(0, 0, 0)),
+			("Skeleton", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.UNDEAD}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//TODO: Add in Missing My Mummy as Quest Req
 		SMALL_SCARAB
-			("Small scarab", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Small scarab", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SPIDER
-			("Spider", new MonsterProfile (new CombatStyle (Style.MELEE), null), new Tile(0, 0, 0)),
+			("Spider", new MonsterProfile (new CombatStyle (Style.MELEE), null), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SPIRITUAL_MAGES
-			("Spiritual mage", new MonsterProfile (new CombatStyle(Style.MAGIC), new Weakness[] {Weakness.RANGE}), new Tile(0, 0, 0)),
+			("Spiritual mage", new MonsterProfile (new CombatStyle(Style.MAGIC), new Weakness[] {Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SPIRITUAL_RANGER
-			("Spiritual ranger", new MonsterProfile (new CombatStyle(Style.RANGE), new Weakness[] {Weakness.MELEE}), new Tile(0, 0, 0)),
+			("Spiritual ranger", new MonsterProfile (new CombatStyle(Style.RANGE), new Weakness[] {Weakness.MELEE}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SPIRITUAL_WARRIOR
-			("Spiritual warrior", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC}), new Tile(0, 0, 0)),
+			("Spiritual warrior", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		STEEL_DRAGON
-			("Steel dragon", null, new MonsterProfile (new CombatStyle(Style.MELEE, Style.RANGED_DRAGONFIRE), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.CRUSH, Weakness.STAB}), new Tile(0, 0, 0)),
+			("Steel dragon", null, new MonsterProfile (new CombatStyle(Style.MELEE, Style.RANGED_DRAGONFIRE), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.CRUSH, Weakness.STAB}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SUQAH
-			("Suquh", new MonsterProfile (new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.SLASH}), new Tile(0, 0, 0)),
+			("Suquh", new MonsterProfile (new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//FIXME: Range weakness applies only to lvl 110 Terror Dogs
 		TERROR_DOG
-			("Terror dog", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC, Weakness.RANGE}), new Tile(0, 0, 0), new Tile(0, 0, 0)),
+			("Terror dog", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.MAGIC, Weakness.RANGE}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		TROLL_GENERAL
-			("Troll general", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC, Weakness.STAB}), new Tile(0, 0, 0)),
+			("Troll general", new MonsterProfile(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC, Weakness.STAB}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		TUROTH
 			("Turoth", new Requirements(new SlayerEquipment[] {SlayerEquipment.LeafBladed_Spear, SlayerEquipment.LeafBladed_Sword}), 
-			new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE}), new Tile( 2720, 10008)),
+			new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.RANGE}), 
+			new MonsterLocation (null, new Tile(2720, 10008))),
 		VAMPIRE
 			("Vampire", new Requirements(new SlayerEquipment[] {SlayerEquipment.Holy_Symbol}), 
-			new MonsterProfile (new CombatStyle(Style.MELEE), null), new Tile(0, 0, 0)),
+			new MonsterProfile (new CombatStyle(Style.MELEE), null), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		WALL_BEAST 
 			("Wall beast", new Requirements(new SlayerEquipment[] {SlayerEquipment.Slayer_Helmet, SlayerEquipment.Spiny_Helmet}), 
-			new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		WARPED_TERRORBIRD 
-			("Warped terrorbird", new Requirements(new SlayerEquipment[] {SlayerEquipment.Crystal_Chime}), new Tile(0, 0, 0)),
+			("Warped terrorbird", new Requirements(new SlayerEquipment[] {SlayerEquipment.Crystal_Chime}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//TODO weakness depends on head appendage: probably different IDs
 		WARPED_TORTOISE
 			("Warped tortoise", new Requirements(new SlayerEquipment[] {SlayerEquipment.Crystal_Chime}), 
-			new MonsterProfile (new CombatStyle(Style.MELEE, Style.RANGE), new Weakness[] {Weakness.SLASH, Weakness.STAB, Weakness.CRUSH}), new Tile(0, 0, 0)),
+			new MonsterProfile (new CombatStyle(Style.MELEE, Style.RANGE), new Weakness[] {Weakness.SLASH, Weakness.STAB, Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		WATERFIEND
-			("Waterfiend", new MonsterProfile (new CombatStyle(Style.MAGIC, Style.MAGICAL_RANGE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0)),
+			("Waterfiend", new MonsterProfile (new CombatStyle(Style.MAGIC, Style.MAGICAL_RANGE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//TODO Add wolfbane weapon method
 		WEREWOLF
 			(new String[]{"Werewolf", "Lev", "Svetlana", "Eduard", "Irina", "Boris"}, 
-			new MonsterProfile (new CombatStyle(Style.MELEE), null), new Tile(0, 0, 0)),
+			new MonsterProfile (new CombatStyle(Style.MELEE), null), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		WILD_DOG
-			("Wild dog", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), new Tile(0, 0, 0), new Tile(0, 0, 0)),
+			("Wild dog", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//FIXME: Weakness depends on level... maybe ID different?
 		WOLF
-			(new String[]{"White wolf", "Wolf", "Big Wolf"}, new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB, Weakness.SLASH}), new Tile(0, 0, 0)),
+			(new String[]{"White wolf", "Wolf", "Big Wolf"}, new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB, Weakness.SLASH}), 
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ZOMBIE
-			("Zombie", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH, Weakness.UNDEAD}), new Tile(0, 0, 0));
+			("Zombie", new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH, Weakness.UNDEAD}), 
+			new MonsterLocation (null, new Tile(0, 0, 0)));
 
 		private String[] names;
 		private Requirements Requirements;
-		private Tile[] location;
+		private MonsterLocation[] monsterLocations;
 		private MonsterProfile profile = null;
 
-		Monster(String[] names, Requirements Requirements, Tile... location) {
-			this.names = names;
-			this.location = location;
-			this.Requirements = Requirements;
+		Monster(String[] names, Requirements Requirements, MonsterLocation... MonsterLocations) {
+			this (names, Requirements, null, MonsterLocations);
 		}
 
-		Monster(String[] names, Requirements Requirements, MonsterProfile prof,
-				Tile... location) {
+		Monster(String[] names, Requirements Requirements, MonsterProfile prof, MonsterLocation... MonsterLocations) {
 			this.names = names;
-			this.location = location;
+			monsterLocations = MonsterLocations;
 			this.Requirements = Requirements;
 			this.profile = prof;
 		}
 
-		Monster(String[] names, Requirements Requirements, CombatStyle prof,
-				Tile... location) {
-			this.names = names;
-			this.location = location;
-			this.Requirements = Requirements;
-			this.profile = new MonsterProfile(prof);
+
+		Monster(String[] names, MonsterProfile prof, MonsterLocation... MonsterLocations) {
+			this (names, null, prof, MonsterLocations);
 		}
 
-		Monster(String[] names, MonsterProfile prof, Tile... location) {
-			this.names = names;
-			this.location = location;
-			this.Requirements = null;
-			this.profile = prof;
+		Monster(String name, Requirements Requirements, MonsterLocation... MonsterLocations) {
+			this(new String[]{name}, Requirements, null, MonsterLocations);
 		}
 
-		Monster(String[] names, CombatStyle prof, Tile... location) {
-			this.names = names;
-			this.location = location;
-			this.Requirements = null;
-			this.profile = new MonsterProfile(prof);
+		Monster(String name, Requirements Requirements, MonsterProfile prof, MonsterLocation... MonsterLocations) {
+			this(new String[]{name}, Requirements, prof, MonsterLocations);
 		}
 
-
-		Monster(String name, Requirements Requirements, Tile... location) {
-			this(new String[]{name}, Requirements, location);
-		}
-
-		Monster(String name, Requirements Requirements, MonsterProfile prof,
-				Tile... location) {
-			this(new String[]{name}, Requirements, prof, location);
-		}
-
-		Monster(String name, Requirements Requirements, CombatStyle prof,
-				Tile... location) {
-			this(new String[]{name}, Requirements, new MonsterProfile(prof),
-					location);
-		}
-
-		Monster(String name, MonsterProfile prof, Tile... location) {
-			this(new String[]{name}, null, prof, location);
-		}
-
-		Monster(String name, CombatStyle prof, Tile... location) {
-			this(new String[]{name}, null, new MonsterProfile(prof), location);
+		Monster(String name, MonsterProfile prof, MonsterLocation... MonsterLocations) {
+			this(new String[]{name}, null, prof, MonsterLocations);
 		}
 
 		public MonsterProfile getProfile() {
 			return profile;
 		}
 
-		public Tile[] getLocation() {
-			return this.location;
-		}
-
-		public Tile getNearest(Tile base) {
-			Tile best = null;
-			double len = -1;
-			for (Tile t : location) {
-				int dX = t.getX() - base.getX();
-				int dY = t.getY() - base.getY();
-				double tLen = Math.sqrt((dX * dX) + (dY * dY));
-				if (len == -1 || tLen < len) {
-					best = t;
-					len = tLen;
-				}
-			}
-			return best;
+		public MonsterLocation[] getLocation() {
+			return monsterLocations;
 		}
 
 		public Requirements getRequirements() {

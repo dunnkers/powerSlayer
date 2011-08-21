@@ -40,7 +40,7 @@ public class CombatStyle {
     }
 
     public Style getStyle(int tier) {
-        if (tier < 0)
+        if (tier <= 0)
             return style[0];
         else if (tier >= style.length)
             return style[style.length - 1];
