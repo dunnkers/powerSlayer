@@ -11,6 +11,7 @@ import org.rsbot.script.methods.Interfaces;
 import org.rsbot.script.methods.NPCs;
 import org.rsbot.script.methods.Settings;
 import org.rsbot.script.methods.Walking;
+import org.rsbot.script.methods.Game.Tabs;
 import org.rsbot.script.methods.tabs.Combat;
 import org.rsbot.script.methods.tabs.Inventory;
 import org.rsbot.script.methods.tabs.Prayer;
@@ -32,18 +33,19 @@ public class FighterState extends State {
     public int loop() {
         if (!Walking.isRunEnabled() && Walking.getEnergy() > random(60, 90)) {
             methods.parent.paint.Current = "Setting Run";
-            Walking.setRun(true);
-            return random(1200, 1600);
+            for (int i = 0; i < 5 && !Walking.isRunEnabled(); i++)
+            	Walking.setRun(true);
         }
         if (Interfaces.canContinue()) {
             methods.parent.paint.Current = "Clicking Continue";
-            Interfaces.clickContinue();
-            return random(1200, 1600);
+            for (int i = 0; i < 5 && Interfaces.canContinue(); i++)
+            	Interfaces.clickContinue();
         }
         if (Game.getCurrentTab() != Game.Tabs.INVENTORY) {
             methods.parent.paint.Current = "Opening Inventory";
-            Game.openTab(Game.Tabs.INVENTORY);
-            return random(700, 1500);
+            for (int i = 0; i < 5 && !Game.getCurrentTab().equals(Tabs.INVENTORY); i++) {
+            	Game.openTab(Tabs.INVENTORY);
+            }
         }
         if (methods.fighter.eat.needEat()) {
             if (methods.fighter.eat.haveFood()) {
@@ -66,12 +68,12 @@ public class FighterState extends State {
 
         methods.fighter.pot.usePotions();
 
-		if(methods.fighter.pot.getPotions().get("PRAYER").length != 0 && !Prayer.isQuickPrayersActive() &&  methods.fighter.pot.setQuickPrayer) {
+		if (methods.fighter.pot.getPotions().get("PRAYER").length != 0 && !Prayer.isQuickPrayersActive() &&  methods.fighter.pot.setQuickPrayer) {
             Prayer.toggleQuickPrayers(true);
         }
 
-	     if(methods.fighter.loot.onlyTakeLootFromKilled && methods.fighter.npcs.lastClickedNPC != null) {
-				methods.fighter.npcs.sleepWhileNpcIsDying(methods.fighter.npcs.lastClickedNPC);
+	     if (methods.fighter.loot.onlyTakeLootFromKilled && methods.fighter.npcs.lastClickedNPC != null) {
+				methods.fighter.npcs.sleepWhileNpcIsDying(5000);
 		 }
 
         for (LoopAction a : loopActions)
@@ -82,13 +84,11 @@ public class FighterState extends State {
 
     @Override
     public boolean activeCondition() {
-
-        return methods.fighter.npcs.getNPC() != null && !killCondition && Settings.get(394) != 0 && checkItems();
+    	return methods.fighter.npcs.getNPC() != null && !killCondition && Settings.get(394) != 0 && checkItems();
     }
 
     public interface LoopAction {
         public int loop();
-
         public boolean activate();
     }
 
@@ -100,24 +100,24 @@ public class FighterState extends State {
 			public int loop() {
 				methods.parent.paint.Current = "Fighting";
 
-				if(methods.fighter.npcs.getInteracting() != null) {
-					if(methods.fighter.npcs.getInteracting().getHPPercent() <= 10 &&
+				if (methods.fighter.npcs.getInteracting() != null) {
+					if (methods.fighter.npcs.getInteracting().getHPPercent() <= 10 &&
 						PowerSlayer.currentTask.getMonster().getRequirements().getFinisher() != null) {
-						if(!methods.fighter.npcs.useFinisher(methods.fighter.npcs.getInteracting())) {
+						if (!methods.fighter.npcs.useFinisher(methods.fighter.npcs.getInteracting())) {
 							log("You ran out of finishers! Stopping Fighter.");
 							killCondition = true;
 						}
 					}
 
-					if( methods.fighter.npcs.useSpecial() && !Combat.isSpecialEnabled() && !methods.fighter.npcs.getInteracting().isDead()) {
+					if (methods.fighter.npcs.useSpecial() && !Combat.isSpecialEnabled() && !methods.fighter.npcs.getInteracting().isDead()) {
 						sleep(random(500, 1000));
 						Combat.setSpecial(true);
 					}
 
 
-					if(methods.fighter.loot.onlyTakeLootFromKilled) {
-						if(methods.fighter.npcs.getInteracting() != null){
-							if(!methods.fighter.npcs.tilesFoughtOn.contains(methods.fighter.npcs.getInteracting().getLocation())
+					if (methods.fighter.loot.onlyTakeLootFromKilled) {
+						if (methods.fighter.npcs.getInteracting() != null){
+							if (!methods.fighter.npcs.tilesFoughtOn.contains(methods.fighter.npcs.getInteracting().getLocation())
 									&& !methods.fighter.npcs.getInteracting().isMoving()) {
 								methods.fighter.npcs.tilesFoughtOn.add(methods.fighter.npcs.getInteracting().getLocation());
 							}
@@ -141,8 +141,8 @@ public class FighterState extends State {
 				NPC n = inter != null ? inter : methods.fighter.npcs.getNPC();
 				if (n != null) {
 					int result = -5;
-					if(PowerSlayer.currentTask.getRequirements().getStarter() != null) {
-						if(!methods.fighter.npcs.useStarter(n)) {
+					if (PowerSlayer.currentTask.getRequirements().getStarter() != null) {
+						if (!methods.fighter.npcs.useStarter(n)) {
 							log("You ran out of starters! Stopping Fighter.");
 							killCondition = true;
 						}
@@ -192,7 +192,7 @@ public class FighterState extends State {
 				if (result == 0) {
 					waitWhileMoving();
 					if (methods.fighter.waitForInvChange(origCount)) {
-						if(methods.fighter.loot.onlyTakeLootFromKilled && methods.fighter.npcs.tilesFoughtOn.contains(loot.getLocation())) {
+						if (methods.fighter.loot.onlyTakeLootFromKilled && methods.fighter.npcs.tilesFoughtOn.contains(loot.getLocation())) {
 							methods.fighter.npcs.tilesFoughtOn.remove(loot.getLocation());
 						}
 					}

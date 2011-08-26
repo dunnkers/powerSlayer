@@ -58,9 +58,10 @@ public class CombatStyle {
     }
 
     public boolean hasStyle(Style style) {
-        for (Style s : this.style)
+        for (Style s : this.style) {
             if (s.equals(style))
                 return true;
+        }
         return false;
     }
 

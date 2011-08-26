@@ -4,6 +4,7 @@ import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.wrappers.Finisher;
 import org.powerbot.powerslayer.wrappers.Requirements;
 import org.powerbot.powerslayer.wrappers.Starter;
+import org.rsbot.script.Script;
 import org.rsbot.script.methods.tabs.Inventory;
 import org.rsbot.script.wrappers.Item;
 
@@ -59,4 +60,23 @@ public class SlayerInventory {
 		}
 		return false;
 	}
+	
+	public static boolean waitForInvChange(int threshold) {
+		int origCount = Inventory.getCount();
+		for (int i = 0; i < ((threshold/50) + 1); i++) {
+			if (origCount != Inventory.getCount())
+				return true;
+			Script.sleep (50);
+		}
+		return false;
+    }
+	
+	public static boolean waitForInvChange(int origCount, int threshold) {
+		for (int i = 0; i < ((threshold/50) + 1); i++) {
+			if (origCount != Inventory.getCount())
+				return true;
+			Script.sleep (50);
+		}
+		return false;
+    }
 }

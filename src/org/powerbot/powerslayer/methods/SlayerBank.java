@@ -24,4 +24,20 @@ public class SlayerBank {
 	public static boolean isInBank(Starter start) {
 		return isInBank(start.getSlayerEquipment());
 	}
+	
+	public static boolean withdraw (SlayerEquipment equipment) {
+		for (Item currItem: Bank.getItems()) {
+			if (currItem.getName().equals(equipment.getName()))
+				return Bank.withdraw(currItem.getID(), equipment.getAmount());
+		}
+		return false;
+	}
+	
+	public static boolean withdraw (Starter start) {
+		return withdraw(start.getSlayerEquipment());
+	}
+	
+	public static boolean withdraw (Finisher finish) {
+		return withdraw(finish.getSlayerEquipment());
+	}
 }

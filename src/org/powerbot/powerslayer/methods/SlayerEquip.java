@@ -43,12 +43,7 @@ public class SlayerEquip {
 	
 
 	public static boolean isEquipped(SlayerEquipment item) {
-		for (Item i : Equipment.getItems()) {
-			if (i.getName().equalsIgnoreCase(item.getName())) {
-				return true;
-			}
-		}
-		return false;
+		return Equipment.getItem(item.equipSlot()).getName().equals(item.getName());
 	}
 	
 	public static Item getReplacingItem(SlayerEquipment item) {

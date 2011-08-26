@@ -58,22 +58,23 @@ public class Finisher {
 		return finisher.isUsable();
 	}
 	
-	public boolean use (NPC Monster) {
-		String s = PowerSlayer.currentTask.getRequirements().getStarter().getName();
-    	for (Item inventItem : Inventory.getItems()) {
-    		if (s.equalsIgnoreCase(inventItem.getName())) {
-    			if (Inventory.getItem(inventItem.getID()).click(true)) {
-    				if (Monster != null) {
-    					if (!Monster.isOnScreen()) {
-    						Camera.turnTo(Monster);
-    					}
-    					if (Monster.isOnScreen()) {
-    						return Monster.interact("Use");
-    					}
-    				}
-    			}
-    		}
-    	}
-    	return false;
+	public static boolean use (NPC Monster) {
+		String starterName = PowerSlayer.currentTask.getRequirements().getFinisher().getName();
+		if (Monster.equals(null) || Monster.isDead())
+			return false;
+		for (int i = 0; i < 28; i++) {
+			Item currItem = Inventory.getItemAt(i);
+			if (currItem.equals(null))
+				continue;
+			if (currItem.getName().equals(starterName)) {
+				currItem.click(true);
+				if (!Monster.isOnScreen())
+					Camera.turnTo(Monster);
+				if (Monster.isOnScreen())
+					return Monster.interact("Use");
+				return false;
+			}
+		}
+		return false;
 	}
 }

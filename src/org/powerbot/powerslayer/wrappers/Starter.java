@@ -1,7 +1,12 @@
 package org.powerbot.powerslayer.wrappers;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
+import org.rsbot.script.methods.Camera;
+import org.rsbot.script.methods.tabs.Inventory;
 import org.rsbot.script.methods.tabs.Equipment.Slot;
+import org.rsbot.script.wrappers.Item;
+import org.rsbot.script.wrappers.NPC;
 
 public class Starter {
 	//TODO: Add methods
@@ -52,5 +57,25 @@ public class Starter {
 	
 	public boolean isUsable() {
 		return starter.isUsable();
+	}
+	
+	public static boolean use (NPC Monster) {
+		String starterName = PowerSlayer.currentTask.getRequirements().getStarter().getName();
+		if (Monster.equals(null) || Monster.isDead())
+			return false;
+		for (int i = 0; i < 28; i++) {
+			Item currItem = Inventory.getItemAt(i);
+			if (currItem.equals(null))
+				continue;
+			if (currItem.getName().equals(starterName)) {
+				currItem.click(true);
+				if (!Monster.isOnScreen())
+					Camera.turnTo(Monster);
+				if (Monster.isOnScreen())
+					return Monster.interact("Use");
+				return false;
+			}
+		}
+		return false;
 	}
 }
