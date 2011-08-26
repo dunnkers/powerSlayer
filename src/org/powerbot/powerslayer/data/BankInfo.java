@@ -1,7 +1,7 @@
 package org.powerbot.powerslayer.data;
 
 import org.rsbot.script.wrappers.Tile;
-
+//TODO: Will replace Banks class.  Hopefully won't be needed
 public enum BankInfo {
 
 	LUMBRIDGE_CASTLE 

@@ -1,8 +1,10 @@
 package org.powerbot.powerslayer.states;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
+import org.powerbot.powerslayer.methods.SlayerInventory;
 import org.rsbot.script.methods.Calculations;
 import org.rsbot.script.methods.Game;
 import org.rsbot.script.methods.Interfaces;
@@ -13,7 +15,6 @@ import org.rsbot.script.methods.tabs.Combat;
 import org.rsbot.script.methods.tabs.Inventory;
 import org.rsbot.script.methods.tabs.Prayer;
 import org.rsbot.script.wrappers.GroundItem;
-import org.rsbot.script.wrappers.Item;
 import org.rsbot.script.wrappers.NPC;
 import org.rsbot.script.wrappers.Tile;
 
@@ -101,7 +102,7 @@ public class FighterState extends State {
 
 				if(methods.fighter.npcs.getInteracting() != null) {
 					if(methods.fighter.npcs.getInteracting().getHPPercent() <= 10 &&
-                    methods.parent.currentTask.getMonster().getRequirements().getFinisher() != null) {
+						PowerSlayer.currentTask.getMonster().getRequirements().getFinisher() != null) {
 						if(!methods.fighter.npcs.useFinisher(methods.fighter.npcs.getInteracting())) {
 							log("You ran out of finishers! Stopping Fighter.");
 							killCondition = true;
@@ -140,7 +141,7 @@ public class FighterState extends State {
 				NPC n = inter != null ? inter : methods.fighter.npcs.getNPC();
 				if (n != null) {
 					int result = -5;
-					if(methods.parent.currentTask.getRequirements().getStarter() != null) {
+					if(PowerSlayer.currentTask.getRequirements().getStarter() != null) {
 						if(!methods.fighter.npcs.useStarter(n)) {
 							log("You ran out of starters! Stopping Fighter.");
 							killCondition = true;
@@ -159,7 +160,7 @@ public class FighterState extends State {
 						return random(0, 200);
 					}
 				} else {
-					String[] currMonster = methods.parent.currentTask.getMonster().getNames();
+					String[] currMonster = PowerSlayer.currentTask.getMonster().getNames();
 					Tile currTile = NPCs.getNearest(currMonster).getLocation();
 					if (Calculations.distanceTo(currTile) > 10) {
 						Walking.walkTileMM(Walking.getClosestTileOnMap(currTile));
@@ -221,24 +222,12 @@ public class FighterState extends State {
     }
 
     public boolean checkItems() {
-        for (SlayerEquipment i : methods.parent.currentTask.getRequirements().getEquipment()) {
-            if (!isInInvent(i)) {
+        for (SlayerEquipment i : PowerSlayer.currentTask.getRequirements().getEquipment()) {
+            if (!SlayerInventory.hasEnough(i)) {
                 return false;
             }
         }
         return true;
     }
-
-    private boolean isInInvent(SlayerEquipment i) {
-    	for (Item item : Inventory.getItems()) {
-    		if (item.getName().equalsIgnoreCase(i.getName())) {
-    			if (Inventory.getCount(true, item.getID()) >= i.getAmount())
-    				return true;
-    		}
-    	}
-
-    	return false;
-    }
-
 }
 

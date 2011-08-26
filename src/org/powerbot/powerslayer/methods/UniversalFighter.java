@@ -5,6 +5,7 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.common.DMethodProvider;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.rsbot.script.methods.Calculations;
@@ -58,7 +59,7 @@ public class UniversalFighter extends DMethodProvider {
         }
         return Inventory.getCount(true) != origCount;
     }
-
+    
     /**
      * Performs a random action, always.
      * Actions: move mouse, move mouse off screen, move camera.
@@ -114,7 +115,7 @@ public class UniversalFighter extends DMethodProvider {
 
     public class SlayerNPCs {
 
-        private String[] npcNames = methods.parent.currentTask.getMonster().getNames();
+        private String[] npcNames = PowerSlayer.currentTask.getMonster().getNames();
 
 	    public NPC lastClickedNPC = null;
 		public boolean npcWasClickedLast = false;
@@ -327,28 +328,27 @@ public class UniversalFighter extends DMethodProvider {
             return good;
         }
 
-        public boolean useStarter( NPC monster) {
-            for (String s : methods.parent.currentTask.getRequirements().getStarter().getNames()) {
-                for (Item inventItem : Inventory.getItems()) {
-                    if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (Inventory.getItem(inventItem.getID()).click(true)) {
-                            if (monster != null) {
-                                if (!monster.isOnScreen()) {
-                                    Camera.turnTo(monster);
-                                }
-                                if (monster.isOnScreen()) {
-                                    return monster.interact("Use");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return false;
+        public boolean useStarter(NPC monster) {
+        	String s = PowerSlayer.currentTask.getRequirements().getStarter().getName();
+        	for (Item inventItem : Inventory.getItems()) {
+        		if (s.equalsIgnoreCase(inventItem.getName())) {
+        			if (Inventory.getItem(inventItem.getID()).click(true)) {
+        				if (monster != null) {
+        					if (!monster.isOnScreen()) {
+        						Camera.turnTo(monster);
+        					}
+        					if (monster.isOnScreen()) {
+        						return monster.interact("Use");
+        					}
+        				}
+        			}
+        		}
+        	}
+        	return false;
         }
 
         public boolean useFinisher(NPC monster) {
-            String s = methods.parent.currentTask.getRequirements().getFinisher().getName();
+            String s = PowerSlayer.currentTask.getRequirements().getFinisher().getName();
                 for (Item inventItem : Inventory.getItems()) {
                     if (s.equalsIgnoreCase(inventItem.getName())) {
                         if (Inventory.getItem(inventItem.getID()).click(true)) {
@@ -856,7 +856,6 @@ public class UniversalFighter extends DMethodProvider {
 			}
 		}
 
-		@SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
 		private boolean NPCisOnBadTile(NPC t) {
 			for(Tile badTile: badTiles) {
 				if(t.getLocation().getX() == badTile.getX() &&

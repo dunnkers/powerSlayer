@@ -11,19 +11,19 @@ import org.rsbot.script.wrappers.InterfaceComponent;
 public class SlayerItems {
 	static SlayerEquipment[] slayerEquipment = slayerEquipmentArray();
 	static boolean elementalWorkshopIFinished = false, elementalWorkshopIIFinished = false, elementalWorkshopIIIFinished = false,
-		elementalWorkshopIVFinished = false, pathOfGlouphrieFinished = false, smokingKillsFinished = false;
+	elementalWorkshopIVFinished = false, pathOfGlouphrieFinished = false, smokingKillsFinished = false;
 	int QUEST_INTERFACE = 190, HIDE_FINISHED_BUTTON = 12, QUEST_LIST = 18;
 	int ELEMENTAL_WORKSHOP_I = 37, ELEMENTAL_WORKSHOP_II = 38,
-		ELEMENTAL_WORKSHOP_III = 172, ELEMENTAL_WORKSHOP_IV = 180, PATH_OF_GLOUPHRIE = 127, SMOKING_KILLS = 138;
+	ELEMENTAL_WORKSHOP_III = 172, ELEMENTAL_WORKSHOP_IV = 180, PATH_OF_GLOUPHRIE = 127, SMOKING_KILLS = 138;
 	int MOUSE_INTERFACE = 261, BUTTON_CHANGER = 6; 
 	public static SlayerEquipment[] slayerHelmets = {SlayerEquipment.Full_Slayer_Helmet4charged5, SlayerEquipment.Full_Slayer_Helmet4e5, SlayerEquipment.Full_Slayer_Helmet, 
-			SlayerEquipment.Slayer_Helmet_4charged5, SlayerEquipment.Slayer_Helmet_4e5, SlayerEquipment.Slayer_Helmet};
-	
+		SlayerEquipment.Slayer_Helmet_4charged5, SlayerEquipment.Slayer_Helmet_4e5, SlayerEquipment.Slayer_Helmet};
+
 	public SlayerItems() {
 		slayerEquipment = slayerEquipmentArray();
 		getQuestsFinished();
 	}
-	
+
 	//TODO: Add in Chaos Shield, Gadderhammer, Keris, Balmung, and Cosmic Shield
 	//TODO: Add in 2-handed Item support & Optional support
 	public static enum SlayerEquipment {
@@ -72,21 +72,21 @@ public class SlayerItems {
 		Unlit_Bug_Lantern (200, Equipment.Slot.SHIELD, new int[] {Skills.SLAYER, 33}, new int[] {7051}),
 		Water_Skin (-1, null, new int[] {Skills.SLAYER, 1}, new int[] {1823, 1825, 1827, 1829, 1831}),
 		Witchwood_Icon (900, Equipment.Slot.NECK, new int[] {Skills.SLAYER, 58}, new int[] {8923});
-		
+
 		int itemCost = -1;
 		Equipment.Slot slot = null;
 		int [] requirements = {-1};
 		int[] IDs;
 		int amount = 1;
-		
-		
+
+
 		SlayerEquipment (int Cost, Equipment.Slot Slot, int[] Requirements, int[] IDList) {
 			itemCost = Cost;
 			requirements = Requirements;
 			slot = Slot;
 			IDs = IDList;
 		}
-		
+
 		SlayerEquipment (SlayerEquipment equipmentEnum) {
 			if (equipmentEnum != null) {
 				itemCost = equipmentEnum.itemCost;
@@ -95,7 +95,7 @@ public class SlayerItems {
 				IDs = equipmentEnum.IDs;
 			}
 		}
-		
+
 		SlayerEquipment (SlayerEquipment equipmentEnum, int Amount) {
 			if (equipmentEnum != null) {
 				itemCost = equipmentEnum.itemCost;
@@ -105,39 +105,37 @@ public class SlayerItems {
 				amount = Amount;
 			}
 		}
-		
+
 		SlayerEquipment (int itemID) {
 			this(getSlayerEquipment(itemID));
 		}
-		
+
 		SlayerEquipment (String itemName) {
 			this(getSlayerEquipment(itemName));
 		}
-		
-		public int getAmount() {
-			return amount;
-		}
-		
+
+
 		public boolean availableAtMaster() {
 			return itemCost != -1;
 		}
-		
-		public int getCost() {
-			return itemCost;
-		}
-		
-		public boolean isEquipable() {
-			return isUsable() && slot != null;
-		}
-		
+
 		public Equipment.Slot equipSlot() {
 			return slot;
 		}
-		
+
+		public int getAmount() {
+			return amount;
+		}
+
+		public int getCost() {
+			return itemCost;
+		}
+
+
 		public int[] getIDs() {
 			return IDs;
 		}
-		
+
 		public String getName() {
 			String enumString = this.toString();
 			StringBuilder t = new StringBuilder();
@@ -167,7 +165,11 @@ public class SlayerItems {
 			}
 			return t.toString();
 		}
-		
+
+		public boolean isEquipable() {
+			return isUsable() && slot != null;
+		}
+
 		public boolean isUsable() {
 			int length = requirements.length;
 			if (length % 2 != 0)
@@ -181,7 +183,7 @@ public class SlayerItems {
 				if (!smokingKillsFinished)
 					return false;
 			} else if (current.equals(Mind_Shield)) {
-					return false;
+				return false;
 			} else if (current.equals(Body_Shield)) {
 				if (!elementalWorkshopIIFinished) 
 					return false;
@@ -289,7 +291,7 @@ public class SlayerItems {
 		}
 		return null;
 	}
-	
+
 	static SlayerEquipment getSlayerEquipment (String itemName) {
 		for (SlayerEquipment currEquip: slayerEquipment) {
 			if (itemName.equalsIgnoreCase(currEquip.getName()))
@@ -297,7 +299,7 @@ public class SlayerItems {
 		}
 		return null;
 	}
-	
+
 	static SlayerEquipment[] slayerEquipmentArray() {
 		return new SlayerEquipment[] { SlayerEquipment.AntiDragon_Shield,
 				SlayerEquipment.Bag_Of_Salt, SlayerEquipment.Body_Shield,

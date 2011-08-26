@@ -1,11 +1,10 @@
 package org.powerbot.powerslayer.wrappers;
 
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
-import org.rsbot.script.methods.tabs.Equipment;
+import org.rsbot.script.methods.tabs.Equipment.Slot;
 
 public class Starter {
 	//TODO: Add methods
-	String[] itemNames;
 	SlayerEquipment starter;
 	int amount = 1;
 	
@@ -18,29 +17,25 @@ public class Starter {
     public Starter(SlayerEquipment equipment) {
         this (equipment, 1);
     }
-    
-    public String[] getNames() {
-    	return itemNames;
-    }
-    
-    public int getAmount() {
-		return amount;
-	}
 	
 	public boolean availableAtMaster() {
 		return starter.availableAtMaster();
 	}
 	
-	public int getCost() {
-		return starter.getCost();
-	}
-	
-	public boolean isEquipable() {
+	public boolean canEquip() {
 		return starter.isEquipable();
 	}
 	
-	public Equipment.Slot equipSlot() {
+	public Slot equipSlot() {
 		return starter.equipSlot();
+	}
+    
+    public int getAmount() {
+		return amount;
+	}
+	
+	public int getCost() {
+		return starter.getCost();
 	}
 	
 	public int[] getIDs() {
@@ -50,6 +45,10 @@ public class Starter {
 	public String getName() {
 		return starter.getName();
 	}
+    
+    public SlayerEquipment getSlayerEquipment() {
+    	return starter;
+    }
 	
 	public boolean isUsable() {
 		return starter.isUsable();
