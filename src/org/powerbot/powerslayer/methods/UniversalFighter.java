@@ -11,10 +11,10 @@ import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.wrappers.Finisher;
 import org.powerbot.powerslayer.wrappers.Starter;
 import org.rsbot.script.methods.Calculations;
-import org.rsbot.script.methods.Camera;
+import org.rsbot.script.methods.ui.Camera;
 import org.rsbot.script.methods.Game;
 import org.rsbot.script.methods.GroundItems;
-import org.rsbot.script.methods.Interfaces;
+import org.rsbot.script.methods.ui.Interfaces;
 import org.rsbot.script.methods.Menu;
 import org.rsbot.script.methods.Mouse;
 import org.rsbot.script.methods.NPCs;
@@ -130,7 +130,7 @@ public class UniversalFighter extends DMethodProvider {
          * @return True if we are in combat.
          */
         public boolean isInCombat() {
-            return Players.getMyPlayer().getInteracting() instanceof NPC;
+            return Players.getLocal().getInteracting() instanceof NPC;
         }
 
 	    public boolean useSpecial() {
@@ -178,7 +178,7 @@ public class UniversalFighter extends DMethodProvider {
 			for (int i = 0; i < 10; i++) {
 				if (isPartiallyOnScreen(npc.getModel())) {
 					Point p = getPointOnScreen(npc.getModel(), false);
-					if (p == null || !Calculations.pointOnScreen(p)) {
+					if (p == null || !Calculations.isPointOnScreen(p)) {
 						continue;
 					}
 					Mouse.move(p, 0, 0);
@@ -196,7 +196,7 @@ public class UniversalFighter extends DMethodProvider {
 							if (!Menu.contains(action)) {
 								break;
 							}
-							if (Menu.doAction(action)) {
+							if (Menu.click(action)) {
 								loot.itemWasClickedLast = false;
 								npcWasClickedLast = true;
 								lastClickedNPC = npc;
@@ -241,7 +241,7 @@ public class UniversalFighter extends DMethodProvider {
                 for (Polygon p : tris) {
                     for (int j = 0; j < p.xpoints.length; j++) {
                         Point pt = new Point(p.xpoints[j], p.ypoints[j]);
-                        if (Calculations.pointOnScreen(pt)) {
+                        if (Calculations.isPointOnScreen(pt)) {
                             if (first)
                                 return pt;
                             list.add(pt);
@@ -304,7 +304,7 @@ public class UniversalFighter extends DMethodProvider {
         public NPC getInteracting() {
             NPC npc = null;
             int dist = 20;
-            for (NPC n : NPCs.getAll()) {
+            for (NPC n : NPCs.getLoaded()) {
                 if (!isOurNPC(n))
                     continue;
                 Character inter = n.getInteracting();
@@ -350,7 +350,7 @@ public class UniversalFighter extends DMethodProvider {
 				}
     		};
 	    	for (int i = 0; i < ((threshold/50) + 1); i++) {
-	    		NPC[] NPCList = NPCs.getAll(monsterFilter);
+	    		NPC[] NPCList = NPCs.getLoaded(monsterFilter);
 	    		if (NPCList.length == 0)
 	    			break;
 	    		if (i == threshold/50)
@@ -698,7 +698,7 @@ public class UniversalFighter extends DMethodProvider {
 					if (Menu.isOpen())
 						Mouse.moveRandomly(300, 500);
 					Point p = item.getLocation().toScreen(random(0.48, 0.52), random(0.48, 0.52), 0);
-					if (!Calculations.pointOnScreen(p))
+					if (!Calculations.isPointOnScreen(p))
 						continue;
 					Mouse.move(p, 3, 3);
 					if (Menu.contains(action)) {
@@ -711,7 +711,7 @@ public class UniversalFighter extends DMethodProvider {
 						} else {
 							Mouse.click(false);
 							sleep(random(100, 200));
-							if (Menu.doAction(action)) {
+							if (Menu.click(action)) {
 								itemWasClickedLast = true;
 								npcs.npcWasClickedLast = false;
 								lastClickedItem = item;
@@ -723,7 +723,7 @@ public class UniversalFighter extends DMethodProvider {
 			} else {
 				Walking.walkTileMM(Walking.getClosestTileOnMap(item.getLocation()));
 				sleep(random(1500, 2000));
-				if (!Players.getMyPlayer().isMoving()) {
+				if (!Players.getLocal().isMoving()) {
 					tiles.addBadTile(item.getLocation());
 					return -1;
 				}

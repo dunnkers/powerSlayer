@@ -2,7 +2,7 @@ package org.powerbot.powerslayer.data;
 
 import org.rsbot.script.Script;
 import org.rsbot.script.methods.Game;
-import org.rsbot.script.methods.Interfaces;
+import org.rsbot.script.methods.ui.Interfaces;
 import org.rsbot.script.methods.Skills;
 import org.rsbot.script.methods.tabs.Equipment;
 import org.rsbot.script.wrappers.Interface;
