@@ -83,10 +83,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		return -1;
 	}
 
-
-	// TODO 90% of these need rewriting and classification
-	
-
 	public void messageReceived(MessageEvent messageEvent) {
 		if(messageEvent.getMessage().equals("You can't reach that.")) {
 			if(methodBase.fighter.loot.itemWasClickedLast && methodBase.fighter.loot.lastClickedItem != null) {

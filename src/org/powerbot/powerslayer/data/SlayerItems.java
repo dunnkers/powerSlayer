@@ -9,6 +9,7 @@ import org.rsbot.script.wrappers.Interface;
 import org.rsbot.script.wrappers.InterfaceComponent;
 
 public class SlayerItems {
+	//FIXME: Huge Code CleanUp 
 	static boolean elementalWorkshopIFinished = false, elementalWorkshopIIFinished = false, elementalWorkshopIIIFinished = false,
 	elementalWorkshopIVFinished = false, pathOfGlouphrieFinished = false, smokingKillsFinished = false;
 	int QUEST_INTERFACE = 190, HIDE_FINISHED_BUTTON = 12, QUEST_LIST = 18;

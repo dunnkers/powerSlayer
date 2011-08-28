@@ -13,15 +13,6 @@ public class Task {
 	    this.amount = amount;
 	    this.master = master;
     }
-
-    public Requirements getRequirements() {
-	    //TODO: Convert over to both locationProfile and monster requirements
-        return monster.getRequirements();
-    }
-
-    public Monster getMonster() {
-        return monster;
-    }
     
     public int getAmount() {
     	return amount;
@@ -29,5 +20,14 @@ public class Task {
     
     public SlayerMaster getMaster() {
     	return master;
+    }
+
+    public Monster getMonster() {
+        return monster;
+    }
+
+    public Requirements getRequirements() {
+	    //TODO: Convert over to both locationProfile and monster requirements
+        return monster.getRequirements();
     }
 }

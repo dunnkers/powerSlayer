@@ -8,10 +8,6 @@ import org.powerbot.powerslayer.methods.UniversalFighter;
 
 import java.util.Random;
 
-/**
- * Created by IntelliJ IDEA. User: Taylor Date: 5/5/11 Time: 5:05 PM Package:
- * org.powerbot.powerslayer.common;
- */
 public class MethodBase {
     public PowerSlayer parent = null;
     public UniversalFighter fighter = new UniversalFighter(this);
