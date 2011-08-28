@@ -79,7 +79,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		states.add(new FighterState(methodBase));
 	}
 
-<<<<<<< HEAD
 	private int getStateLoop() {
 		for (State state : states) {
 			if (state.activeCondition()) {
@@ -88,11 +87,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		}
 		return -1;
 	}
-=======
-
-	// TODO 90% of these need rewriting and classification
-	
->>>>>>> f667e089cf0409a9f1000fd339affe5d43683e2a
 
 	public void messageReceived(MessageEvent messageEvent) {
 		if(messageEvent.getMessage().equals("You can't reach that.")) {
