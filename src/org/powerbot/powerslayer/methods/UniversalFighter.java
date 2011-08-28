@@ -332,7 +332,7 @@ public class UniversalFighter extends DMethodProvider {
 		 */
 		public boolean sleepWhileNpcIsDying(int threshold) {
 			NPC currNPC = npcs.lastClickedNPC;
-			if (currNPC.equals(null) || currNPC.isDead())
+			if (currNPC == null || currNPC.isDead())
 				return false;
 			final Tile npcTile = currNPC.getLocation();
 			Filter<NPC> monsterFilter = new Filter<NPC>() {
@@ -445,7 +445,7 @@ public class UniversalFighter extends DMethodProvider {
 		 */
 		public boolean eatFood() {
 			Item i = getFood();
-			if (i.equals(null))
+			if (i == null)
 				return false;
 			for (int j = 0; j < 3; j++) {
 				if (i.interact("Eat")) 
@@ -680,9 +680,9 @@ public class UniversalFighter extends DMethodProvider {
 		 * @param item The item to take.
 		 * @return -1 if error, 0 if taken, 1 if walked
 		 */
-		//FIXME: Badly written method
+		
 		public int takeItem(GroundItem item) {
-			if (item.equals(null))
+			if (item == null)
 				return -1;
 			String action = "Take " + item.getItem().getName();
 			if (item.isOnScreen()) {
@@ -728,7 +728,6 @@ public class UniversalFighter extends DMethodProvider {
 			public boolean accept(GroundItem t) {
 				//Skip if we can't hold it
 				Item i;
-				//FIXME: If inventory is full, check if item is more valuable than something in inventory/can eat
 				if (Inventory.isFull() && ((i = Inventory.getItem(t.getItem().getID())) == null || i.getStackSize() <= 1)) {
 					return false;
 				}
