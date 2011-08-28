@@ -6,7 +6,7 @@ import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.methods.SlayerInventory;
 import org.rsbot.script.methods.Calculations;
 import org.rsbot.script.methods.Game;
-import org.rsbot.script.methods.Interfaces;
+import org.rsbot.script.methods.ui.Interfaces;
 import org.rsbot.script.methods.NPCs;
 import org.rsbot.script.methods.Settings;
 import org.rsbot.script.methods.Walking;

@@ -31,7 +31,7 @@ public abstract class DMethodProvider {
      * @see Players#getMyPlayer()
      */
     public Player getMyPlayer() {
-        return Players.getMyPlayer();
+        return Players.getLocal();
     }
 
     /**

@@ -2,7 +2,7 @@ package org.powerbot.powerslayer.wrappers;
 
 import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
-import org.rsbot.script.methods.Camera;
+import org.rsbot.script.methods.ui.Camera;
 import org.rsbot.script.methods.tabs.Inventory;
 import org.rsbot.script.methods.tabs.Equipment.Slot;
 import org.rsbot.script.wrappers.Item;

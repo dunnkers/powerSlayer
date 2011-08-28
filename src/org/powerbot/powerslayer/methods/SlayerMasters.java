@@ -5,7 +5,7 @@ import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.Monsters.Monster;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.wrappers.Task;
-import org.rsbot.script.methods.Interfaces;
+import org.rsbot.script.methods.ui.Interfaces;
 import org.rsbot.script.methods.NPCs;
 import org.rsbot.script.methods.Players;
 import org.rsbot.script.methods.Skills;
@@ -22,7 +22,7 @@ public class SlayerMasters extends DMethodProvider {
 		ArrayList<SlayerMaster> possibleMasters = new ArrayList<SlayerMaster>();
 		for(SlayerMaster master : SlayerMaster.values()) {
 			if(master.getSlayerLevel() < Skills.getLevel(Skills.SLAYER) &&
-					master.getCombatLevel() < Players.getMyPlayer().getCombatLevel()) {
+					master.getCombatLevel() < Players.getLocal().getCombatLevel()) {
 				possibleMasters.add(master);
 			}
 		}
