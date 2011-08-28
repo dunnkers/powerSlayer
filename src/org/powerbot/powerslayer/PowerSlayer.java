@@ -32,7 +32,7 @@ import org.rsbot.script.internal.event.MessageListener;
 import org.rsbot.script.internal.event.PaintListener;
 import org.rsbot.script.methods.Skills;
 
-@ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 0.1, description = "Slayer bot.")
+@ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 1.00, description = "The best universal slayer bot!")
 public class PowerSlayer extends Script implements PaintListener, MouseListener, MessageListener {
 
 	public static Task currentTask;
