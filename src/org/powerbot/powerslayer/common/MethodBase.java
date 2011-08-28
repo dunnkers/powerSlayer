@@ -1,12 +1,12 @@
 package org.powerbot.powerslayer.common;
 
+import java.util.Random;
+
 import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.methods.Banking;
 import org.powerbot.powerslayer.methods.SlayerMasters;
 import org.powerbot.powerslayer.methods.Traveling;
 import org.powerbot.powerslayer.methods.UniversalFighter;
-
-import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA. User: Taylor Date: 5/5/11 Time: 5:05 PM Package:

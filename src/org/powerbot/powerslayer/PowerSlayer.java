@@ -17,7 +17,6 @@ import javax.imageio.ImageIO;
 
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
-import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.states.BankingState;
 import org.powerbot.powerslayer.states.FighterState;
@@ -25,9 +24,6 @@ import org.powerbot.powerslayer.states.GetTaskState;
 import org.powerbot.powerslayer.states.GoToBankState;
 import org.powerbot.powerslayer.states.GoToMasterState;
 import org.powerbot.powerslayer.states.GoToMonsterState;
-import org.powerbot.powerslayer.wrappers.Finisher;
-import org.powerbot.powerslayer.wrappers.Requirements;
-import org.powerbot.powerslayer.wrappers.Starter;
 import org.powerbot.powerslayer.wrappers.Task;
 import org.rsbot.bot.event.events.MessageEvent;
 import org.rsbot.script.Script;
@@ -35,12 +31,7 @@ import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.internal.event.MessageListener;
 import org.rsbot.script.internal.event.PaintListener;
 import org.rsbot.script.methods.Skills;
-import org.rsbot.script.methods.tabs.Equipment;
-import org.rsbot.script.methods.tabs.Inventory;
-import org.rsbot.script.methods.ui.Bank;
-import org.rsbot.script.wrappers.Item;
 
-@SuppressWarnings("unused")
 @ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 0.1, description = "Slayer bot.")
 public class PowerSlayer extends Script implements PaintListener, MouseListener, MessageListener {
 
