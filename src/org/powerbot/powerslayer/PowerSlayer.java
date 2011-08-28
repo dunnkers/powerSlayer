@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -61,8 +62,21 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		return true;
 	}
 
-	public int loop() {
-		return getStateLoop();
+	@Override
+	protected int loop() {
+		// Loop through every state, first one active will be executed.
+		for (State state : states) {
+			if (state.activeCondition()) {
+				return state.loop();
+			}
+		}
+		return -1;
+	}
+
+	public void initalizeMethodBase() {
+		if (methodBase == null) {
+			methodBase = new MethodBase(this);
+		}
 	}
 
 	public void initStates() {
@@ -72,15 +86,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		states.add(new GoToMonsterState(methodBase));
 		states.add(new BankingState(methodBase));
 		states.add(new FighterState(methodBase));
-	}
-
-	private int getStateLoop() {
-		for (State state : states) {
-			if (state.activeCondition()) {
-				return state.loop();
-			}
-		}
-		return -1;
 	}
 
 
@@ -157,8 +162,9 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		}
 	}
 
-	public void onRepaint(Graphics g1) {
-		Graphics2D g = (Graphics2D) g1;
+	@Override
+	public void onRepaint(Graphics g) {
+		((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		if (tab == 1) {
 			g.drawImage(paint.tabOne, -1, 293, null);
 		} else if (tab == 2) {
@@ -197,6 +203,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		}
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (paint.hideRect.contains(e.getPoint())) {
 			tab = 3;
@@ -207,23 +214,21 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		}
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 	}
 
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
-
+	@Override
 	public void mouseExited(MouseEvent e) {
-	}
-
-	public void initalizeMethodBase() {
-		if (methodBase == null)
-			methodBase = new MethodBase(this);
 	}
 }
