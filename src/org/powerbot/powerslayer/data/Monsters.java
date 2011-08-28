@@ -255,16 +255,16 @@ public class Monsters {
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//FIXME: Add in Keris support
 		KALPHITE_GUARDIAN
-			("Kalphite guardian", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			("Kalphite guardian", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.KERIS}), 
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		KALPHITE_QUEEN
-			("Kalphite queen", new MonsterProfile (new CombatStyle (Style.MELEE, Style.MAGIC, Style.RANGE), new Weakness[] {Weakness.CRUSH}), 
+			("Kalphite queen", new MonsterProfile (new CombatStyle (Style.MELEE, Style.MAGIC, Style.RANGE), new Weakness[] {Weakness.CRUSH, Weakness.KERIS}), 
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		KALPHITE_SOLDIER
-			("Kalphite soldier", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			("Kalphite soldier", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.KERIS}), 
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		KALPHITE_WORKER
-			("Kalphite worker", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
+			("Kalphite worker", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.KERIS}), 
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		KILLERWATT
 			("Killerwatt", new Requirements(new SlayerEquipment[] {SlayerEquipment.Insulated_Boots}), 
@@ -442,10 +442,9 @@ public class Monsters {
 		WATERFIEND
 			("Waterfiend", new MonsterProfile (new CombatStyle(Style.MAGIC, Style.MAGICAL_RANGE), new Weakness[] {Weakness.CRUSH}), 
 			new MonsterLocation (null, new Tile(0, 0, 0))),
-		//TODO Add wolfbane weapon method
 		WEREWOLF
 			(new String[]{"Werewolf", "Lev", "Svetlana", "Eduard", "Irina", "Boris"}, 
-			new MonsterProfile (new CombatStyle(Style.MELEE), null), 
+			new MonsterProfile (new CombatStyle(Style.MELEE), new Weakness[] {Weakness.WOLFBANE}), 
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		WILD_DOG
 			("Wild dog", new MonsterProfile (new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}), 
@@ -520,7 +519,7 @@ public class Monsters {
 			return this.names;
 		}
 	}
-	private static final Monster[] 
+	public static final Monster[] 
 	DAGANNOTH = {Monster.DAGANNOTH, Monster.DAGANNOTH_GUARDIAN, Monster.DAGANNOTH_PRIME, Monster.DAGANNOTH_REX, 
 		Monster.DAGANNOTH_SPAWN, Monster.DAGANNOTH_SUPREME},
 	DOGS = {Monster.DESERT_WOLF, Monster.DIRE_WOLF, Monster.FENRIS_WOLF, Monster.GUARD_DOG, Monster.HELLHOUND, 
@@ -538,44 +537,4 @@ public class Monsters {
 		Monster.ICE_TROLL_RUNT, Monster.MOUNTAIN_TROLL, Monster.TROLL_GENERAL},
 	WOLVES = {Monster.DESERT_WOLF, Monster.DIRE_WOLF, Monster.FENRIS_WOLF, Monster.ICE_WOLF, 
 		Monster.JUNGLE_WOLF, Monster.WOLF};
-	
-	public Monster[] getDagannothList() {
-		return DAGANNOTH;
-	}
-	
-	public Monster[] getDogList() {
-		return DOGS;
-	}
-	
-	public Monster[] getKalphiteList() {
-		return KALPHITES;
-	}
-	
-	public Monster[] getMonkeyList() {
-		return MONKEYS;
-	}
-	
-	public Monster[] getScabariteList() {
-		return SCABARITES;
-	}
-	
-	public Monster[] getSeaSnakeList() {
-		return SEA_SNAKES;
-	}
-	
-	public Monster[] getShadeList() {
-		return SHADES;
-	}
-	
-	public Monster[] getSpiderList() {
-		return SPIDERS;
-	}
-	
-	public Monster[] getTrollList() {
-		return TROLLS;
-	}
-	
-	public Monster[] getWolfList() {
-		return WOLVES;
-	}
 }

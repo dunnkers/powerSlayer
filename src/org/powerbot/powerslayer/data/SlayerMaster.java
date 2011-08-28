@@ -1,5 +1,6 @@
 package org.powerbot.powerslayer.data;
 
+import org.rsbot.script.methods.Skills;
 import org.rsbot.script.wrappers.Tile;
 
 public enum SlayerMaster {
@@ -17,19 +18,28 @@ public enum SlayerMaster {
     private int combatLevel;
     private int slayerLevel;
 
-    private SlayerMaster(String[] name, Tile location, int combatLevel) {
-        this.name = name;
-        this.location = location;
-        this.combatLevel = combatLevel;
-        this.slayerLevel = 0;
+    private SlayerMaster(String[] Name, Tile Location, int CombatLevel) {
+        name = Name;
+        location = Location;
+        combatLevel = CombatLevel;
+        slayerLevel = 0;
     }
 
-    private SlayerMaster(String[] name, Tile location, int combatLevel,
-                         int slayerLevel) {
-        this.name = name;
-        this.location = location;
-        this.combatLevel = combatLevel;
-        this.slayerLevel = slayerLevel;
+    private SlayerMaster(String[] Name, Tile Location, int CombatLevel,
+                         int SlayerLevel) {
+        name = Name;
+        location = Location;
+        combatLevel = CombatLevel;
+        slayerLevel = SlayerLevel;
+    }
+    
+    //FIXME: Add in combat level checker
+    public boolean canUse() {
+    	return Skills.getLevel(Skills.SLAYER) >= slayerLevel;
+    }
+
+    public int getCombatLevel() {
+        return this.combatLevel;
     }
 
 	public Tile getLocation() {
@@ -39,12 +49,8 @@ public enum SlayerMaster {
     public String[] getNames() {
         return this.name;
     }
-
+    
     public int getSlayerLevel() {
         return this.slayerLevel;
-    }
-
-    public int getCombatLevel() {
-        return this.combatLevel;
     }
 }

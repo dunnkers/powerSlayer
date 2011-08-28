@@ -5,8 +5,11 @@ import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.common.DMethodProvider;
 import org.powerbot.powerslayer.common.MethodBase;
+import org.powerbot.powerslayer.wrappers.Finisher;
+import org.powerbot.powerslayer.wrappers.Starter;
 import org.rsbot.script.methods.Calculations;
 import org.rsbot.script.methods.Camera;
 import org.rsbot.script.methods.Game;
@@ -52,13 +55,9 @@ public class UniversalFighter extends DMethodProvider {
      * @return true when the time has passed
      */
     public boolean waitForInvChange(int origCount) {
-        long start = System.currentTimeMillis();
-        while (Inventory.getCount(true) == origCount && System.currentTimeMillis() - start < 2000) {
-            sleep(random(20, 70));
-        }
-        return Inventory.getCount(true) != origCount;
+        return SlayerInventory.waitForInvChange(origCount, 2000);
     }
-
+    
     /**
      * Performs a random action, always.
      * Actions: move mouse, move mouse off screen, move camera.
@@ -114,7 +113,7 @@ public class UniversalFighter extends DMethodProvider {
 
     public class SlayerNPCs {
 
-        private String[] npcNames = methods.parent.currentTask.getMonster().getNames();
+        private String[] npcNames = PowerSlayer.currentTask.getMonster().getNames();
 
 	    public NPC lastClickedNPC = null;
 		public boolean npcWasClickedLast = false;
@@ -135,7 +134,7 @@ public class UniversalFighter extends DMethodProvider {
         }
 
 	    public boolean useSpecial() {
-            if(hasSpecialWeapon) {
+            if (hasSpecialWeapon) {
                 int[] amountUsage = {10, 25, 33, 35, 45, 50, 55, 60, 80, 85, 100};
                 String[][] weapons = {
                         {"Rune thrownaxe", "Rod of ivandis"},
@@ -327,55 +326,38 @@ public class UniversalFighter extends DMethodProvider {
             return good;
         }
 
-        public boolean useStarter( NPC monster) {
-            for (String s : methods.parent.currentTask.getRequirements().getStarter().getNames()) {
-                for (Item inventItem : Inventory.getItems()) {
-                    if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (Inventory.getItem(inventItem.getID()).click(true)) {
-                            if (monster != null) {
-                                if (!monster.isOnScreen()) {
-                                    Camera.turnTo(monster);
-                                }
-                                if (monster.isOnScreen()) {
-                                    return monster.interact("Use");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return false;
+        public boolean useStarter(NPC monster) {
+        	return Starter.use(monster);
         }
 
         public boolean useFinisher(NPC monster) {
-            String s = methods.parent.currentTask.getRequirements().getFinisher().getName();
-                for (Item inventItem : Inventory.getItems()) {
-                    if (s.equalsIgnoreCase(inventItem.getName())) {
-                        if (Inventory.getItem(inventItem.getID()).click(true)) {
-                            if (monster != null) {
-                                if (!monster.isOnScreen()) {
-                                    Camera.turnTo(monster);
-                                }
-                                if (monster.isOnScreen()) {
-                                    return monster.interact("Use");
-                                }
-                            }
-                        }
-                    }
-                }
-            return false;
+            return Finisher.use(monster);
         }
 
-
-	    public void sleepWhileNpcIsDying(NPC t) {
-			if(npcs.lastClickedNPC.isDead()) {
-				GroundItem[] GIs = GroundItems.getAllAt(t.getLocation());
-				long start = System.currentTimeMillis();
-				while(lastClickedNPC.isDead() && GIs.length == GroundItems.getAllAt(t.getLocation()).length
-						&& System.currentTimeMillis() - start < 5000) {
-					sleep(random(20, 70));
+        /**
+         * Waits until the last clicked NPC dies or time runs out... whichever comes first
+         * @param sleep threshold
+         * @return true if last clicked NPC died within threshold, else false
+         */
+	    public boolean sleepWhileNpcIsDying(int threshold) {
+	    	NPC currNPC = npcs.lastClickedNPC;
+	    	if (currNPC.equals(null) || currNPC.isDead())
+	    		return false;
+	    	final Tile npcTile = currNPC.getLocation();
+	    	Filter<NPC> monsterFilter = new Filter<NPC>() {
+				public boolean accept(NPC currNPC) {
+					return currNPC.getLocation().equals(npcTile);
 				}
-			}
+    		};
+	    	for (int i = 0; i < ((threshold/50) + 1); i++) {
+	    		NPC[] NPCList = NPCs.getAll(monsterFilter);
+	    		if (NPCList.length == 0)
+	    			break;
+	    		if (i == threshold/50)
+	    			return false;
+	    		sleep (50);
+	    	}
+	    	return true;
 		}
 
         /**
@@ -400,10 +382,8 @@ public class UniversalFighter extends DMethodProvider {
 
     public class Eating {
 
-        private final int[] B2P_TAB_ID = new int[]{8015};
+        private final int B2P_ID = 8015;
         private final int[] BONES_ID = new int[]{526, 532, 530, 528, 3183, 2859};
-
-        private int toEatAtPercent = getRandomEatPercent();
 
         /**
          * Returns a random integer of when to eat.
@@ -420,14 +400,14 @@ public class UniversalFighter extends DMethodProvider {
          * @return True if we have a tab.
          */
         public boolean haveB2pTab() {
-            return Inventory.getCount(B2P_TAB_ID) > 0;
+            return Inventory.getCount(B2P_ID) > 0;
         }
 
         /**
          * Breaks a B2P tab.
          */
         public void breakB2pTab() {
-            Item i = Inventory.getItem(B2P_TAB_ID);
+            Item i = Inventory.getItem(B2P_ID);
             if (i != null)
                 i.click(true);
         }
@@ -474,12 +454,11 @@ public class UniversalFighter extends DMethodProvider {
          */
         public boolean eatFood() {
             Item i = getFood();
+            if (i.equals(null))
+            	return false;
             for (int j = 0; j < 3; j++) {
-                if (i == null)
-                    break;
-                if (i.interact("Eat")) {
+                if (i.interact("Eat")) 
                     return true;
-                }
             }
             return false;
         }
@@ -490,11 +469,7 @@ public class UniversalFighter extends DMethodProvider {
          * @return True if we need to eat.
          */
         public boolean needEat() {
-            if (getHPPercent() <= toEatAtPercent) {
-                toEatAtPercent = getRandomEatPercent();
-                return true;
-            }
-            return false;
+            return getHPPercent() <= getRandomEatPercent();
         }
 
         /**
@@ -504,7 +479,9 @@ public class UniversalFighter extends DMethodProvider {
          */
         public int getHPPercent() {
             try {
-                return ((int) ((Integer.parseInt(Interfaces.get(748).getComponent(8).getText().trim()) / (double) (Skills.getAbsoluteLevel(Skills.CONSTITUTION) * 10)) * 100));
+            	int health = Integer.parseInt(Interfaces.get(748).getComponent(8).getText().trim());
+            	double ratio = (health*1D)/(Skills.getAbsoluteLevel(Skills.CONSTITUTION) * 10);
+                return (int) (100 * ratio);
             } catch (Exception e) {
                 return 100;
             }
@@ -579,26 +556,26 @@ public class UniversalFighter extends DMethodProvider {
 		public void usePotions() {
 			HashMap<String, Item[]> potions = getPotions();
 
-			if(Inventory.getItems(VIAL).length != 0) {
-				for( Item i : Inventory.getItems(VIAL)) {
+			if (Inventory.getItems(VIAL).length != 0) {
+				for ( Item i : Inventory.getItems(VIAL)) {
 					int n = Inventory.getCount(true);
 					i.interact("Drop Vial");
 					waitForInvChange(n);
 				}
 			}
 
-			if(!(statIsBoosted(Skills.MAGIC)) && (potions.get("MAGIC").length != 0 || potions.get("OVERLOAD").length != 0)) {
-				if(potions.get("MAGIC").length != 0) {
+			if (!(statIsBoosted(Skills.MAGIC)) && (potions.get("MAGIC").length != 0 || potions.get("OVERLOAD").length != 0)) {
+				if (potions.get("MAGIC").length != 0) {
 					potions.get("MAGIC")[0].click(true);
 				}
-				else if(potions.get("OVERLOAD").length != 0) {
+				else if (potions.get("OVERLOAD").length != 0) {
 					potions.get("OVERLOAD")[0].click(true);
 				}
 			}
 
-			if(shouldUsePrayerPot() && potions.get("PRAYER").length != 0 && setQuickPrayer) {
+			if (shouldUsePrayerPot() && potions.get("PRAYER").length != 0 && setQuickPrayer) {
 				int current = Prayer.getRemainingPoints();
-				if(potions.get("PRAYER")[0].click(true)) {
+				if (potions.get("PRAYER")[0].click(true)) {
 					long time = System.currentTimeMillis();
 					while(Prayer.getRemainingPoints() == current && System.currentTimeMillis() - time < 10000) {
 						sleep(random(200, 500));
@@ -606,57 +583,57 @@ public class UniversalFighter extends DMethodProvider {
 				}
 			}
 
-			if(!(statIsBoosted(Skills.RANGE)) && (potions.get("RANGE").length != 0 || potions.get("OVERLOAD").length != 0)) {
-				if(potions.get("RANGE").length != 0) {
+			if (!(statIsBoosted(Skills.RANGE)) && (potions.get("RANGE").length != 0 || potions.get("OVERLOAD").length != 0)) {
+				if (potions.get("RANGE").length != 0) {
 					potions.get("RANGE")[0].click(true);
 				}
-				else if(potions.get("OVERLOAD").length != 0) {
+				else if (potions.get("OVERLOAD").length != 0) {
 					potions.get("OVERLOAD")[0].click(true);
 				}
 			}
 
-			if(Walking.getEnergy() < random(40, 70) && potions.get("ENERGY").length != 0) {
+			if (Walking.getEnergy() < random(40, 70) && potions.get("ENERGY").length != 0) {
 				potions.get("ENERGY")[0].click(true);
 			}
 
-			if(!(statIsBoosted(Skills.STRENGTH)) && (potions.get("STRENGTH").length != 0 || potions.get("COMBAT").length != 0 || potions.get("ZAMORAK").length != 0  || potions.get("OVERLOAD").length != 0)) {
-				if(potions.get("COMBAT").length != 0) {
+			if (!(statIsBoosted(Skills.STRENGTH)) && (potions.get("STRENGTH").length != 0 || potions.get("COMBAT").length != 0 || potions.get("ZAMORAK").length != 0  || potions.get("OVERLOAD").length != 0)) {
+				if (potions.get("COMBAT").length != 0) {
 					potions.get("COMBAT")[0].click(true);
 				}
-				else if(potions.get("STRENGTH").length != 0) {
+				else if (potions.get("STRENGTH").length != 0) {
 					potions.get("STRENGTH")[0].click(true);
 				}
-				else if(potions.get("ZAMORAK").length != 0) {
+				else if (potions.get("ZAMORAK").length != 0) {
 					potions.get("ZAMORAK")[0].click(true);
 				}
-				else if(potions.get("OVERLOAD").length != 0) {
+				else if (potions.get("OVERLOAD").length != 0) {
 					potions.get("OVERLOAD")[0].click(true);
 				}
 			}
 
-			if(!(statIsBoosted(Skills.DEFENSE)) && (potions.get("DEFENSE").length != 0 || potions.get("SARADOMIN").length != 0 || potions.get("OVERLOAD").length != 0)) {
-				if(potions.get("DEFENSE").length != 0) {
+			if (!(statIsBoosted(Skills.DEFENSE)) && (potions.get("DEFENSE").length != 0 || potions.get("SARADOMIN").length != 0 || potions.get("OVERLOAD").length != 0)) {
+				if (potions.get("DEFENSE").length != 0) {
 					potions.get("DEFENSE")[0].click(true);
 				}
-				else if(potions.get("SARADOMIN").length != 0) {
+				else if (potions.get("SARADOMIN").length != 0) {
 					potions.get("SARADOMIN")[0].click(true);
 				}
-				else if(potions.get("OVERLOAD").length != 0) {
+				else if (potions.get("OVERLOAD").length != 0) {
 					potions.get("OVERLOAD")[0].click(true);
 				}
 			}
 
-			if(!(statIsBoosted(Skills.ATTACK)) && (potions.get("ATTACK").length != 0 || potions.get("COMBAT").length != 0 || potions.get("ZAMORAK").length != 0 || potions.get("OVERLOAD").length != 0)) {
-				if(potions.get("COMBAT").length != 0) {
+			if (!(statIsBoosted(Skills.ATTACK)) && (potions.get("ATTACK").length != 0 || potions.get("COMBAT").length != 0 || potions.get("ZAMORAK").length != 0 || potions.get("OVERLOAD").length != 0)) {
+				if (potions.get("COMBAT").length != 0) {
 					potions.get("COMBAT")[0].click(true);
 				}
-				else if(potions.get("ATTACK").length != 0) {
+				else if (potions.get("ATTACK").length != 0) {
 					potions.get("ATTACK")[0].click(true);
 				}
-				else if(potions.get("ZAMORAK").length != 0) {
+				else if (potions.get("ZAMORAK").length != 0) {
 					potions.get("ZAMORAK")[0].click(true);
 				}
-				else if(potions.get("OVERLOAD").length != 0) {
+				else if (potions.get("OVERLOAD").length != 0) {
 					potions.get("OVERLOAD")[0].click(true);
 				}
 			}
@@ -666,28 +643,26 @@ public class UniversalFighter extends DMethodProvider {
 			}
 		}
 
-
-		private boolean statIsBoosted(int Skill) {
-			return Skills.getLevel(Skill) != Skills.getAbsoluteLevel(Skill);
-		}
-
-		private boolean shouldUsePrayerPot() {
-			 return (Skills.getAbsoluteLevel(Skills.PRAYER) - Prayer.getRemainingPoints()) > (7+Math.floor(Skills.getAbsoluteLevel(Skills.PRAYER)/4));
-		}
-
 		private Item[] getRealItems(int[] ids) {
 			Item[] raw = Inventory.getItems(ids);
 			ArrayList<Item> refined = new ArrayList<Item>();
-			for(Item item : raw) {
-				if(item != null) {
-					if(item.getID() != -1) {
+			for (Item item : raw) {
+				if (item != null) {
+					if (item.getID() != -1) {
 						refined.add(item);
 					}
 				}
 			}
 			return refined.toArray(new Item[refined.size()]);
 		}
+		
+		private boolean shouldUsePrayerPot() {
+			 return (Skills.getAbsoluteLevel(Skills.PRAYER) - Prayer.getRemainingPoints()) > (7+Math.floor(Skills.getAbsoluteLevel(Skills.PRAYER)/4));
+		}
 
+		private boolean statIsBoosted(int Skill) {
+			return Skills.getLevel(Skill) != Skills.getAbsoluteLevel(Skill);
+		}
 	}
 
 	public class Loot {
@@ -748,7 +723,7 @@ public class UniversalFighter extends DMethodProvider {
 			} else {
 				Walking.walkTileMM(Walking.getClosestTileOnMap(item.getLocation()));
 				sleep(random(1500, 2000));
-				if(!Players.getMyPlayer().isMoving()) {
+				if (!Players.getMyPlayer().isMoving()) {
 					tiles.addBadTile(item.getLocation());
 					return -1;
 				}
@@ -776,18 +751,18 @@ public class UniversalFighter extends DMethodProvider {
 						good = true;
 				}
 
-				if(good){
-					for(Tile badTile : tiles.badTiles) {
-						if(t.getLocation().getX() == badTile.getX() && t.getLocation().getY() == badTile.getY() ) {
+				if (good) {
+					for (Tile badTile : tiles.badTiles) {
+						if (t.getLocation().getX() == badTile.getX() && t.getLocation().getY() == badTile.getY() ) {
 							good = false;
 							break;
 						}
 					}
 				}
-				if(good && onlyTakeLootFromKilled) {
-					if(!npcs.tilesFoughtOn.isEmpty()) {
-						for(Tile tileFoughtOn : npcs.tilesFoughtOn) {
-							if(t.getLocation().getX() == tileFoughtOn.getX() && t.getLocation().getY() == tileFoughtOn.getY()) {
+				if (good && onlyTakeLootFromKilled) {
+					if (!npcs.tilesFoughtOn.isEmpty()) {
+						for (Tile tileFoughtOn : npcs.tilesFoughtOn) {
+							if (t.getLocation().getX() == tileFoughtOn.getX() && t.getLocation().getY() == tileFoughtOn.getY()) {
 								return true;
 							} else {
 								good = false;
@@ -809,7 +784,7 @@ public class UniversalFighter extends DMethodProvider {
 
 		public Tile getNearestTile(Tile[] tiles) {
 			Tile closest = null;
-			for(Tile t : tiles) {
+			for (Tile t : tiles) {
 				if (closest == null || Calculations.distanceTo(t) < Calculations.distanceTo(closest))
 					closest = t;
 			}
@@ -821,32 +796,32 @@ public class UniversalFighter extends DMethodProvider {
 		}
 
 		public void addBadTile(Tile tile, int thres) {
-			if(thres > -1) {
+			if (thres > -1) {
 				if (badTiles.size() > 0) {
 
 					ArrayList<Tile> tilesWithinRadius = new ArrayList<Tile>();
 
-					for(Tile badTile : badTiles) {
-						if(Calculations.distanceBetween(badTile, tile) < thres) {
+					for (Tile badTile : badTiles) {
+						if (Calculations.distanceBetween(badTile, tile) < thres) {
 							tilesWithinRadius.add(badTile);
 						}
 					}
 
-					if (tilesWithinRadius.size() > 1){
+					if (tilesWithinRadius.size() > 1) {
 						tilesWithinRadius.add(tile);
 						Area temp = new Area(tilesWithinRadius.toArray(new Tile[tilesWithinRadius.size()]));
 						Tile[] areaTiles = temp.getTileArray();
-						for(Tile tileToAdd : areaTiles) {
-							if(!badTiles.contains(tileToAdd)) {
+						for (Tile tileToAdd : areaTiles) {
+							if (!badTiles.contains(tileToAdd)) {
 								badTiles.add(tileToAdd);
 							}
 						}
-						if(!badTiles.contains(tile)) {
+						if (!badTiles.contains(tile)) {
 							badTiles.add(tile);
 						}
 
-					} else  {
-						if(!badTiles.contains(tile)) {
+					} else {
+						if (!badTiles.contains(tile)) {
 							badTiles.add(tile);
 						}
 					}
@@ -856,10 +831,9 @@ public class UniversalFighter extends DMethodProvider {
 			}
 		}
 
-		@SuppressWarnings({"BooleanMethodIsAlwaysInverted"})
 		private boolean NPCisOnBadTile(NPC t) {
-			for(Tile badTile: badTiles) {
-				if(t.getLocation().getX() == badTile.getX() &&
+			for (Tile badTile: badTiles) {
+				if (t.getLocation().getX() == badTile.getX() &&
 						t.getLocation().getY() == badTile.getY() ) {
 					return true;
 				}

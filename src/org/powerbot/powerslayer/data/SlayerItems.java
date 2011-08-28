@@ -9,21 +9,21 @@ import org.rsbot.script.wrappers.Interface;
 import org.rsbot.script.wrappers.InterfaceComponent;
 
 public class SlayerItems {
-	static SlayerEquipment[] slayerEquipment = slayerEquipmentArray();
 	static boolean elementalWorkshopIFinished = false, elementalWorkshopIIFinished = false, elementalWorkshopIIIFinished = false,
-		elementalWorkshopIVFinished = false, pathOfGlouphrieFinished = false, smokingKillsFinished = false;
+	elementalWorkshopIVFinished = false, pathOfGlouphrieFinished = false, smokingKillsFinished = false;
 	int QUEST_INTERFACE = 190, HIDE_FINISHED_BUTTON = 12, QUEST_LIST = 18;
 	int ELEMENTAL_WORKSHOP_I = 37, ELEMENTAL_WORKSHOP_II = 38,
-		ELEMENTAL_WORKSHOP_III = 172, ELEMENTAL_WORKSHOP_IV = 180, PATH_OF_GLOUPHRIE = 127, SMOKING_KILLS = 138;
+	ELEMENTAL_WORKSHOP_III = 172, ELEMENTAL_WORKSHOP_IV = 180, PATH_OF_GLOUPHRIE = 127, SMOKING_KILLS = 138;
 	int MOUSE_INTERFACE = 261, BUTTON_CHANGER = 6; 
-	public static SlayerEquipment[] slayerHelmets = {SlayerEquipment.Full_Slayer_Helmet4charged5, SlayerEquipment.Full_Slayer_Helmet4e5, SlayerEquipment.Full_Slayer_Helmet, 
-			SlayerEquipment.Slayer_Helmet_4charged5, SlayerEquipment.Slayer_Helmet_4e5, SlayerEquipment.Slayer_Helmet};
+	public static SlayerEquipment[] 
+	slayerHelmets = {SlayerEquipment.Full_Slayer_Helmet_4charged5, SlayerEquipment.Full_Slayer_Helmet_4e5, SlayerEquipment.Full_Slayer_Helmet, 
+		SlayerEquipment.Slayer_Helmet_4charged5, SlayerEquipment.Slayer_Helmet_4e5, SlayerEquipment.Slayer_Helmet},
+	grassWeapons = {SlayerEquipment.LeafBladed_Spear, SlayerEquipment.LeafBladed_Sword, SlayerEquipment.Broad_Arrows, SlayerEquipment.BroadTipped_Bolts};
 	
 	public SlayerItems() {
-		slayerEquipment = slayerEquipmentArray();
 		getQuestsFinished();
 	}
-	
+
 	//TODO: Add in Chaos Shield, Gadderhammer, Keris, Balmung, and Cosmic Shield
 	//TODO: Add in 2-handed Item support & Optional support
 	public static enum SlayerEquipment {
@@ -42,8 +42,8 @@ public class SlayerItems {
 		Ferocious_Ring (-1, Equipment.Slot.RING, new int[] {Skills.SLAYER, 1}, new int[] {15398, 15399, 15400, 15401, 15402}),
 		Fishing_Explosive (60, null, new int[] {Skills.SLAYER, 1}, new int[] {6660, 6664}),
 		Full_Slayer_Helmet (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20}, new int[] {15492}),
-		Full_Slayer_Helmet4charged5 (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20, Skills.SUMMONING, 20}, new int[] {15497}),
-		Full_Slayer_Helmet4e5 (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20}, new int[] {15496}),
+		Full_Slayer_Helmet_4charged5 (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20, Skills.SUMMONING, 20}, new int[] {15497}),
+		Full_Slayer_Helmet_4e5 (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20}, new int[] {15496}),
 		Fungicide (10, null, new int[] {Skills.SLAYER, 1}, new int[] {7432}),
 		Fungicide_Spray (300, null, new int[] {Skills.SLAYER, 57}, new int[] {7421, 7422, 7423, 7424, 7425, 7426, 7427, 7428, 7429, 7430, 7431}),
 		Holy_Symbol (-1, Equipment.Slot.NECK, new int[] {Skills.SLAYER, 1}, new int[] {1718, 1719, 4682}),
@@ -72,21 +72,21 @@ public class SlayerItems {
 		Unlit_Bug_Lantern (200, Equipment.Slot.SHIELD, new int[] {Skills.SLAYER, 33}, new int[] {7051}),
 		Water_Skin (-1, null, new int[] {Skills.SLAYER, 1}, new int[] {1823, 1825, 1827, 1829, 1831}),
 		Witchwood_Icon (900, Equipment.Slot.NECK, new int[] {Skills.SLAYER, 58}, new int[] {8923});
-		
+
 		int itemCost = -1;
 		Equipment.Slot slot = null;
 		int [] requirements = {-1};
 		int[] IDs;
 		int amount = 1;
-		
-		
+
+
 		SlayerEquipment (int Cost, Equipment.Slot Slot, int[] Requirements, int[] IDList) {
 			itemCost = Cost;
 			requirements = Requirements;
 			slot = Slot;
 			IDs = IDList;
 		}
-		
+
 		SlayerEquipment (SlayerEquipment equipmentEnum) {
 			if (equipmentEnum != null) {
 				itemCost = equipmentEnum.itemCost;
@@ -95,7 +95,7 @@ public class SlayerItems {
 				IDs = equipmentEnum.IDs;
 			}
 		}
-		
+
 		SlayerEquipment (SlayerEquipment equipmentEnum, int Amount) {
 			if (equipmentEnum != null) {
 				itemCost = equipmentEnum.itemCost;
@@ -105,39 +105,37 @@ public class SlayerItems {
 				amount = Amount;
 			}
 		}
-		
+
 		SlayerEquipment (int itemID) {
-			this(getSlayerEquipment(itemID));
+			this(get(itemID));
 		}
-		
+
 		SlayerEquipment (String itemName) {
-			this(getSlayerEquipment(itemName));
+			this(get(itemName));
 		}
-		
-		public int getAmount() {
-			return amount;
-		}
-		
+
+
 		public boolean availableAtMaster() {
 			return itemCost != -1;
 		}
-		
-		public int getCost() {
-			return itemCost;
-		}
-		
-		public boolean isEquipable() {
-			return isUsable() && slot != null;
-		}
-		
+
 		public Equipment.Slot equipSlot() {
 			return slot;
 		}
-		
+
+		public int getAmount() {
+			return amount;
+		}
+
+		public int getCost() {
+			return itemCost;
+		}
+
+
 		public int[] getIDs() {
 			return IDs;
 		}
-		
+
 		public String getName() {
 			String enumString = this.toString();
 			StringBuilder t = new StringBuilder();
@@ -167,7 +165,11 @@ public class SlayerItems {
 			}
 			return t.toString();
 		}
-		
+
+		public boolean isEquipable() {
+			return isUsable() && slot != null;
+		}
+
 		public boolean isUsable() {
 			int length = requirements.length;
 			if (length % 2 != 0)
@@ -181,7 +183,7 @@ public class SlayerItems {
 				if (!smokingKillsFinished)
 					return false;
 			} else if (current.equals(Mind_Shield)) {
-					return false;
+				return false;
 			} else if (current.equals(Body_Shield)) {
 				if (!elementalWorkshopIIFinished) 
 					return false;
@@ -192,6 +194,90 @@ public class SlayerItems {
 			}
 			return true;
 		}
+	}
+	
+	//TODO: Update to cover Earmuffs and shit
+	private static SlayerEquipment[] checkGroups(SlayerEquipment currEquip) {
+		// TODO Auto-generated method stub
+		String equipment = currEquip.getName();
+		if (equipment.contains("Helmet"))
+			return slayerHelmets;
+		if (equipment.contains("Broad") || equipment.contains("Grass"))
+			return grassWeapons;
+		return new SlayerEquipment[] {get(equipment)};
+	}
+
+	private void checkMouseButtons() {
+		Interface mouse = Interfaces.get(MOUSE_INTERFACE);
+		InterfaceComponent mouseButtons;
+		if (mouse != null) {
+			mouseButtons = mouse.getComponent(BUTTON_CHANGER);
+			if (mouseButtons.getTextureID() == 762) 
+				return;
+		}
+		for (int i = 0; i < 6; i++) {
+			Game.openTab(Game.Tabs.OPTIONS);
+			Script.sleep (600);
+			if (!Game.isLoggedIn())  
+				return;
+			if (Game.getCurrentTab().equals(Game.Tabs.OPTIONS))
+				break;
+			if (i == 5) 
+				return;
+		}
+		mouse = Interfaces.get(MOUSE_INTERFACE);
+		if (mouse != null) {
+			mouseButtons = mouse.getComponent(BUTTON_CHANGER);
+			if (mouseButtons.getTextureID() != 762) {
+				for (int i = 0; i < 5; i++) {
+					mouseButtons.click();
+					Script.sleep (1000);
+					if (!Game.isLoggedIn())  
+						return;
+					if (Interfaces.get(QUEST_INTERFACE).getComponent(HIDE_FINISHED_BUTTON).getTextureID() == 699)
+						break;
+				}
+			}
+		}
+	}
+
+	public static SlayerEquipment get(int itemID) {
+		for (SlayerEquipment currEquip: getAll()) {
+			for (int currInt: currEquip.getIDs()) {
+				if (currInt == itemID)
+					return currEquip;
+			}
+		}
+		return null;
+	}
+
+	public static SlayerEquipment get(String itemName) {
+		for (SlayerEquipment currEquip: getAll()) {
+			if (itemName.equalsIgnoreCase(currEquip.getName()))
+				return currEquip;
+		}
+		return null;
+	}
+
+	public static SlayerEquipment[] getAll() {
+		return SlayerEquipment.values();
+	}
+	
+	public static SlayerEquipment[] getAllValid(int itemID) {
+		for (SlayerEquipment currEquip: getAll()) {
+			for (int currInt: currEquip.getIDs())
+				if (currInt == itemID) 
+					return checkGroups(currEquip);
+		}
+		return null;
+	}
+	
+	public static SlayerEquipment[] getAllValid(String itemName) {
+		for (SlayerEquipment currEquip: getAll()) {
+			if (currEquip.getName().equals(itemName)) 
+				return checkGroups(currEquip);
+		}
+		return null;
 	}
 
 	private void getQuestsFinished() {
@@ -244,80 +330,5 @@ public class SlayerItems {
 				smokingKillsFinished = questList.getComponent(SMOKING_KILLS).getRelativeX() == 0;
 			}
 		}
-	}
-
-	private void checkMouseButtons() {
-		Interface mouse = Interfaces.get(MOUSE_INTERFACE);
-		InterfaceComponent mouseButtons;
-		if (mouse != null) {
-			mouseButtons = mouse.getComponent(BUTTON_CHANGER);
-			if (mouseButtons.getTextureID() == 762) 
-				return;
-		}
-		for (int i = 0; i < 6; i++) {
-			Game.openTab(Game.Tabs.OPTIONS);
-			Script.sleep (600);
-			if (!Game.isLoggedIn())  
-				return;
-			if (Game.getCurrentTab().equals(Game.Tabs.OPTIONS))
-				break;
-			if (i == 5) 
-				return;
-		}
-		mouse = Interfaces.get(MOUSE_INTERFACE);
-		if (mouse != null) {
-			mouseButtons = mouse.getComponent(BUTTON_CHANGER);
-			if (mouseButtons.getTextureID() != 762) {
-				for (int i = 0; i < 5; i++) {
-					mouseButtons.click();
-					Script.sleep (1000);
-					if (!Game.isLoggedIn())  
-						return;
-					if (Interfaces.get(QUEST_INTERFACE).getComponent(HIDE_FINISHED_BUTTON).getTextureID() == 699)
-						break;
-				}
-			}
-		}
-	}
-
-	static SlayerEquipment getSlayerEquipment (int itemID) {
-		for (SlayerEquipment currEquip: slayerEquipment) {
-			for (int currInt: currEquip.getIDs()) {
-				if (currInt == itemID)
-					return currEquip;
-			}
-		}
-		return null;
-	}
-	
-	static SlayerEquipment getSlayerEquipment (String itemName) {
-		for (SlayerEquipment currEquip: slayerEquipment) {
-			if (itemName.equalsIgnoreCase(currEquip.getName()))
-				return currEquip;
-		}
-		return null;
-	}
-	
-	static SlayerEquipment[] slayerEquipmentArray() {
-		return new SlayerEquipment[] { SlayerEquipment.AntiDragon_Shield,
-				SlayerEquipment.Bag_Of_Salt, SlayerEquipment.Body_Shield,
-				SlayerEquipment.BroadTipped_Bolts,SlayerEquipment.Broad_Arrows, 
-				SlayerEquipment.Crystal_Chime, SlayerEquipment.Dragonfire_Shield,
-				SlayerEquipment.Earmuffs, SlayerEquipment.Elemental_Shield,
-				SlayerEquipment.Enchanted_Gem, SlayerEquipment.Face_Mask,
-				SlayerEquipment.Ferocious_Ring, SlayerEquipment.Fishing_Explosive,
-				SlayerEquipment.Full_Slayer_Helmet, SlayerEquipment.Full_Slayer_Helmet4charged5,
-				SlayerEquipment.Full_Slayer_Helmet4e5, SlayerEquipment.Fungicide,
-				SlayerEquipment.Fungicide_Spray, SlayerEquipment.Ice_Cooler,
-				SlayerEquipment.Insulated_Boots, SlayerEquipment.LeafBladed_Spear,
-				SlayerEquipment.LeafBladed_Sword, SlayerEquipment.Lit_Bug_Lantern,
-				SlayerEquipment.Masked_Earmuffs, SlayerEquipment.Mind_Shield,
-				SlayerEquipment.Mirror_Shield, SlayerEquipment.Nosepeg,
-				SlayerEquipment.Rock_Hammer, SlayerEquipment.Slayer_Bell,
-				SlayerEquipment.Slayer_Gloves, SlayerEquipment.Slayer_Helmet,
-				SlayerEquipment.Slayer_Helmet_4charged5, SlayerEquipment.Slayer_Helmet_4e5,
-				SlayerEquipment.Slayer_Staff, SlayerEquipment.Spiked_Helmet,
-				SlayerEquipment.Spiny_Helmet, SlayerEquipment.Super_Fishing_Explosive,
-				SlayerEquipment.Unlit_Bug_Lantern, SlayerEquipment.Witchwood_Icon };
 	}
 }

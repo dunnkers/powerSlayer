@@ -1,11 +1,15 @@
 package org.powerbot.powerslayer.wrappers;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
-import org.rsbot.script.methods.tabs.Equipment;
+import org.rsbot.script.methods.Camera;
+import org.rsbot.script.methods.tabs.Inventory;
+import org.rsbot.script.methods.tabs.Equipment.Slot;
+import org.rsbot.script.wrappers.Item;
+import org.rsbot.script.wrappers.NPC;
 
 public class Starter {
 	//TODO: Add methods
-	String[] itemNames;
 	SlayerEquipment starter;
 	int amount = 1;
 	
@@ -18,29 +22,25 @@ public class Starter {
     public Starter(SlayerEquipment equipment) {
         this (equipment, 1);
     }
-    
-    public String[] getNames() {
-    	return itemNames;
-    }
-    
-    public int getAmount() {
-		return amount;
-	}
 	
 	public boolean availableAtMaster() {
 		return starter.availableAtMaster();
 	}
 	
-	public int getCost() {
-		return starter.getCost();
-	}
-	
-	public boolean isEquipable() {
+	public boolean canEquip() {
 		return starter.isEquipable();
 	}
 	
-	public Equipment.Slot equipSlot() {
+	public Slot equipSlot() {
 		return starter.equipSlot();
+	}
+    
+    public int getAmount() {
+		return amount;
+	}
+	
+	public int getCost() {
+		return starter.getCost();
 	}
 	
 	public int[] getIDs() {
@@ -50,8 +50,32 @@ public class Starter {
 	public String getName() {
 		return starter.getName();
 	}
+    
+    public SlayerEquipment getSlayerEquipment() {
+    	return starter;
+    }
 	
 	public boolean isUsable() {
 		return starter.isUsable();
+	}
+	
+	public static boolean use (NPC Monster) {
+		String starterName = PowerSlayer.currentTask.getRequirements().getStarter().getName();
+		if (Monster.equals(null) || Monster.isDead())
+			return false;
+		for (int i = 0; i < 28; i++) {
+			Item currItem = Inventory.getItemAt(i);
+			if (currItem.equals(null))
+				continue;
+			if (currItem.getName().equals(starterName)) {
+				currItem.click(true);
+				if (!Monster.isOnScreen())
+					Camera.turnTo(Monster);
+				if (Monster.isOnScreen())
+					return Monster.interact("Use");
+				return false;
+			}
+		}
+		return false;
 	}
 }

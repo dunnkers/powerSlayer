@@ -18,6 +18,10 @@ public class LocationProfile {
 		this.locations = locations;
 	}
 
+	public Tile getBestLocation() {
+		return null;
+	}
+
 	public Tile getNearestLocationFromTile(Tile tile) {
 		Tile closest = null;
 		for(MonsterLocation location : locations) {
@@ -25,10 +29,6 @@ public class LocationProfile {
 				closest = location.getTile();
 		}
 		return closest;
-	}
-
-	public Tile getBestLocation() {
-		return null;
 	}
 
 	public MonsterLocation[] getLocations() {
