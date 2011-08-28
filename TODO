@@ -1,12 +1,57 @@
-Locations (We will need to come to a agreement as some monsters have multiple locations).
-Traveling (Walking/Teleporting) (Currently being worked on by jkeech (MrSneaky))
-Slayer masters (There is currently only two included)
-Universal fighter (Needs to cater for starters and finishers) (currently being  worked on by Zalgo2462)
-Options/GUI (A Jframe or paint? Decide on a list of options...)
-Anti-ban (Is it really needed? or could it be included in the fighter)
-Banking (Many things are needed for this, also other banks need to be added)
-Paint (Currently being worked on by Debauchery)
-Drops (Just need a way to get a list of drops, Included in Universal Fighter)
+FIXME
+
+1. Quest finished checking.  Add to requirements?
+2. Write method to find combat level
+3. Remove light-source from Requirements (must add shit to SlayerLocations)
+
+TODO
+
+FIRST PRIORITY (will be assigned):
+1. Write BankingState
+2. Write getTaskState
+
+Locations 
+(We will need to come to a agreement as some monsters have multiple locations).
+
+SlayerItems
+1. Add in more slayerItem groups (nosepeg, earmuffs, etc...)
+2. Add in items (listed in class)
+3. Find a way to support 2-handed item detection
+
+Traveling
+Waiting for Quantum Step.  Must discuss
+
+Slayer masters 
+1. Must add Slayer Master handling
+2. Must add Slayer Master IDs
+3. Must add Slayer Master Locations
+
+Universal fighter & FighterState
+1. Add in Keris and Wolfbane
+2. Fix pick-up & loot methods
+Zalgo2462
+
+Monsters
+1. Add Slayer Level required
+
+CombatStyle/Weakness
+1. Fix CombatStyle class
+2. Change weakness and CombatStyle format/interaction
+    a. Weakness can be dependent on level/ID
+    b. Add in maxhit for weakness
+
+GUI & Anti-Ban
+Must discuss!
+1. Drops
+
+Banking 
+IMPORTANT: New bank class = bankInfo
+1. Create bestBank method
+2. Add banks.
+3. Add bank handling (class SlayerBank)
+
+Paint 
+Debauchery (He's busy, so as much support as possible is great
 
 Start coding all helper methods and databases (Framework)
 
