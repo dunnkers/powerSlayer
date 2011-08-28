@@ -48,6 +48,19 @@ public abstract class DMethodProvider {
     }
 
     /**
+     * Returns a random double with min as the inclusive lower bound and max as
+     * the exclusive upper bound.
+     *
+     * @param min The inclusive lower bound.
+     * @param max The exclusive upper bound.
+     * @return Random double min <= n < max.
+     */
+    public double random(double min, double max) {
+        return Math.min(min, max) + methods.random.nextDouble()
+                * Math.abs(max - min);
+    }
+
+    /**
      * Checks for the existence of a NPC.
      *
      * @param npc The NPC to check for.
@@ -85,19 +98,6 @@ public abstract class DMethodProvider {
      */
     public boolean verify(GroundItem i) {
         return i != null;
-    }
-
-    /**
-     * Returns a random double with min as the inclusive lower bound and max as
-     * the exclusive upper bound.
-     *
-     * @param min The inclusive lower bound.
-     * @param max The exclusive upper bound.
-     * @return Random double min <= n < max.
-     */
-    public double random(double min, double max) {
-        return Math.min(min, max) + methods.random.nextDouble()
-                * Math.abs(max - min);
     }
 
     /**

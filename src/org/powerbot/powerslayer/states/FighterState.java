@@ -3,7 +3,6 @@ package org.powerbot.powerslayer.states;
 import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
-import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.methods.SlayerInventory;
 import org.rsbot.script.methods.Calculations;
 import org.rsbot.script.methods.Game;
@@ -191,7 +190,7 @@ public class FighterState extends State {
 				int result = methods.fighter.loot.takeItem(loot);
 				if (result == 0) {
 					waitWhileMoving();
-					if (methods.fighter.waitForInvChange(origCount)) {
+					if (SlayerInventory.waitForInvChange(origCount, 2000)) {
 						if (methods.fighter.loot.onlyTakeLootFromKilled && methods.fighter.npcs.tilesFoughtOn.contains(loot.getLocation())) {
 							methods.fighter.npcs.tilesFoughtOn.remove(loot.getLocation());
 						}
@@ -222,12 +221,7 @@ public class FighterState extends State {
     }
 
     public boolean checkItems() {
-        for (SlayerEquipment i : PowerSlayer.currentTask.getRequirements().getEquipment()) {
-            if (!SlayerInventory.hasEnough(i)) {
-                return false;
-            }
-        }
-        return true;
+        return SlayerInventory.containsAllEquipment();
     }
 }
 

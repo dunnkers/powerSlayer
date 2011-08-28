@@ -1,5 +1,6 @@
 package org.powerbot.powerslayer.methods;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.wrappers.Finisher;
 import org.powerbot.powerslayer.wrappers.Requirements;
@@ -10,6 +11,15 @@ import org.rsbot.script.wrappers.Item;
 
 public class SlayerInventory {
 
+	public static boolean containsAllEquipment() {
+        for (SlayerEquipment i : PowerSlayer.currentTask.getRequirements().getEquipment()) {
+            if (!hasEnough(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+	
 	public static boolean contains(SlayerEquipment equipment) {
 		for (Item currItem: Inventory.getItems()) {
 			if (currItem.getName().equalsIgnoreCase(equipment.getName()));
