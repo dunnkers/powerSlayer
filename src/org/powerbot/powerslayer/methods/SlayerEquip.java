@@ -1,7 +1,6 @@
 package org.powerbot.powerslayer.methods;
 
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
-import org.powerbot.powerslayer.methods.SlayerInventory;
 import org.powerbot.powerslayer.wrappers.Requirements;
 import org.rsbot.script.methods.tabs.Equipment;
 import org.rsbot.script.methods.tabs.Inventory;

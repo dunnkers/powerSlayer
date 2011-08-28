@@ -1,11 +1,11 @@
 package org.powerbot.powerslayer.wrappers;
 
-import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
-import org.powerbot.powerslayer.methods.CombatStyle;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
+import org.powerbot.powerslayer.methods.CombatStyle;
 
 public class Requirements {
     List<SlayerEquipment> items = new ArrayList<SlayerEquipment>();
