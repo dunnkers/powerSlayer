@@ -1,17 +1,17 @@
 package org.powerbot.powerslayer.methods;
 
+import java.util.ArrayList;
+
 import org.powerbot.powerslayer.common.DMethodProvider;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.Monsters.Monster;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.wrappers.Task;
-import org.rsbot.script.methods.ui.Interfaces;
 import org.rsbot.script.methods.NPCs;
 import org.rsbot.script.methods.Players;
 import org.rsbot.script.methods.Skills;
+import org.rsbot.script.methods.ui.Interfaces;
 import org.rsbot.script.wrappers.NPC;
-
-import java.util.ArrayList;
 
 public class SlayerMasters extends DMethodProvider {
 	public SlayerMasters(MethodBase methods) {

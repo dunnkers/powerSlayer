@@ -1,5 +1,7 @@
 package org.powerbot.powerslayer.common;
 
+import java.util.Random;
+
 import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.methods.Banking;
 import org.powerbot.powerslayer.methods.SlayerMasters;
