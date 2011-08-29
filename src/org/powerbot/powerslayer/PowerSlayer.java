@@ -79,6 +79,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		states.add(new FighterState(methodBase));
 	}
 
+	@SuppressWarnings("unused")
 	private int getStateLoop() {
 		for (State state : states) {
 			if (state.activeCondition()) {
