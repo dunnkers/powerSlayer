@@ -1,5 +1,7 @@
 package org.powerbot.powerslayer.data;
 
+import java.util.ArrayList;
+
 import org.rsbot.script.Script;
 import org.rsbot.script.methods.Game;
 import org.rsbot.script.methods.Skills;
@@ -9,42 +11,45 @@ import org.rsbot.script.wrappers.Interface;
 import org.rsbot.script.wrappers.InterfaceComponent;
 
 public class SlayerItems {
-	//FIXME: Huge Code CleanUp 
-	static boolean elementalWorkshopIFinished = false, elementalWorkshopIIFinished = false, elementalWorkshopIIIFinished = false,
-	elementalWorkshopIVFinished = false, pathOfGlouphrieFinished = false, smokingKillsFinished = false;
-	int QUEST_INTERFACE = 190, HIDE_FINISHED_BUTTON = 12, QUEST_LIST = 18;
-	int ELEMENTAL_WORKSHOP_I = 37, ELEMENTAL_WORKSHOP_II = 38,
-	ELEMENTAL_WORKSHOP_III = 172, ELEMENTAL_WORKSHOP_IV = 180, PATH_OF_GLOUPHRIE = 127, SMOKING_KILLS = 138;
-	int MOUSE_INTERFACE = 261, BUTTON_CHANGER = 6; 
-	public static SlayerEquipment[] 
-	slayerHelmets = {SlayerEquipment.Full_Slayer_Helmet_4charged5, SlayerEquipment.Full_Slayer_Helmet_4e5, SlayerEquipment.Full_Slayer_Helmet, 
-		SlayerEquipment.Slayer_Helmet_4charged5, SlayerEquipment.Slayer_Helmet_4e5, SlayerEquipment.Slayer_Helmet},
-	grassWeapons = {SlayerEquipment.LeafBladed_Spear, SlayerEquipment.LeafBladed_Sword, SlayerEquipment.Broad_Arrows, SlayerEquipment.BroadTipped_Bolts};
 	
-	public SlayerItems() {
-		getQuestsFinished();
-	}
+	private final static int QUEST_INTERFACE = 190;
+	private final static int QUEST_LIST = 18;
+	
+	private final static int HIDE_FINISHED_BUTTON = 12;
+	private final static int MOUSE_INTERFACE = 261;
+	private final static int BUTTON_CHANGER = 6; 
+	
+	public static SlayerEquipment[] 
+	slayerHelmets = {
+		SlayerEquipment.Full_Slayer_Helmet_4charged5, SlayerEquipment.Full_Slayer_Helmet_4e5, SlayerEquipment.Full_Slayer_Helmet, 
+		SlayerEquipment.Slayer_Helmet_4charged5, SlayerEquipment.Slayer_Helmet_4e5, SlayerEquipment.Slayer_Helmet
+	},
+	grassWeapons = {
+		SlayerEquipment.LeafBladed_Spear, SlayerEquipment.LeafBladed_Sword, SlayerEquipment.Broad_Arrows, SlayerEquipment.BroadTipped_Bolts
+	};
+	
+	private static ArrayList<Quest> completedQuests;
 
 	//TODO: Add in Chaos Shield, Gadderhammer, Keris, Balmung, and Cosmic Shield
 	//TODO: Add in 2-handed Item support & Optional support
 	public static enum SlayerEquipment {
-		AntiDragon_Shield (-1, Equipment.Slot.SHIELD, new int[] {Skills.DEFENSE, 0}, new int[] {1540, 1541, 8282, 16933, 16934}),
-		Bag_Of_Salt (10, null, new int[] {Skills.SLAYER, 1}, new int[] {4161}),
-		Body_Shield (-1, Equipment.Slot.SHIELD, new int[] {Skills.DEFENSE, 33}, new int[] {18691, 18692}),
+		AntiDragon_Shield (new int[] {1540, 1541, 8282, 16933, 16934}, new int[] {Skills.DEFENSE, 0}, Equipment.Slot.SHIELD),
+		Bag_Of_Salt (new int[] {4161}, new int[] {Skills.SLAYER, 1}, null, 10),
+		Body_Shield (new int[] {18691, 18692}, new int[] {Skills.DEFENSE, 33}, Equipment.Slot.SHIELD),
 		BroadTipped_Bolts (-1, Equipment.Slot.AMMO, new int[] {Skills.SLAYER, 55, Skills.RANGE, 50}, new int[] {13280}),
 		Broad_Arrows (90, Equipment.Slot.AMMO, new int[] {Skills.SLAYER, 55, Skills.RANGE, 50}, new int[] {4150, 4160, 4172, 4173, 4174, 4175}),
 		Bullseye_Lantern (-1, null, new int[] {Skills.FIREMAKING, 49}, new int[] {4544, 4545, 4546, 4547, 4548, 4549, 4550}),
-		Crystal_Chime (-1, null, new int[] {Skills.SLAYER, 1}, new int[] {11749}),
+		Crystal_Chime (-1, null, new int[] {Skills.SLAYER, 1}, new int[] {11749}, Quest.THE_PATH_OF_GLOUPHRIE),
 		Dragonfire_Shield (-1, Equipment.Slot.SHIELD, new int[] {Skills.DEFENSE, 75}, new int[] {11283, 11284, 11285}),
 		Earmuffs (200, Equipment.Slot.HELMET, new int[] {Skills.SLAYER, 15}, new int[] {4166, 4167}),
-		Elemental_Shield (-1, Equipment.Slot.SHIELD, new int[] {Skills.DEFENSE, 1}, new int[] {2890, 2891}),
+		Elemental_Shield (-1, Equipment.Slot.SHIELD, new int[] {Skills.DEFENSE, 1}, new int[] {2890, 2891}, Quest.ELEMENTAL_WORKSHOP_I),
 		Enchanted_Gem (1, null, new int[] {Skills.SLAYER, 1}, new int[] {4155}),
 		Face_Mask (200, Equipment.Slot.HELMET, new int[] {Skills.SLAYER, 10}, new int[] {4164, 4165}),
 		Ferocious_Ring (-1, Equipment.Slot.RING, new int[] {Skills.SLAYER, 1}, new int[] {15398, 15399, 15400, 15401, 15402}),
 		Fishing_Explosive (60, null, new int[] {Skills.SLAYER, 1}, new int[] {6660, 6664}),
-		Full_Slayer_Helmet (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20}, new int[] {15492}),
-		Full_Slayer_Helmet_4charged5 (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20, Skills.SUMMONING, 20}, new int[] {15497}),
-		Full_Slayer_Helmet_4e5 (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20}, new int[] {15496}),
+		Full_Slayer_Helmet (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20}, new int[] {15492}, Quest.SMOKING_KILLS),
+		Full_Slayer_Helmet_4charged5 (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20, Skills.SUMMONING, 20}, new int[] {15497}, Quest.SMOKING_KILLS),
+		Full_Slayer_Helmet_4e5 (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 10, Skills.STRENGTH, 20, Skills.MAGIC, 20, Skills.RANGE, 20}, new int[] {15496}, Quest.SMOKING_KILLS),
 		Fungicide (10, null, new int[] {Skills.SLAYER, 1}, new int[] {7432}),
 		Fungicide_Spray (300, null, new int[] {Skills.SLAYER, 57}, new int[] {7421, 7422, 7423, 7424, 7425, 7426, 7427, 7428, 7429, 7430, 7431}),
 		Holy_Symbol (-1, Equipment.Slot.NECK, new int[] {Skills.SLAYER, 1}, new int[] {1718, 1719, 4682}),
@@ -53,7 +58,7 @@ public class SlayerItems {
 		LeafBladed_Spear (31000, Equipment.Slot.WEAPON /*+ Equipment.Slot.SHIELD*/, new int[] {Skills.SLAYER, 55, Skills.ATTACK, 50}, new int[] {4158, 4159}),
 		LeafBladed_Sword (-1, Equipment.Slot.WEAPON, new int[] {Skills.SLAYER, 55, Skills.ATTACK, 50}, new int[] {13290, 13291}),
 		Lit_Bug_Lantern (200, Equipment.Slot.SHIELD, new int[] {Skills.SLAYER, 33}, new int[] {7052, 7053}),
-		Masked_Earmuffs (-1, Equipment.Slot.HELMET, new int[] {Skills.SLAYER, 1}, new int[] {13277}),
+		Masked_Earmuffs (-1, Equipment.Slot.HELMET, new int[] {Skills.SLAYER, 1}, new int[] {13277}, Quest.SMOKING_KILLS),
 		Mind_Shield (-1, Equipment.Slot.SHIELD, new int[] {Skills.DEFENSE, 1}, new int[] {9731, 9732}),
 		Mirror_Shield (5000, Equipment.Slot.SHIELD, new int[] {Skills.SLAYER, 15, Skills.DEFENSE, 20}, new int[] {4156, 4157}),
 		Nosepeg (200, Equipment.Slot.HELMET, new int[] {Skills.SLAYER, 60}, new int[] {4168, 4169}),
@@ -62,9 +67,9 @@ public class SlayerItems {
 		Seers_Headband (-1, null, new int[] {Skills.SLAYER, 1}, new int[] {14631, 14662, 14663}),
 		Slayer_Bell (150, null, new int[] {Skills.SLAYER, 30}, new int[] {10952, 10953}),
 		Slayer_Gloves (200, Equipment.Slot.HANDS, new int[] {Skills.SLAYER, 17}, new int[] {6708, 6720}),
-		Slayer_Helmet (-1, Equipment.Slot.HELMET, new int[] {Skills.SUMMONING, 20, Skills.DEFENSE, 10}, new int[] {13263}),
-		Slayer_Helmet_4charged5 (-1, Equipment.Slot.HELMET, new int[] {Skills.SUMMONING, 20, Skills.DEFENSE, 10}, new int[] {14637}),
-		Slayer_Helmet_4e5 (-1, Equipment.Slot.HELMET, new int[] {Skills.SUMMONING, 20, Skills.DEFENSE, 10}, new int[] {14636}),
+		Slayer_Helmet (-1, Equipment.Slot.HELMET, new int[] {Skills.SUMMONING, 20, Skills.DEFENSE, 10}, new int[] {13263}, Quest.SMOKING_KILLS),
+		Slayer_Helmet_4charged5 (-1, Equipment.Slot.HELMET, new int[] {Skills.SUMMONING, 20, Skills.DEFENSE, 10}, new int[] {14637}, Quest.SMOKING_KILLS),
+		Slayer_Helmet_4e5 (-1, Equipment.Slot.HELMET, new int[] {Skills.SUMMONING, 20, Skills.DEFENSE, 10}, new int[] {14636}, Quest.SMOKING_KILLS),
 		Slayer_Staff (21000, Equipment.Slot.WEAPON, new int[] {Skills.SLAYER, 55, Skills.MAGIC, 50}, new int[] {4170, 4171}),
 		Spiked_Helmet (-1, Equipment.Slot.HELMET, new int[] {Skills.DEFENSE, 5}, new int[] {13105, 13106, 13168}),
 		Spiny_Helmet (650, Equipment.Slot.HELMET, new int[] {Skills.SLAYER, 1, Skills.DEFENSE, 5}, new int[] {4551, 4552}),
@@ -74,50 +79,36 @@ public class SlayerItems {
 		Water_Skin (-1, null, new int[] {Skills.SLAYER, 1}, new int[] {1823, 1825, 1827, 1829, 1831}),
 		Witchwood_Icon (900, Equipment.Slot.NECK, new int[] {Skills.SLAYER, 58}, new int[] {8923});
 
-		int itemCost = -1;
-		Equipment.Slot slot = null;
-		int [] requirements = {-1};
-		int[] IDs;
-		int amount = 1;
-
-
-		SlayerEquipment (int Cost, Equipment.Slot Slot, int[] Requirements, int[] IDList) {
-			itemCost = Cost;
-			requirements = Requirements;
-			slot = Slot;
-			IDs = IDList;
+		private final int price;
+		private final Equipment.Slot slot;
+		private final int [] requirements;
+		private final int[] itemIDs;
+		private final int amount = 1;
+		private final Quest[] quests;
+		
+		SlayerEquipment (int[] itemIDs, int[] skillRequirements, Equipment.Slot slot) {
+			this(itemIDs, skillRequirements, slot, -1);
 		}
 
-		SlayerEquipment (SlayerEquipment equipmentEnum) {
-			if (equipmentEnum != null) {
-				itemCost = equipmentEnum.itemCost;
-				requirements = equipmentEnum.requirements;
-				slot = equipmentEnum.slot;
-				IDs = equipmentEnum.IDs;
-			}
+		//TODO Replace the constructors by this, more efficient one.
+		SlayerEquipment (int[] itemIDs, int[] skillRequirements, Equipment.Slot slot, int price, Quest... quests) {
+			this.price = price;
+			this.slot = slot;
+			this.requirements = skillRequirements;
+			this.itemIDs = itemIDs;
+			this.quests = quests;
 		}
-
-		SlayerEquipment (SlayerEquipment equipmentEnum, int Amount) {
-			if (equipmentEnum != null) {
-				itemCost = equipmentEnum.itemCost;
-				requirements = equipmentEnum.requirements;
-				slot = equipmentEnum.slot;
-				IDs = equipmentEnum.IDs;
-				amount = Amount;
-			}
+		
+		SlayerEquipment (int price, Equipment.Slot slot, int[] requirements, int[] itemIDs, Quest... quests) {
+			this.price = price;
+			this.slot = slot;
+			this.requirements = requirements;
+			this.itemIDs = itemIDs;
+			this.quests = quests;
 		}
-
-		SlayerEquipment (int itemID) {
-			this(get(itemID));
-		}
-
-		SlayerEquipment (String itemName) {
-			this(get(itemName));
-		}
-
 
 		public boolean availableAtMaster() {
-			return itemCost != -1;
+			return price != -1;
 		}
 
 		public Equipment.Slot equipSlot() {
@@ -129,42 +120,27 @@ public class SlayerItems {
 		}
 
 		public int getCost() {
-			return itemCost;
+			return price;
 		}
 
-
 		public int[] getIDs() {
-			return IDs;
+			return itemIDs;
 		}
 
 		public String getName() {
-			String enumString = this.toString();
-			StringBuilder t = new StringBuilder();
+			String name = this.name().replaceAll("_", " ").replaceAll("4", "(").replaceAll("5", ")");
+			StringBuilder output = new StringBuilder();
 			boolean upperCase = true;
 			boolean lastUpperCase;
-			for (char currChar: enumString.toCharArray()) {
+			for (char currChar: name.toCharArray()) {
 				lastUpperCase = upperCase;
-				if (currChar == '_') {
-					t.append (" ");
-					upperCase = false;
-					continue;
-				}
-				if (currChar == '4') {
-					t.append ("(");
-					upperCase = false;
-					continue;
-				}
-				if (currChar == '5') {
-					t.append (")");
-					upperCase = false;
-					continue;
-				}
 				upperCase = Character.isUpperCase(currChar);
-				if (upperCase && upperCase != lastUpperCase) 
-					t.append("-");
-				t.append(currChar);
+				if (upperCase && upperCase != lastUpperCase) {
+					output.append("-");
+				}
+				output.append(currChar);
 			}
-			return t.toString();
+			return output.toString();
 		}
 
 		public boolean isEquipable() {
@@ -173,9 +149,22 @@ public class SlayerItems {
 
 		public boolean isUsable() {
 			int length = requirements.length;
-			if (length % 2 != 0)
+			if (length % 2 != 0) {
 				return false;
-			SlayerEquipment current = this;
+			}
+			
+			if (quests != null && quests.length > 0) {
+				ArrayList<Quest> completedQuests = getCompletedQuests();
+				if (completedQuests == null) {
+					return false;
+				}
+				for (Quest quest : quests) {
+					if (!completedQuests.contains(quest)) {
+						return false;
+					}
+				}
+			}
+			/*SlayerEquipment current = this;
 			if (current.equals(Crystal_Chime))
 				return pathOfGlouphrieFinished;
 			if (current.equals(Elemental_Shield))
@@ -188,7 +177,9 @@ public class SlayerItems {
 			} else if (current.equals(Body_Shield)) {
 				if (!elementalWorkshopIIFinished) 
 					return false;
-			}
+			}*/
+			
+			
 			for (int i = 0; i < length; i += 2) {
 				if (Skills.getLevel(requirements[i]) < requirements[i + 1])
 					return false;
@@ -208,7 +199,7 @@ public class SlayerItems {
 		return new SlayerEquipment[] {get(equipment)};
 	}
 
-	private void checkMouseButtons() {
+	private static void checkMouseButtons() {
 		Interface mouse = Interfaces.get(MOUSE_INTERFACE);
 		InterfaceComponent mouseButtons;
 		if (mouse != null) {
@@ -280,56 +271,64 @@ public class SlayerItems {
 		}
 		return null;
 	}
-
-	private void getQuestsFinished() {
-		checkMouseButtons();
-		Interface quests = Interfaces.get(QUEST_INTERFACE);
-		InterfaceComponent hideButton, questList;
-		if (quests != null) {
-			hideButton = quests.getComponent(HIDE_FINISHED_BUTTON);
-			if (hideButton.getTextureID() == 699) {
-				questList = quests.getComponent(QUEST_LIST);
-				elementalWorkshopIFinished = questList.getComponent(ELEMENTAL_WORKSHOP_I).getRelativeX() == 0;
-				elementalWorkshopIIFinished = questList.getComponent(ELEMENTAL_WORKSHOP_II).getRelativeX() == 0;
-				elementalWorkshopIIIFinished = questList.getComponent(ELEMENTAL_WORKSHOP_III).getRelativeX() == 0;
-				elementalWorkshopIVFinished = questList.getComponent(ELEMENTAL_WORKSHOP_IV).getRelativeX() == 0;
-				pathOfGlouphrieFinished = questList.getComponent(PATH_OF_GLOUPHRIE).getRelativeX() == 0;
-				smokingKillsFinished = questList.getComponent(SMOKING_KILLS).getRelativeX() == 0;
-				return;
-			}
+	
+	/**
+	 * Gets the current completed quests.
+	 * 
+	 * @author Dunnkers
+	 * @return An ArrayList of the completed quests.
+	 */
+	private static ArrayList<Quest> getCompletedQuests() {
+		if (completedQuests != null && completedQuests.size() > 0) {
+			return completedQuests;
 		}
-		for (int i = 0; i < 6; i++) {
-			Game.openTab(Game.Tabs.QUESTS);
-			Script.sleep (600);
-			if (!Game.isLoggedIn())  
-				return;
-			if (Game.getCurrentTab().equals(Game.Tabs.QUESTS))
-				break;
-			if (i == 5) 
-				return;
-		}
-		quests = Interfaces.get(QUEST_INTERFACE);
-		if (quests != null) {
-			hideButton = quests.getComponent(HIDE_FINISHED_BUTTON);
-			if (hideButton.getTextureID() != 699) {
-				for (int i = 0; i < 5; i++) {
-					hideButton.click();
-					Script.sleep (1000);
-					if (!Game.isLoggedIn())  
-						return;
-					if (Interfaces.get(QUEST_INTERFACE).getComponent(HIDE_FINISHED_BUTTON).getTextureID() == 699)
-						break;
+		InterfaceComponent questInterface = null;
+		int i = 0;
+		while (questInterface == null) {
+			checkMouseButtons();
+			if (!Game.getCurrentTab().equals(Game.Tabs.QUESTS)) {
+				if (Game.openTab(Game.Tabs.QUESTS)) {
+					Script.sleep(Script.random(Script.random(250, 500), 500));
 				}
 			}
-			if (Interfaces.get(QUEST_INTERFACE).getComponent(HIDE_FINISHED_BUTTON).getTextureID() == 699) {
-				questList = Interfaces.get(QUEST_INTERFACE).getComponent(QUEST_LIST);
-				elementalWorkshopIFinished = questList.getComponent(ELEMENTAL_WORKSHOP_I).getRelativeX() == 0;
-				elementalWorkshopIIFinished = questList.getComponent(ELEMENTAL_WORKSHOP_II).getRelativeX() == 0;
-				elementalWorkshopIIIFinished = questList.getComponent(ELEMENTAL_WORKSHOP_III).getRelativeX() == 0;
-				elementalWorkshopIVFinished = questList.getComponent(ELEMENTAL_WORKSHOP_IV).getRelativeX() == 0;
-				pathOfGlouphrieFinished = questList.getComponent(PATH_OF_GLOUPHRIE).getRelativeX() == 0;
-				smokingKillsFinished = questList.getComponent(SMOKING_KILLS).getRelativeX() == 0;
+			questInterface = Interfaces.getComponent(QUEST_INTERFACE, QUEST_LIST);
+			i ++;
+			if (i > 3) { // On 4th execution
+				return null;
 			}
 		}
+		InterfaceComponent[] questInterfaceComponents = questInterface.getComponents();
+		if (questInterfaceComponents == null) {
+			return null;
+		}
+		Quest[] quests = Quest.values();
+		ArrayList<Quest> completedQuestsTemporary = new ArrayList<Quest>();
+		outer: for (InterfaceComponent questInterfaceComponent : questInterfaceComponents) {
+			if (questInterfaceComponent == null) {
+				continue;
+			}
+			String[] actions = questInterfaceComponent.getActions();
+			if (actions == null) {
+				continue;
+			}
+			for (String action : actions) {
+				if (action.toLowerCase().contains("toggle map hint")) {
+					continue outer;
+				}
+			}
+			for (Quest quest : quests) {
+				if (quest == null) {
+					continue;
+				}
+				if (quest.getComponent() == questInterfaceComponent.getComponentID()) {
+					completedQuestsTemporary.add(quest);
+					continue outer;
+				}
+			}
+		}
+		if (!completedQuestsTemporary.isEmpty()) {
+			completedQuests = completedQuestsTemporary;
+		}
+		return completedQuestsTemporary.isEmpty() ? null : completedQuestsTemporary;
 	}
 }
