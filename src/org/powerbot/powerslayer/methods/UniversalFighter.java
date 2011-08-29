@@ -121,7 +121,7 @@ public class UniversalFighter extends DMethodProvider {
 		 * @return True if we are in combat.
 		 */
 		public boolean isInCombat() {
-			return Players.getMyPlayer().getInteracting() instanceof NPC;
+			return Players.getLocal().getInteracting() instanceof NPC;
 		}
 
 		public boolean useSpecial() {
@@ -232,7 +232,7 @@ public class UniversalFighter extends DMethodProvider {
 				for (Polygon p : tris) {
 					for (int j = 0; j < p.xpoints.length; j++) {
 						Point pt = new Point(p.xpoints[j], p.ypoints[j]);
-						if (Calculations.pointOnScreen(pt)) {
+						if (Calculations.isPointOnScreen(pt)) {
 							if (first)
 								return pt;
 							list.add(pt);
@@ -295,7 +295,7 @@ public class UniversalFighter extends DMethodProvider {
 		public NPC getInteracting() {
 			NPC npc = null;
 			int dist = 20;
-			for (NPC n : NPCs.getAll()) {
+			for (NPC n : NPCs.getLoaded()) {
 				if (!isOurNPC(n))
 					continue;
 				Character inter = n.getInteracting();
@@ -341,7 +341,7 @@ public class UniversalFighter extends DMethodProvider {
 				}
 			};
 			for (int i = 0; i < ((threshold/50) + 1); i++) {
-				NPC[] NPCList = NPCs.getAll(monsterFilter);
+				NPC[] NPCList = NPCs.getLoaded(monsterFilter);
 				if (NPCList.length == 0)
 					break;
 				if (i == threshold/50)
