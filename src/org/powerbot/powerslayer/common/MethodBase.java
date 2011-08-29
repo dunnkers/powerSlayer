@@ -8,8 +8,6 @@ import org.powerbot.powerslayer.methods.SlayerMasters;
 import org.powerbot.powerslayer.methods.Traveling;
 import org.powerbot.powerslayer.methods.UniversalFighter;
 
-import java.util.Random;
-
 public class MethodBase {
     public PowerSlayer parent = null;
     public UniversalFighter fighter = new UniversalFighter(this);
