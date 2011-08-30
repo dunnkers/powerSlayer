@@ -1,7 +1,5 @@
 package org.powerbot.powerslayer.data;
 
-import java.util.ArrayList;
-
 import org.powerbot.powerslayer.data.Quests.Quest;
 import org.rsbot.script.methods.Skills;
 import org.rsbot.script.methods.tabs.Equipment;
