@@ -269,11 +269,11 @@ public class Quests {
 	/**
 	 * Gets the current completed quests.
 	 * 
-	 * @author Dunnkers & Daniel987600
+	 * @author Dunnkers
 	 * @return An ArrayList of the completed quests.
 	 */
 	//FIXME: Need to put this in permanent memory
-	static ArrayList<Quest> getCompletedQuests() {
+	public static ArrayList<Quest> getCompletedQuests() {
 		if (completedQuests != null && completedQuests.size() > 0) {
 			return completedQuests;
 		}
