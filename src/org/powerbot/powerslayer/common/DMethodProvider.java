@@ -17,11 +17,8 @@ public abstract class DMethodProvider {
 
     public DMethodProvider(MethodBase methods) {
         this.methods = methods;
-        log = Logger
-                .getLogger((methods != null && methods.parent != null ? methods.parent
-                        .getClass().getName() + "-"
-                        : "")
-                        + getClass().getName());
+        log = Logger.getLogger(((methods != null && methods.parent != null) ? 
+        		methods.parent.getClass().getName() + "-": "")+ getClass().getName());
     }
 
     /**
@@ -31,7 +28,7 @@ public abstract class DMethodProvider {
      * @see Players#getMyPlayer()
      */
     public Player getMyPlayer() {
-        return Players.getMyPlayer();
+        return Players.getLocal();
     }
 
     /**
