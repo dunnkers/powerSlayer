@@ -301,7 +301,6 @@ public class Quests {
 	 * @author Daniel987600
 	 * @return Quest Interface Open & Finished Quests filtered
 	 */
-
 	private static boolean setUpQuests() {
 		InterfaceComponent questInterface = null;
 		int i = 0;
@@ -327,5 +326,27 @@ public class Quests {
 			}
 		}
 		return Game.getCurrentTab().equals(Game.Tabs.QUESTS) && Interfaces.getComponent(HIDE_FINISHED_BUTTON).getTextureID() == 699;
+	}
+	
+	/**
+	 * Checks if the given quests are completed.
+	 * @author Dunnkers
+	 * @param quests The quests you'd like to check.
+	 * @return <tt>True</tt> if the given quests are completed.
+	 */
+	public static boolean isQuestCompleted(Quest... quests) {
+		if (quests == null || !(quests.length > 0)) {
+			return false;
+		}
+		ArrayList<Quest> completedQuests = Quests.getCompletedQuests();
+		if (completedQuests == null) {
+			return false;
+		}
+		for (Quest quest : quests) {
+			if (!completedQuests.contains(quest)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
