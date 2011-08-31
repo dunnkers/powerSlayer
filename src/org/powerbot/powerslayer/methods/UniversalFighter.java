@@ -169,7 +169,7 @@ public class UniversalFighter extends DMethodProvider {
 			for (int i = 0; i < 10; i++) {
 				if (isPartiallyOnScreen(npc.getModel())) {
 					Point p = getPointOnScreen(npc.getModel(), false);
-					if (p == null || !Calculations.pointOnScreen(p)) {
+					if (p == null || !Calculations.isPointOnScreen(p)) {
 						continue;
 					}
 					Mouse.move(p, 0, 0);
@@ -232,7 +232,7 @@ public class UniversalFighter extends DMethodProvider {
 				for (Polygon p : tris) {
 					for (int j = 0; j < p.xpoints.length; j++) {
 						Point pt = new Point(p.xpoints[j], p.ypoints[j]);
-						if (Calculations.pointOnScreen(pt)) {
+						if (Calculations.isPointOnScreen(pt)) {
 							if (first)
 								return pt;
 							list.add(pt);
@@ -690,7 +690,7 @@ public class UniversalFighter extends DMethodProvider {
 					if (Menu.isOpen())
 						Mouse.moveRandomly(300, 500);
 					Point p = item.getLocation().toScreen(random(0.48, 0.52), random(0.48, 0.52), 0);
-					if (!Calculations.pointOnScreen(p))
+					if (!Calculations.isPointOnScreen(p))
 						continue;
 					Mouse.move(p, 3, 3);
 					if (Menu.contains(action)) {

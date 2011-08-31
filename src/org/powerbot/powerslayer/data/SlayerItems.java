@@ -1,7 +1,5 @@
 package org.powerbot.powerslayer.data;
 
-import java.util.ArrayList;
-
 import org.powerbot.powerslayer.data.Quests.Quest;
 import org.rsbot.script.methods.Skills;
 import org.rsbot.script.methods.tabs.Equipment;
@@ -93,21 +91,6 @@ public class SlayerItems {
 			return slot;
 		}
 
-		public boolean finishedQuests() {
-			if (quests != null && quests.length > 0) {
-				ArrayList<Quest> completedQuests = Quests.getCompletedQuests();
-				if (completedQuests == null) {
-					return false;
-				}
-				for (Quest quest : quests) {
-					if (!completedQuests.contains(quest)) {
-						return false;
-					}
-				}
-			}
-			return true;
-		}
-
 		public int getAmount() {
 			return amount;
 		}
@@ -148,7 +131,7 @@ public class SlayerItems {
 				if (Skills.getLevel(requirements[i]) < requirements[i + 1])
 					return false;
 			}
-			return finishedQuests();
+			return Quests.isQuestCompleted(quests);
 		}
 	}
 
