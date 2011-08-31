@@ -4,12 +4,8 @@ import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.methods.SlayerInventory;
-import org.rsbot.script.methods.Calculations;
-import org.rsbot.script.methods.Game;
+import org.rsbot.script.methods.*;
 import org.rsbot.script.methods.Game.Tabs;
-import org.rsbot.script.methods.NPCs;
-import org.rsbot.script.methods.Settings;
-import org.rsbot.script.methods.Walking;
 import org.rsbot.script.methods.tabs.Combat;
 import org.rsbot.script.methods.tabs.Inventory;
 import org.rsbot.script.methods.tabs.Prayer;
@@ -35,6 +31,8 @@ public class FighterState extends State {
             for (int i = 0; i < 5 && !Walking.isRunEnabled(); i++)
             	Walking.setRun(true);
         }
+
+	    //TODO: Zalgo implement explorers ring
         if (Interfaces.canContinue()) {
             methods.parent.paint.Current = "Clicking Continue";
             for (int i = 0; i < 5 && Interfaces.canContinue(); i++)
@@ -113,7 +111,6 @@ public class FighterState extends State {
 						Combat.setSpecial(true);
 					}
 
-
 					if (methods.fighter.loot.onlyTakeLootFromKilled) {
 						if (methods.fighter.npcs.getInteracting() != null){
 							if (!methods.fighter.npcs.tilesFoughtOn.contains(methods.fighter.npcs.getInteracting().getLocation())
@@ -139,7 +136,7 @@ public class FighterState extends State {
 				NPC inter = methods.fighter.npcs.getInteracting();
 				NPC n = inter != null ? inter : methods.fighter.npcs.getNPC();
 				if (n != null) {
-					int result = -5;
+					int result;
 					if (PowerSlayer.currentTask.getRequirements().getStarter() != null) {
 						if (!methods.fighter.npcs.useStarter(n)) {
 							log("You ran out of starters! Stopping Fighter.");
@@ -178,6 +175,7 @@ public class FighterState extends State {
 		}
 
 
+	    //TODO: Find a way to get a list of loots to feed into the loot loop
 		@SuppressWarnings("unused")
 		private class LootLoop implements LoopAction {
 

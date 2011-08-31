@@ -3,13 +3,9 @@ package org.powerbot.powerslayer.methods;
 import org.powerbot.powerslayer.common.DMethodProvider;
 import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.Banks;
-import org.powerbot.powerslayer.data.Monsters.Monster;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.wrappers.Task;
 import org.rsbot.script.methods.Calculations;
-import org.rsbot.script.methods.NPCs;
-import org.rsbot.script.methods.tabs.Equipment;
-import org.rsbot.script.wrappers.Item;
 import org.rsbot.script.wrappers.Tile;
 
 //TODO: Convert to QS Once it comes out
@@ -22,21 +18,8 @@ public class Traveling extends DMethodProvider {
         return travelTo(master.getLocation());
     }
 
-    public boolean travelToMonster(Task task) {
-    	Monster currMonster = task.getMonster();
-    	Tile currTile = NPCs.getNearest(currMonster.getNames()).getLocation();
-        return travelTo(currTile);
-    }
-
-    public Item getEquipmentItem(int... ids) {
-        for (Item i : Equipment.getItems()) {
-            for (int id : ids) {
-                if (id == i.getID()) {
-                    return i;
-                }
-            }
-        }
-        return null;
+    public boolean travelToSlayerLocation(Task task) {
+	    return travelTo(task.getMonster().getLocationProfile().getBestLocation().getSlayerLocation().getTile());
     }
 
     // The default will be the closest bank to the player
@@ -68,31 +51,5 @@ public class Traveling extends DMethodProvider {
             }
         }
         return best;
-    }
-
-    public boolean isInBank(Tile tile) {
-        for (Banks b : Banks.values()) {
-            if (b.containsTile(tile)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int getArrayIndex(int[] array, int num) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == num) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public int min(int[] a) {
-        int res = Integer.MAX_VALUE;
-        for (int anA : a) {
-            res = Math.min(anA, res);
-        }
-        return res;
     }
 }

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+//TODO: Discuss movement/ rewriting
 public class CombatStyle {
     private Style[] style;
     private int[] maxHits;
@@ -68,6 +69,9 @@ public class CombatStyle {
     public Style getStyle() {
         return getStyle(0);
     }
+
+	//TODO: write setStyle method
+	public boolean setStyle(Style style) {return false;}
 
     public static enum Style {
         MELEE, MAGIC, RANGE, DRAGONFIRE, RANGED_DRAGONFIRE, MAGICAL_MELEE, MAGICAL_RANGE

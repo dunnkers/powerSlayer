@@ -1,4 +1,4 @@
-package org.powerbot.powerslayer.data;
+package org.powerbot.powerslayer.wrappers;
 
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.rsbot.script.methods.Skills;
@@ -83,7 +83,7 @@ public class MonsterLocation {
 		return monsterTile;
 	}
 	
-	SlayerLocation getLocation() {
+	public SlayerLocation getSlayerLocation() {
 		return monsterLocation;
 	}
 }

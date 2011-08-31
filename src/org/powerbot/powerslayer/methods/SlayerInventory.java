@@ -22,7 +22,7 @@ public class SlayerInventory {
 	
 	public static boolean contains(SlayerEquipment equipment) {
 		for (Item currItem: Inventory.getItems()) {
-			if (currItem.getName().equalsIgnoreCase(equipment.getName()));
+			if (currItem.getName().equalsIgnoreCase(equipment.getName()))
 			   return true;
 		}
 		return false;
@@ -58,7 +58,7 @@ public class SlayerInventory {
 	}
 
 	@SuppressWarnings("unused")
-	private int inventSpace() {
+	private static int inventSpace() {
 		return 28 - Inventory.getCount();
 	}
 	

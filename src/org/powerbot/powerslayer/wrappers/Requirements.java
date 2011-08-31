@@ -1,11 +1,12 @@
 package org.powerbot.powerslayer.wrappers;
 
+import org.powerbot.powerslayer.data.Quests;
+import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
+import org.powerbot.powerslayer.methods.CombatStyle;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
-import org.powerbot.powerslayer.methods.CombatStyle;
 
 public class Requirements {
     List<SlayerEquipment> items = new ArrayList<SlayerEquipment>();
@@ -13,11 +14,11 @@ public class Requirements {
     Starter starter;
     CombatStyle style = null;
 
-
     boolean lightsource = false;
 
-    public Requirements(SlayerEquipment[] itemArray, Finisher finisher, Starter starter,
-    		CombatStyle style, boolean lightsource) {
+	//TODO: Do we really need all these constructors?
+    public Requirements(SlayerEquipment[] itemArray, Quests.Quest[] questArray, Finisher finisher, Starter starter,
+                        CombatStyle style, boolean lightsource) {
         this.items.addAll(Arrays.asList(itemArray));
         this.finisher = finisher;
         this.starter = starter;
@@ -34,11 +35,11 @@ public class Requirements {
 
     public Requirements (SlayerEquipment[] itemArray, Finisher finisher, Starter starter,
                         boolean lightsource) {
-        this(itemArray, finisher, starter, null, lightsource);
+        this(itemArray, null, finisher, starter, null, lightsource);
     }
 
     public Requirements(SlayerEquipment[] itemArray, boolean lightsource) {
-        this(itemArray, null, null, null, lightsource);
+        this(itemArray, null, null, null, null, lightsource);
     }
 
     public Requirements(SlayerEquipment[] itemArray, Finisher finisher) {

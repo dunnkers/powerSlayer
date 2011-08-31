@@ -1,15 +1,11 @@
 package org.powerbot.powerslayer.common;
 
-import java.awt.Color;
+import org.rsbot.script.methods.Players;
+import org.rsbot.script.wrappers.*;
+
+import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.rsbot.script.methods.Players;
-import org.rsbot.script.wrappers.GameObject;
-import org.rsbot.script.wrappers.GroundItem;
-import org.rsbot.script.wrappers.NPC;
-import org.rsbot.script.wrappers.Player;
-import org.rsbot.script.wrappers.Tile;
 
 public abstract class DMethodProvider {
     public MethodBase methods;
@@ -21,16 +17,10 @@ public abstract class DMethodProvider {
 
     public DMethodProvider(MethodBase methods) {
         this.methods = methods;
-        log = Logger.getLogger(((methods != null && methods.parent != null) ? 
-        		methods.parent.getClass().getName() + "-": "")+ getClass().getName());
+        log = Logger.getLogger(((methods != null && methods.parent != null) ?
+		        methods.parent.getClass().getName() + "-" : "") + getClass().getName());
     }
 
-    /**
-     * Returns the current client's local player.
-     *
-     * @return The current client's <tt>RSPlayer</tt>.
-     * @see Players#getMyPlayer()
-     */
     public Player getMyPlayer() {
         return Players.getLocal();
     }
