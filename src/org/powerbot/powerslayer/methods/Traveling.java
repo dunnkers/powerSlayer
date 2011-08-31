@@ -1,59 +1,43 @@
 package org.powerbot.powerslayer.methods;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.common.DMethodProvider;
-import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.Banks;
-import org.powerbot.powerslayer.data.Monsters.Monster;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.wrappers.Task;
 import org.rsbot.script.methods.Calculations;
-import org.rsbot.script.methods.NPCs;
-import org.rsbot.script.methods.tabs.Equipment;
-import org.rsbot.script.wrappers.Item;
 import org.rsbot.script.wrappers.Tile;
 
 //TODO: Convert to QS Once it comes out
 public class Traveling extends DMethodProvider {
-    public Traveling(MethodBase methods) {
-        super(methods);
+    
+	public Traveling(PowerSlayer parent) {
+        super(parent);
     }
 
-    public boolean travelToMaster(SlayerMaster master) {
+    public static boolean travelToMaster(SlayerMaster master) {
         return travelTo(master.getLocation());
     }
 
-    public boolean travelToMonster(Task task) {
-    	Monster currMonster = task.getMonster();
-    	Tile currTile = NPCs.getNearest(currMonster.getNames()).getLocation();
-        return travelTo(currTile);
-    }
-
-    public Item getEquipmentItem(int... ids) {
-        for (Item i : Equipment.getItems()) {
-            for (int id : ids) {
-                if (id == i.getID()) {
-                    return i;
-                }
-            }
-        }
-        return null;
+    public static boolean travelToSlayerLocation(Task task) {
+	    return travelTo(task.getMonster().getLocationProfile().getBestLocation().getSlayerLocation().getTile());
     }
 
     // The default will be the closest bank to the player
-    public boolean travelToBank() {
+    public static boolean travelToBank() {
         return travelToBank(getNearestBank());
     }
 
-    public boolean travelToBank(Banks bank) {
+    public static boolean travelToBank(Banks bank) {
         return travelTo(bank.getArea().getCentralTile());
     }
 
-    public boolean travelTo(Tile t) {
+    public static boolean travelTo(Tile t) {
         //return Web.generateRoute(getMyPlayer().getLocation(), t).execute();
 	    return false;
     }
 
-    public Banks getNearestBank() {
+    public static Banks getNearestBank() {
         /*
        * TODO Add a method to remove all banks that a player can not  reach.
        * TODO Use the web to return a 'real' distance.
@@ -68,31 +52,5 @@ public class Traveling extends DMethodProvider {
             }
         }
         return best;
-    }
-
-    public boolean isInBank(Tile tile) {
-        for (Banks b : Banks.values()) {
-            if (b.containsTile(tile)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public int getArrayIndex(int[] array, int num) {
-        for (int i = 0; i < array.length; i++) {
-            if (array[i] == num) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public int min(int[] a) {
-        int res = Integer.MAX_VALUE;
-        for (int anA : a) {
-            res = Math.min(anA, res);
-        }
-        return res;
     }
 }

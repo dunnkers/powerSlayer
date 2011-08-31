@@ -25,7 +25,7 @@ public class SlayerEquip {
 			if (!isEquipped(currEquipment)) {
 				if (SlayerInventory.hasEnough(currEquipment)) {
 					for (SlayerEquipment r : req.getEquipment()) {
-						if (getReplacingItem(currEquipment).equals(r.getName())) {
+						if (getReplacingItem(currEquipment).getName().equals(r.getName())) {
 							return false;
 						}
 

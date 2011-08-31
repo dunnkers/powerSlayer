@@ -1,6 +1,5 @@
 package org.powerbot.powerslayer.wrappers;
 
-import org.powerbot.powerslayer.data.MonsterLocation;
 import org.rsbot.script.methods.Calculations;
 import org.rsbot.script.wrappers.Tile;
 
@@ -9,7 +8,7 @@ public class LocationProfile {
 	private MonsterLocation[] locations;
 	
 	
-	/*	TODO Make an algorithm that returns a tile based on:
+	/*	TODO Make an algorithm that returns a MonsterLocation based on:
 	 * 		1. Current Location
 	 * 		2. Combat level
 	 * 		3. Equipment needed to go in
@@ -18,7 +17,7 @@ public class LocationProfile {
 		this.locations = locations;
 	}
 
-	public Tile getBestLocation() {
+	public MonsterLocation getBestLocation() {
 		return null;
 	}
 
@@ -31,7 +30,7 @@ public class LocationProfile {
 		return closest;
 	}
 
-	public MonsterLocation[] getLocations() {
+	public MonsterLocation[] getMonsterLocations() {
 		return locations;
 	}
 

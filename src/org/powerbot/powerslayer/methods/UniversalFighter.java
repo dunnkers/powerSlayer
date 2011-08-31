@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.common.DMethodProvider;
-import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.wrappers.Finisher;
 import org.powerbot.powerslayer.wrappers.Starter;
 import org.rsbot.script.methods.Calculations;
@@ -37,23 +36,18 @@ import org.rsbot.script.wrappers.Tile;
 
 //TODO: Zalgo2462 Touch up
 public class UniversalFighter extends DMethodProvider {
-	public UniversalFighter(MethodBase methods) {
-		super(methods);
+	
+	public UniversalFighter(PowerSlayer parent) {
+		super(parent);
 	}
 
-
-	private long nextAntiban = 0;
-	public SlayerNPCs npcs = new SlayerNPCs();
-	public Eating eat = new Eating();
-	public Potion pot = new Potion();
-	public Loot loot = new Loot();
-	public Tiles tiles = new Tiles();
+	private static long nextAntiban = 0;
 
 	/**
 	 * Performs a random action, always.
 	 * Actions: move mouse, move mouse off screen, move camera.
 	 */
-	public void antiban() {
+	public static void antiban() {
 		if (System.currentTimeMillis() > nextAntiban) {
 			nextAntiban = System.currentTimeMillis() + random(2000, 30000);
 		} else {
@@ -102,29 +96,29 @@ public class UniversalFighter extends DMethodProvider {
 			sleep(random(30, 100));
 	}
 
-	public class SlayerNPCs {
+	public static class SlayerNPCs {
 
-		private String[] npcNames = PowerSlayer.currentTask.getMonster().getNames();
+		private static String[] npcNames = PowerSlayer.currentTask.getMonster().getNames();
 
-		public NPC lastClickedNPC = null;
-		public boolean npcWasClickedLast = false;
+		public static NPC lastClickedNPC = null;
+		public static boolean npcWasClickedLast = false;
 
-		private String weapon = "";
-		private boolean hasSpecialWeapon = false;
+		private static String weapon = "";
+		private static boolean hasSpecialWeapon = false;
 
 
-		public ArrayList<Tile> tilesFoughtOn = new ArrayList<Tile>();
+		public static ArrayList<Tile> tilesFoughtOn = new ArrayList<Tile>();
 
 		/**
 		 * Checks if we are in combat.
 		 *
 		 * @return True if we are in combat.
 		 */
-		public boolean isInCombat() {
+		public static boolean isInCombat() {
 			return Players.getLocal().getInteracting() instanceof NPC;
 		}
 
-		public boolean useSpecial() {
+		public static boolean useSpecial() {
 			if (hasSpecialWeapon) {
 				int[] amountUsage = {10, 25, 33, 35, 45, 50, 55, 60, 80, 85, 100};
 				String[][] weapons = {
@@ -165,18 +159,18 @@ public class UniversalFighter extends DMethodProvider {
 		 * @param action The action to perform.
 		 * @return 0 if the NPC was clicked, 1 if we walked to it, or -1 if nothing happened.
 		 */
-		public int clickNPC(NPC npc, String action) {
+		public static int clickNPC(NPC npc, String action) {
 			for (int i = 0; i < 10; i++) {
 				if (isPartiallyOnScreen(npc.getModel())) {
 					Point p = getPointOnScreen(npc.getModel(), false);
-					if (p == null || !Calculations.pointOnScreen(p)) {
+					if (p == null || !Calculations.isPointOnScreen(p)) {
 						continue;
 					}
 					Mouse.move(p, 0, 0);
 					String[] items = Menu.getItems();
 					if (items.length > 0 && items[0].contains(action)) {
 						Mouse.click(true);
-						loot.itemWasClickedLast = false;
+						Loot.itemWasClickedLast = false;
 						npcWasClickedLast = true;
 						lastClickedNPC = npc;
 						return 0;
@@ -188,7 +182,7 @@ public class UniversalFighter extends DMethodProvider {
 								break;
 							}
 							if (Menu.click(action)) {
-								loot.itemWasClickedLast = false;
+								Loot.itemWasClickedLast = false;
 								npcWasClickedLast = true;
 								lastClickedNPC = npc;
 								return 0;
@@ -211,7 +205,7 @@ public class UniversalFighter extends DMethodProvider {
 		 * @param m The RSModel to check.
 		 * @return True if any point on the model is on screen.
 		 */
-		private boolean isPartiallyOnScreen(GameModel m) {
+		private static boolean isPartiallyOnScreen(GameModel m) {
 			return getPointOnScreen(m, true) != null;
 		}
 
@@ -222,7 +216,7 @@ public class UniversalFighter extends DMethodProvider {
 		 * @param first If true, it will return the first point that it finds on screen.
 		 * @return A random point on screen of an object.
 		 */
-		private Point getPointOnScreen(GameModel m, boolean first) {
+		private static Point getPointOnScreen(GameModel m, boolean first) {
 			if (m == null) {
 				return null;
 			}
@@ -232,7 +226,7 @@ public class UniversalFighter extends DMethodProvider {
 				for (Polygon p : tris) {
 					for (int j = 0; j < p.xpoints.length; j++) {
 						Point pt = new Point(p.xpoints[j], p.ypoints[j]);
-						if (Calculations.pointOnScreen(pt)) {
+						if (Calculations.isPointOnScreen(pt)) {
 							if (first)
 								return pt;
 							list.add(pt);
@@ -253,7 +247,7 @@ public class UniversalFighter extends DMethodProvider {
 		 * @return The distance between the two points, using the distance formula.
 		 */
 		@SuppressWarnings("unused")
-		private double distanceBetween(Point p1, Point p2) {
+		private static double distanceBetween(Point p1, Point p2) {
 			return Math.sqrt(((p1.x - p2.x) * (p1.x - p2.x)) + ((p1.y - p2.y) * (p1.y - p2.y)));
 		}
 
@@ -265,7 +259,7 @@ public class UniversalFighter extends DMethodProvider {
 		 * @return A closer tile.
 		 */
 		@SuppressWarnings("unused")
-		private Tile closerTile(Tile t, int dist) {
+		private static Tile closerTile(Tile t, int dist) {
 			Tile loc = getMyPlayer().getLocation();
 			int newX = t.getX(), newY = t.getY();
 			for (int i = 1; i < dist; i++) {
@@ -280,7 +274,7 @@ public class UniversalFighter extends DMethodProvider {
 		 *
 		 * @return The nearest NPC that matches the filter.
 		 */
-		public NPC getNPC() {
+		public static NPC getNPC() {
 			NPC onScreen = NPCs.getNearest(npcOnScreenFilter);
 			if (onScreen != null)
 				return onScreen;
@@ -292,7 +286,7 @@ public class UniversalFighter extends DMethodProvider {
 		 *
 		 * @return The closest interacting NPC that matches the filter.
 		 */
-		public NPC getInteracting() {
+		public static NPC getInteracting() {
 			NPC npc = null;
 			int dist = 20;
 			for (NPC n : NPCs.getLoaded()) {
@@ -307,7 +301,7 @@ public class UniversalFighter extends DMethodProvider {
 			return npc;
 		}
 
-		private boolean isOurNPC(NPC t) {
+		private static boolean isOurNPC(NPC t) {
 			String name = t.getName();
 			boolean good = false;
 			for (String s : npcNames) {
@@ -317,11 +311,11 @@ public class UniversalFighter extends DMethodProvider {
 			return good;
 		}
 
-		public boolean useStarter(NPC monster) {
+		public static boolean useStarter(NPC monster) {
 			return Starter.use(monster);
 		}
 
-		public boolean useFinisher(NPC monster) {
+		public static boolean useFinisher(NPC monster) {
 			return Finisher.use(monster);
 		}
 
@@ -330,8 +324,8 @@ public class UniversalFighter extends DMethodProvider {
 		 * @param sleep threshold
 		 * @return true if last clicked NPC died within threshold, else false
 		 */
-		public boolean sleepWhileNpcIsDying(int threshold) {
-			NPC currNPC = npcs.lastClickedNPC;
+		public static boolean sleepWhileNpcIsDying(int threshold) {
+			NPC currNPC = SlayerNPCs.lastClickedNPC;
 			if (currNPC == null || currNPC.isDead())
 				return false;
 			final Tile npcTile = currNPC.getLocation();
@@ -354,34 +348,34 @@ public class UniversalFighter extends DMethodProvider {
 		/**
 		 * The filter we use!
 		 */
-		private final Filter<NPC> npcFilter = new Filter<NPC>() {
+		private final static Filter<NPC> npcFilter = new Filter<NPC>() {
 			public boolean accept(NPC t) {
 				return (isOurNPC(t) && t.verify() && !t.isInCombat() && t.getInteracting() == null &&
-						t.getHPPercent() != 0 && !tiles.NPCisOnBadTile(t));
+						t.getHPPercent() != 0 && !Tiles.NPCisOnBadTile(t));
 			}
 		};
 
 		/**
 		 * Will only return an on screen NPC. Based on npcFilter.
 		 */
-		private final Filter<NPC> npcOnScreenFilter = new Filter<NPC>() {
+		private final static Filter<NPC> npcOnScreenFilter = new Filter<NPC>() {
 			public boolean accept(NPC n) {
 				return npcFilter.accept(n) && getPointOnScreen(n.getModel(), true) != null;
 			}
 		};
 	}
 
-	public class Eating {
+	public static class Eating {
 
-		private final int B2P_ID = 8015;
-		private final int[] BONES_ID = new int[]{526, 532, 530, 528, 3183, 2859};
+		private final static int B2P_ID = 8015;
+		private final static int[] BONES_ID = new int[]{526, 532, 530, 528, 3183, 2859};
 
 		/**
 		 * Returns a random integer of when to eat.
 		 *
 		 * @return A random integer of the percent to eat at.
 		 */
-		private int getRandomEatPercent() {
+		private static int getRandomEatPercent() {
 			return random(45, 60);
 		}
 
@@ -390,14 +384,14 @@ public class UniversalFighter extends DMethodProvider {
 		 *
 		 * @return True if we have a tab.
 		 */
-		public boolean haveB2pTab() {
+		public static boolean haveB2pTab() {
 			return Inventory.getCount(B2P_ID) > 0;
 		}
 
 		/**
 		 * Breaks a B2P tab.
 		 */
-		public void breakB2pTab() {
+		public static void breakB2pTab() {
 			Item i = Inventory.getItem(B2P_ID);
 			if (i != null)
 				i.click(true);
@@ -408,7 +402,7 @@ public class UniversalFighter extends DMethodProvider {
 		 *
 		 * @return True if we have bones.
 		 */
-		public boolean haveBones() {
+		public static boolean haveBones() {
 			return Inventory.getCount(BONES_ID) > 0;
 		}
 
@@ -417,7 +411,7 @@ public class UniversalFighter extends DMethodProvider {
 		 *
 		 * @return True if we have food.
 		 */
-		public boolean haveFood() {
+		public static boolean haveFood() {
 			return getFood() != null;
 		}
 
@@ -426,7 +420,7 @@ public class UniversalFighter extends DMethodProvider {
 		 *
 		 * @return The food, or null if none was found.
 		 */
-		private Item getFood() {
+		private static Item getFood() {
 			for (Item i : Inventory.getItems()) {
 				if (i == null || i.getID() == -1)
 					continue;
@@ -443,7 +437,7 @@ public class UniversalFighter extends DMethodProvider {
 		 *
 		 * @return True if we ate.
 		 */
-		public boolean eatFood() {
+		public static boolean eatFood() {
 			Item i = getFood();
 			if (i == null)
 				return false;
@@ -459,7 +453,7 @@ public class UniversalFighter extends DMethodProvider {
 		 *
 		 * @return True if we need to eat.
 		 */
-		public boolean needEat() {
+		public static boolean needEat() {
 			return getHPPercent() <= getRandomEatPercent();
 		}
 
@@ -468,7 +462,7 @@ public class UniversalFighter extends DMethodProvider {
 		 *
 		 * @return The current health percentage.
 		 */
-		public int getHPPercent() {
+		public static int getHPPercent() {
 			try {
 				int health = Integer.parseInt(Interfaces.get(748).getComponent(8).getText().trim());
 				double ratio = (health*1D)/(Skills.getAbsoluteLevel(Skills.CONSTITUTION) * 10);
@@ -479,42 +473,42 @@ public class UniversalFighter extends DMethodProvider {
 		}
 	}
 
-	public class Potion {
+	public static class Potion {
 
-		private final int[] MAGIC_POTIONS = new int[] {3040, 3042, 3044, 3046, 11513, 11515, 13520, 13521, 13522, 13523};
+		private final static int[] MAGIC_POTIONS = new int[] {3040, 3042, 3044, 3046, 11513, 11515, 13520, 13521, 13522, 13523};
 
-		private final int[] PRAYER_POTIONS = new int[] {2434, 139, 141, 143, 11465, 11467};
+		private final static int[] PRAYER_POTIONS = new int[] {2434, 139, 141, 143, 11465, 11467};
 
-		private final int[] RANGE_POTIONS = new int[] {2444, 169, 171, 173, 11509, 11511, 13524, 13525, 15326, 15327};
+		private final static int[] RANGE_POTIONS = new int[] {2444, 169, 171, 173, 11509, 11511, 13524, 13525, 15326, 15327};
 
-		private final int[] ENERGY_POTIONS = new int[] {3008, 3010, 3012, 3014, 3016, 3018, 3020, 3022, 11453, 11455,
+		private final static int[] ENERGY_POTIONS = new int[] {3008, 3010, 3012, 3014, 3016, 3018, 3020, 3022, 11453, 11455,
 				11481, 11483};
 
-		private final int[] COMBAT_POTIONS = new int[] {9739, 9741, 9743, 9745, 11445, 11447};
+		private final static int[] COMBAT_POTIONS = new int[] {9739, 9741, 9743, 9745, 11445, 11447};
 
-		private final int[] ATTACK_POTIONS = new int[] {2428, 121, 123, 125, 2436, 145, 147, 149, 11429, 11431,
+		private final static int[] ATTACK_POTIONS = new int[] {2428, 121, 123, 125, 2436, 145, 147, 149, 11429, 11431,
 				11429, 11431, 11429, 11431, 11469, 11471, 15308	, 15309, 15310, 15311};
 
-		private final int[] STRENGTH_POTIONS = new int[] {113, 115, 117, 119, 2440, 157, 159, 161, 11443, 11441,
+		private final static int[] STRENGTH_POTIONS = new int[] {113, 115, 117, 119, 2440, 157, 159, 161, 11443, 11441,
 				11485, 11487, 15312, 15313, 15314, 15315};
 
-		private final int[] DEFENSE_POTIONS = new int[] {2432, 133, 135, 137, 2442, 163, 165, 167, 11457, 11459,
+		private final static int[] DEFENSE_POTIONS = new int[] {2432, 133, 135, 137, 2442, 163, 165, 167, 11457, 11459,
 				11497, 11499, 15316, 15317, 15318, 15319};
 
-		private final int[] ANTIPOISON = new int[] {2446, 175, 177, 179, 2448, 181, 183, 185, 5952, 5954,
+		private final static int[] ANTIPOISON = new int[] {2446, 175, 177, 179, 2448, 181, 183, 185, 5952, 5954,
 				5956, 5958, 5943, 5945, 5947, 5949, 11433, 11435, 11501, 11503};
 
-		private final int[] ZAMORAK_POTIONS = new int[] {2450, 189, 191, 193, 11521, 11523};
+		private final static int[] ZAMORAK_POTIONS = new int[] {2450, 189, 191, 193, 11521, 11523};
 
-		private final int[] SARADOMIN_POTIONS = new int[] {6685, 6687, 6689, 6691};
+		private final static int[] SARADOMIN_POTIONS = new int[] {6685, 6687, 6689, 6691};
 
-		private final int[] OVERLOAD_POTIONS = new int[] {15332, 15333, 15334, 15335};
+		private final static int[] OVERLOAD_POTIONS = new int[] {15332, 15333, 15334, 15335};
 
-		private final int[] VIAL = new int[] {229};
+		private final static int[] VIAL = new int[] {229};
 
-		public boolean setQuickPrayer = true;
+		public static boolean setQuickPrayer = true;
 
-		public HashMap<String, Item[]> getPotions() {
+		public static HashMap<String, Item[]> getPotions() {
 			HashMap<String, Item[]> potions = new HashMap<String, Item[]>();
 
 			potions.put("MAGIC", getRealItems(MAGIC_POTIONS));
@@ -544,7 +538,7 @@ public class UniversalFighter extends DMethodProvider {
 			return potions;
 		}
 
-		public void usePotions() {
+		public static void usePotions() {
 			HashMap<String, Item[]> potions = getPotions();
 
 			if (Inventory.getItems(VIAL).length != 0) {
@@ -634,7 +628,7 @@ public class UniversalFighter extends DMethodProvider {
 			}
 		}
 
-		private Item[] getRealItems(int[] ids) {
+		private static Item[] getRealItems(int[] ids) {
 			Item[] raw = Inventory.getItems(ids);
 			ArrayList<Item> refined = new ArrayList<Item>();
 			for (Item item : raw) {
@@ -647,30 +641,30 @@ public class UniversalFighter extends DMethodProvider {
 			return refined.toArray(new Item[refined.size()]);
 		}
 
-		private boolean shouldUsePrayerPot() {
+		private static boolean shouldUsePrayerPot() {
 			return (Skills.getAbsoluteLevel(Skills.PRAYER) - Prayer.getRemainingPoints()) > (7+Math.floor(Skills.getAbsoluteLevel(Skills.PRAYER)/4));
 		}
 
-		private boolean statIsBoosted(int Skill) {
+		private static boolean statIsBoosted(int Skill) {
 			return Skills.getLevel(Skill) != Skills.getAbsoluteLevel(Skill);
 		}
 	}
 
-	public class Loot {
+	public static class Loot {
 
-		private String[] lootNames = new String[0];
+		private static String[] lootNames = new String[0];
 
-		public GroundItem lastClickedItem = null;
-		public boolean itemWasClickedLast = false;
+		public static GroundItem lastClickedItem = null;
+		public static boolean itemWasClickedLast = false;
 
-		public boolean onlyTakeLootFromKilled = false;
+		public static boolean onlyTakeLootFromKilled = false;
 
 		/**
 		 * Gets the nearest loot, based on the filter
 		 *
 		 * @return The nearest item to loot, or null if none.
 		 */
-		public GroundItem getLoot() {
+		public static GroundItem getLoot() {
 			return GroundItems.getNearest(lootFilter);
 		}
 
@@ -681,7 +675,7 @@ public class UniversalFighter extends DMethodProvider {
 		 * @return -1 if error, 0 if taken, 1 if walked
 		 */
 		
-		public int takeItem(GroundItem item) {
+		public static int takeItem(GroundItem item) {
 			if (item == null)
 				return -1;
 			String action = "Take " + item.getItem().getName();
@@ -690,14 +684,14 @@ public class UniversalFighter extends DMethodProvider {
 					if (Menu.isOpen())
 						Mouse.moveRandomly(300, 500);
 					Point p = item.getLocation().toScreen(random(0.48, 0.52), random(0.48, 0.52), 0);
-					if (!Calculations.pointOnScreen(p))
+					if (!Calculations.isPointOnScreen(p))
 						continue;
 					Mouse.move(p, 3, 3);
 					if (Menu.contains(action)) {
 						if (Menu.getItems()[0].contains(action)) {
 							Mouse.click(true);
 							itemWasClickedLast = true;
-							npcs.npcWasClickedLast = false;
+							SlayerNPCs.npcWasClickedLast = false;
 							lastClickedItem = item;
 							return 0;
 						} else {
@@ -705,7 +699,7 @@ public class UniversalFighter extends DMethodProvider {
 							sleep(random(100, 200));
 							if (Menu.click(action)) {
 								itemWasClickedLast = true;
-								npcs.npcWasClickedLast = false;
+								SlayerNPCs.npcWasClickedLast = false;
 								lastClickedItem = item;
 								return 0;
 							}
@@ -716,7 +710,7 @@ public class UniversalFighter extends DMethodProvider {
 				Walking.walkTileMM(Walking.getClosestTileOnMap(item.getLocation()));
 				sleep(random(1500, 2000));
 				if (!Players.getLocal().isMoving()) {
-					tiles.addBadTile(item.getLocation());
+					Tiles.addBadTile(item.getLocation());
 					return -1;
 				}
 				return 1;
@@ -724,7 +718,7 @@ public class UniversalFighter extends DMethodProvider {
 			return -1;
 		}
 
-		private final Filter<GroundItem> lootFilter = new Filter<GroundItem>() {
+		private final static Filter<GroundItem> lootFilter = new Filter<GroundItem>() {
 			public boolean accept(GroundItem t) {
 				//Skip if we can't hold it
 				Item i;
@@ -744,7 +738,7 @@ public class UniversalFighter extends DMethodProvider {
 				}
 
 				if (good) {
-					for (Tile badTile : tiles.badTiles) {
+					for (Tile badTile : Tiles.badTiles) {
 						if (t.getLocation().getX() == badTile.getX() && t.getLocation().getY() == badTile.getY() ) {
 							good = false;
 							break;
@@ -752,8 +746,8 @@ public class UniversalFighter extends DMethodProvider {
 					}
 				}
 				if (good && onlyTakeLootFromKilled) {
-					if (!npcs.tilesFoughtOn.isEmpty()) {
-						for (Tile tileFoughtOn : npcs.tilesFoughtOn) {
+					if (!SlayerNPCs.tilesFoughtOn.isEmpty()) {
+						for (Tile tileFoughtOn : SlayerNPCs.tilesFoughtOn) {
 							if (t.getLocation().getX() == tileFoughtOn.getX() && t.getLocation().getY() == tileFoughtOn.getY()) {
 								return true;
 							} else {
@@ -770,11 +764,11 @@ public class UniversalFighter extends DMethodProvider {
 
 	}
 
-	public class Tiles {
-		ArrayList<Tile> badTiles = new ArrayList<Tile>();
-		int threshold = 5;
+	public static class Tiles {
+		static ArrayList<Tile> badTiles = new ArrayList<Tile>();
+		static int threshold = 5;
 
-		public Tile getNearestTile(Tile[] tiles) {
+		public static Tile getNearestTile(Tile[] tiles) {
 			Tile closest = null;
 			for (Tile t : tiles) {
 				if (closest == null || Calculations.distanceTo(t) < Calculations.distanceTo(closest))
@@ -783,11 +777,11 @@ public class UniversalFighter extends DMethodProvider {
 			return closest;
 		}
 
-		public void addBadTile(Tile tile) {
+		public static void addBadTile(Tile tile) {
 			addBadTile(tile, threshold);
 		}
 
-		public void addBadTile(Tile tile, int thres) {
+		public static void addBadTile(Tile tile, int thres) {
 			if (thres > -1) {
 				if (badTiles.size() > 0) {
 
@@ -823,7 +817,7 @@ public class UniversalFighter extends DMethodProvider {
 			}
 		}
 
-		private boolean NPCisOnBadTile(NPC t) {
+		private static boolean NPCisOnBadTile(NPC t) {
 			for (Tile badTile: badTiles) {
 				if (t.getLocation().getX() == badTile.getX() &&
 						t.getLocation().getY() == badTile.getY() ) {
@@ -836,7 +830,7 @@ public class UniversalFighter extends DMethodProvider {
 
 	}
 
-	private boolean isPoisoned() {
+	private static boolean isPoisoned() {
 		return Settings.get(102) > 0 || Interfaces.getComponent(748, 4).getTextureID() == 1801;
 	}
 }
