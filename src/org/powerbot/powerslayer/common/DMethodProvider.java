@@ -6,6 +6,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.powerbot.powerslayer.PowerSlayer;
+
+import org.rsbot.script.internal.ScriptHandler;
+import org.rsbot.script.methods.Game;
 import org.rsbot.script.methods.Players;
 import org.rsbot.script.wrappers.GameObject;
 import org.rsbot.script.wrappers.GroundItem;
@@ -15,18 +18,21 @@ import org.rsbot.script.wrappers.Tile;
 
 public abstract class DMethodProvider {
     public PowerSlayer parent;
+    public interface Condition {
+		public boolean isTrue();
+	}
 
     /**
      * The logger instance
      */
-    public final Logger log;
+    public static Logger log;
+    public static ScriptHandler handler;
     static Random r = new Random();
     
 
     public DMethodProvider(PowerSlayer Parent) {
     	parent = Parent;
-        log = Logger.getLogger(((Parent != null) ?
-        		parent.getClass().getName() + "-" : "") + getClass().getName());
+        log = Logger.getLogger(((Parent != null) ? parent.getClass().getName() + "-" : "") + getClass().getName());
     }
 
     public static Player getMyPlayer() {
@@ -55,8 +61,7 @@ public abstract class DMethodProvider {
      * @return Random double min <= n < max.
      */
     public static double random(double min, double max) {
-        return Math.min(min, max) + r.nextDouble()
-                * Math.abs(max - min);
+        return Math.min(min, max) + r.nextDouble()* Math.abs(max - min);
     }
 
     /**
@@ -136,7 +141,7 @@ public abstract class DMethodProvider {
      *
      * @param message Object to log.
      */
-    public void log(Object message) {
+    public static void log(Object message) {
         log.info(message.toString());
     }
 
@@ -146,8 +151,22 @@ public abstract class DMethodProvider {
      * @param color   The color of the font
      * @param message Object to log
      */
-    public void log(Color color, Object message) {
+    public static void log(Color color, Object message) {
         Object[] parameters = {color};
         log.log(Level.INFO, message.toString(), parameters);
     }
+    
+    //FIXME: WILL THIS WORK!!!
+    public static boolean waitIf (int threshold, Condition waitIf) {
+		int millis = threshold / 2;
+		while (millis > 50) {
+			millis = millis / 2;
+		}
+		for (int i = 0; i < (int) (1 + (threshold / millis)) && waitIf.isTrue(); i++) {
+			if (!Game.isLoggedIn() || i == threshold/millis || handler.isRunning()) 
+				return false;
+			sleep(millis);
+		}
+		return true;
+	}
 }
