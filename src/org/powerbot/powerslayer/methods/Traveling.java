@@ -1,7 +1,7 @@
 package org.powerbot.powerslayer.methods;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.common.DMethodProvider;
-import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.Banks;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.wrappers.Task;
@@ -10,33 +10,34 @@ import org.rsbot.script.wrappers.Tile;
 
 //TODO: Convert to QS Once it comes out
 public class Traveling extends DMethodProvider {
-    public Traveling(MethodBase methods) {
-        super(methods);
+    
+	public Traveling(PowerSlayer parent) {
+        super(parent);
     }
 
-    public boolean travelToMaster(SlayerMaster master) {
+    public static boolean travelToMaster(SlayerMaster master) {
         return travelTo(master.getLocation());
     }
 
-    public boolean travelToSlayerLocation(Task task) {
+    public static boolean travelToSlayerLocation(Task task) {
 	    return travelTo(task.getMonster().getLocationProfile().getBestLocation().getSlayerLocation().getTile());
     }
 
     // The default will be the closest bank to the player
-    public boolean travelToBank() {
+    public static boolean travelToBank() {
         return travelToBank(getNearestBank());
     }
 
-    public boolean travelToBank(Banks bank) {
+    public static boolean travelToBank(Banks bank) {
         return travelTo(bank.getArea().getCentralTile());
     }
 
-    public boolean travelTo(Tile t) {
+    public static boolean travelTo(Tile t) {
         //return Web.generateRoute(getMyPlayer().getLocation(), t).execute();
 	    return false;
     }
 
-    public Banks getNearestBank() {
+    public static Banks getNearestBank() {
         /*
        * TODO Add a method to remove all banks that a player can not  reach.
        * TODO Use the web to return a 'real' distance.

@@ -3,8 +3,13 @@ package org.powerbot.powerslayer.data;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.methods.CombatStyle;
 import org.powerbot.powerslayer.methods.CombatStyle.Style;
-import org.powerbot.powerslayer.wrappers.*;
+import org.powerbot.powerslayer.wrappers.Finisher;
+import org.powerbot.powerslayer.wrappers.LocationProfile;
+import org.powerbot.powerslayer.wrappers.MonsterInfo;
 import org.powerbot.powerslayer.wrappers.MonsterInfo.Weakness;
+import org.powerbot.powerslayer.wrappers.MonsterLocation;
+import org.powerbot.powerslayer.wrappers.Requirements;
+import org.powerbot.powerslayer.wrappers.Starter;
 import org.rsbot.script.wrappers.Tile;
 
 public class Monsters {

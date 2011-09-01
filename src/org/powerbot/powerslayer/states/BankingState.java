@@ -1,13 +1,13 @@
 package org.powerbot.powerslayer.states;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.abstracts.State;
-import org.powerbot.powerslayer.common.MethodBase;
 
 public class BankingState extends State {
 
 	//TODO: Write State
-    public BankingState(MethodBase methods) {
-        super(methods);
+    public BankingState(PowerSlayer parent) {
+    	super(parent);
     }
 
     public int loop() {

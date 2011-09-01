@@ -1,27 +1,35 @@
 package org.powerbot.powerslayer.common;
 
-import org.rsbot.script.methods.Players;
-import org.rsbot.script.wrappers.*;
-
-import java.awt.*;
+import java.awt.Color;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.powerbot.powerslayer.PowerSlayer;
+import org.rsbot.script.methods.Players;
+import org.rsbot.script.wrappers.GameObject;
+import org.rsbot.script.wrappers.GroundItem;
+import org.rsbot.script.wrappers.NPC;
+import org.rsbot.script.wrappers.Player;
+import org.rsbot.script.wrappers.Tile;
+
 public abstract class DMethodProvider {
-    public MethodBase methods;
+    public PowerSlayer parent;
 
     /**
      * The logger instance
      */
     public final Logger log;
+    static Random r = new Random();
+    
 
-    public DMethodProvider(MethodBase methods) {
-        this.methods = methods;
-        log = Logger.getLogger(((methods != null && methods.parent != null) ?
-		        methods.parent.getClass().getName() + "-" : "") + getClass().getName());
+    public DMethodProvider(PowerSlayer Parent) {
+    	parent = Parent;
+        log = Logger.getLogger(((Parent != null) ?
+        		parent.getClass().getName() + "-" : "") + getClass().getName());
     }
 
-    public Player getMyPlayer() {
+    public static Player getMyPlayer() {
         return Players.getLocal();
     }
 
@@ -33,9 +41,9 @@ public abstract class DMethodProvider {
      * @param max The exclusive upper bound.
      * @return Random integer min <= n < max.
      */
-    public int random(int min, int max) {
+    public static int random(int min, int max) {
         int n = Math.abs(max - min);
-        return Math.min(min, max) + (n == 0 ? 0 : methods.random.nextInt(n));
+        return Math.min(min, max) + (n == 0 ? 0 : r.nextInt(n));
     }
 
     /**
@@ -46,8 +54,8 @@ public abstract class DMethodProvider {
      * @param max The exclusive upper bound.
      * @return Random double min <= n < max.
      */
-    public double random(double min, double max) {
-        return Math.min(min, max) + methods.random.nextDouble()
+    public static double random(double min, double max) {
+        return Math.min(min, max) + r.nextDouble()
                 * Math.abs(max - min);
     }
 
@@ -108,7 +116,7 @@ public abstract class DMethodProvider {
      *
      * @param toSleep The time to sleep in milliseconds.
      */
-    public void sleep(int toSleep) {
+    public static void sleep(int toSleep) {
         try {
             long start = System.currentTimeMillis();
             Thread.sleep(toSleep);

@@ -1,9 +1,11 @@
 package org.powerbot.powerslayer;
 
 import org.powerbot.powerslayer.abstracts.State;
-import org.powerbot.powerslayer.common.MethodBase;
 import org.powerbot.powerslayer.data.SlayerMaster;
-import org.powerbot.powerslayer.states.*;
+import org.powerbot.powerslayer.methods.UniversalFighter.Loot;
+import org.powerbot.powerslayer.methods.UniversalFighter.Potion;
+import org.powerbot.powerslayer.methods.UniversalFighter.SlayerNPCs;
+import org.powerbot.powerslayer.methods.UniversalFighter.Tiles;
 import org.powerbot.powerslayer.wrappers.Task;
 import org.rsbot.bot.event.events.MessageEvent;
 import org.rsbot.script.Script;
@@ -27,7 +29,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 	public SlayerMaster slayerMaster;
 
 	private ArrayList<State> states = new ArrayList<State>();
-	public MethodBase methodBase = null;
 
 	private int tab = 1;
 	public Paint paint = new Paint();
@@ -35,9 +36,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 
 	@Override
 	public boolean onRun() {
-		//TODO: Decide where a player must start the script
-		initalizeMethodBase();
-		initStates();
 		return true;
 	}
 
@@ -52,21 +50,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		return -1;
 	}
 
-	public void initalizeMethodBase() {
-		if (methodBase == null) {
-			methodBase = new MethodBase(this);
-		}
-	}
-
-	public void initStates() {
-		states.add(new GetTaskState(methodBase));
-		states.add(new GoToMasterState(methodBase));
-		states.add(new GoToBankState(methodBase));
-		states.add(new GoToMonsterState(methodBase));
-		states.add(new BankingState(methodBase));
-		states.add(new FighterState(methodBase));
-	}
-
 	@SuppressWarnings("unused")
 	private int getStateLoop() {
 		for (State state : states) {
@@ -79,21 +62,21 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 
 	public void messageReceived(MessageEvent messageEvent) {
 		if(messageEvent.getMessage().equals("You can't reach that.")) {
-			if(methodBase.fighter.loot.itemWasClickedLast && methodBase.fighter.loot.lastClickedItem != null) {
-				methodBase.fighter.tiles.addBadTile(methodBase.fighter.loot.lastClickedItem.getLocation());
-			} else if(methodBase.fighter.npcs.npcWasClickedLast && methodBase.fighter.npcs.lastClickedNPC != null) {
-				methodBase.fighter.tiles.addBadTile(methodBase.fighter.npcs.lastClickedNPC.getLocation());
+			if(Loot.itemWasClickedLast && Loot.lastClickedItem != null) {
+				Tiles.addBadTile(Loot.lastClickedItem.getLocation());
+			} else if(SlayerNPCs.npcWasClickedLast && SlayerNPCs.lastClickedNPC != null) {
+				Tiles.addBadTile(SlayerNPCs.lastClickedNPC.getLocation());
 			}
 		} else if(messageEvent.getMessage().equals("You don't have any quick prayers selected.")) {
-			methodBase.fighter.pot.setQuickPrayer = false;
+			Potion.setQuickPrayer = false;
 			log("You must set your quick prayers to use prayer potions.");
 		}
 	}
 
 	//Start Paint
 
-	public class Paint {
-		public String Current = "Loading...";
+	public static class Paint {
+		public static String Current = "Loading...";
 		public Image closed;
 		public Image tabOne;
 		public Image tabTwo;
