@@ -1,7 +1,5 @@
 package org.powerbot.powerslayer.methods;
 
-import java.util.ArrayList;
-
 import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.common.DMethodProvider;
 import org.powerbot.powerslayer.data.Monsters;
@@ -9,51 +7,40 @@ import org.powerbot.powerslayer.data.Monsters.Monster;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.wrappers.Task;
 import org.rsbot.script.methods.NPCs;
-import org.rsbot.script.methods.Players;
-import org.rsbot.script.methods.Skills;
 import org.rsbot.script.methods.ui.Interfaces;
 import org.rsbot.script.wrappers.NPC;
 
 //TODO: Peer review code
 public class SlayerMasters extends DMethodProvider {
+	
 	public SlayerMasters(PowerSlayer parent) {
 		super(parent);
 	}
 
-	public static SlayerMaster getBestSlayerMaster() {
-		ArrayList<SlayerMaster> possibleMasters = new ArrayList<SlayerMaster>();
-		for(SlayerMaster master : SlayerMaster.values()) {
-			if(master.getSlayerLevel() < Skills.getLevel(Skills.SLAYER) &&
-					master.getCombatLevel() < Players.getLocal().getCombatLevel()) {
-				possibleMasters.add(master);
-			}
-		}
-		if(possibleMasters.size() < 1) {
-			return null;
-		}
-		if(possibleMasters.size() == 1) {
-			return possibleMasters.get(0);
-		}
-		if(possibleMasters.size() > 1) {
-			SlayerMaster best = null;
-			for(SlayerMaster master : possibleMasters) {
-				if(best == null || master.getCombatLevel() > best.getCombatLevel()) {
-					best = master;
-				}
-			}
-
-			for(SlayerMaster master : possibleMasters) {
-				if(best == null || master.getSlayerLevel() > best.getSlayerLevel()) {
-					best = master;
-				}
-			}
-			return best;
+	public static SlayerMaster getBestUsableMaster() {
+		SlayerMaster[] masters = SlayerMaster.values();
+		for (int i = masters.length; i > 0; i--) {
+			SlayerMaster currMaster = masters[i];
+			if (currMaster.canUse())
+				return currMaster;
 		}
 		return null;
 	}
+	
+	public boolean getTask(NPC SlayerMaster) {
+		if (Interfaces.getComponent(64, 4) != null)
+			return true;
+		return SlayerMaster.interact("Get-Task")?
+			super.waitIf(2000, new Condition() {
+				public boolean isTrue() {
+					return Interfaces.getComponent(64, 4).getText().equals("I need another assignment");
+				}
+			}) : false;
+	}
 
+	//TODO: Overly complicated.  Make multiple methods
 	public static Task getTaskFromMaster(SlayerMaster master) {
-		NPC npc = getMasterNPC(master);
+		NPC npc = getMaster();
 		if (npc != null) {
 			if (npc.interact ("Get-Task")) {
 				long time = System.currentTimeMillis ();
@@ -110,12 +97,11 @@ public class SlayerMasters extends DMethodProvider {
 		return null;
 	}
 
-	public static NPC getMasterNPC(SlayerMaster master) {
-		NPC masterNPC = null;
-		for(String name : master.getNames()) {
-			if(NPCs.getNearest(name) != null) {
-				return masterNPC;
-			}
+	public static NPC getMaster() {
+		for (SlayerMaster currMaster : SlayerMaster.values()) {
+			NPC master = NPCs.getNearest(currMaster.getNames());
+			if (master != null) 
+				return master;
 		}
 		return null;
 	}
