@@ -71,18 +71,19 @@ public class SlayerItems {
 		private final int amount = 1;
 		private final Quest[] quests;
 
+
+		SlayerEquipment (int Price, Equipment.Slot Slot, int[] Requirements, int[] ItemIDs, Quest... Quests) {
+			price = Price;
+			slot = Slot;
+			requirements = Requirements;
+			itemIDs = ItemIDs;
+			quests = Quests;
+		}
+
 		SlayerEquipment (Equipment.Slot slot, int[] skillRequirements, int[] itemIDs, Quest... quests) {
 			this(-1, slot, skillRequirements, itemIDs, quests);
 		}
-
-		SlayerEquipment (int price, Equipment.Slot slot, int[] skillRequirements, int[] itemIDs, Quest... quests) {
-			this.price = price;
-			this.slot = slot;
-			this.requirements = skillRequirements;
-			this.itemIDs = itemIDs;
-			this.quests = quests;
-		}
-
+		
 		public boolean availableAtMaster() {
 			return price != -1;
 		}

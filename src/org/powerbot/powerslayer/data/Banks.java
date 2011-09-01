@@ -31,17 +31,14 @@ public enum Banks {
     private Area area;
     private boolean isDepositBox = false;
 
-    private Banks(Area area) {
-        this.area = area;
-    }
-
-    private Banks(Area area, boolean isDepositBox) {
-        this.area = area;
-        this.isDepositBox = isDepositBox;
+    private Banks(Area Area, boolean... DepositBox) {
+        area = Area;
+        if (DepositBox != null)
+        	isDepositBox = DepositBox[0];
     }
 
     public Area getArea() {
-        return this.area;
+        return area;
     }
 
     public boolean isDepositBox() {
@@ -53,7 +50,7 @@ public enum Banks {
     }
 
     public boolean containsTile(Tile tile) {
-        return this.area.contains(new Tile[] {tile});
+        return area.contains(new Tile[] {tile});
     }
 }
 /**
