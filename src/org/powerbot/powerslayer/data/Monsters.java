@@ -14,7 +14,7 @@ public class Monsters {
 	public static enum Monster {
 		// 	TODO Add Loots?
 		//	TODO: Add in Slayer levels for monsters that are part of a group
-		ABBERANT_SPECTRE
+		ABERRANT_SPECTRE
 			("Aberrant Spectre", new Requirements(new SlayerEquipment[] {SlayerEquipment.Nosepeg, SlayerEquipment.Slayer_Helmet}),
 			new MonsterInfo(new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.UNDEAD}), new MonsterLocation(null, new Tile (3418, 3549, 1))),
 		ABYSSAL_DEMON
