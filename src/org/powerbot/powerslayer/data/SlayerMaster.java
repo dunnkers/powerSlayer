@@ -39,6 +39,13 @@ public enum SlayerMaster {
 		this.quest = quest;
 	}
 
+	/**
+	 * Checks if we have the required combat level, slayer level and quests completed.
+	 * <br/>
+	 * <br/>
+	 * <i>Please only use in a state where you are logged in.</i>
+	 * @return <tt>True</tt> if we can use this slayer master.
+	 */
 	public boolean canUse() {
 		return Players.getLocal().getCombatLevel() >= getCombatLevel() && 
 				Skills.getLevel(Skills.SLAYER) >= slayerLevel && 
