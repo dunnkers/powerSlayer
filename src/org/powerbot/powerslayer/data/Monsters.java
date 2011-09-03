@@ -100,6 +100,9 @@ public class Monsters {
 		CRYPT_SPIDER
 			("Crypt spider", new MonsterInfo(new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
+		CYCLOPS
+			("Cyclops", new MonsterInfo(new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//FIXME: Multiple locations with different Weaknesses based on location & level
 		DAGANNOTH
 			("Dagannoth", new MonsterInfo(new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}),
@@ -131,6 +134,9 @@ public class Monsters {
 			new MonsterLocation (null, new Tile (0, 0, 0))),
 		DESERT_WOLF
 			("Desert wolf", new MonsterInfo(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
+		DESERT_STRYKEWYRM
+			("Desert strykewyrm", new MonsterInfo(new CombatStyle(Style.MELEE, Style.MAGICAL_RANGE), new Weakness[] {Weakness.SLASH}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		DIRE_WOLF
 			("Dire wolf", new MonsterInfo(new CombatStyle(Style.MELEE), null), new MonsterLocation (null, new Tile(0, 0, 0))),
@@ -254,6 +260,9 @@ public class Monsters {
 		JUNGLE_WOLF
 			("Jungle wolf", new MonsterInfo(new CombatStyle(Style.MELEE), null),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
+		JUNGLE_STRYKEWYRM
+			("Jungle strykewyrm", new MonsterInfo(new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.STAB, Weakness.RANGE}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//FIXME: Add in Keris support
 		KALPHITE_GUARDIAN
 			("Kalphite guardian", new MonsterInfo(new CombatStyle (Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.KERIS}),
@@ -327,6 +336,9 @@ public class Monsters {
 			("Mutated zygomite", new Requirements(new SlayerEquipment[] {SlayerEquipment.Fungicide_Spray}, new Finisher(SlayerEquipment.Fungicide_Spray)),
 			new MonsterInfo(new CombatStyle(Style.MAGICAL_MELEE, Style.MAGICAL_RANGE), new Weakness[] {Weakness.SLASH}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
+		MUTATED_JADINKO
+			("Mutated jadinko", new MonsterInfo(new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.RANGE}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		NECHRYAEL
 			("Nechryael", new MonsterInfo(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.DEMONIC}),
 			new MonsterLocation (null, new Tile(3441, 3567, 2))),
@@ -353,6 +365,9 @@ public class Monsters {
 			("Rock slug", new Requirements(new SlayerEquipment[] {SlayerEquipment.Bag_Of_Salt}, new Finisher(SlayerEquipment.Bag_Of_Salt)),
 			new MonsterInfo(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}),
 			new MonsterLocation (null, new Tile(2798, 10019, 0))),
+		RED_DRAGON
+			("Red Dragon", new MonsterInfo(new CombatStyle(Style.MELEE, Style.RANGED_DRAGONFIRE), new Weakness[] {Weakness.RANGE, Weakness.STAB}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SCABARAS_LANCER
 			("Scabaras lancer", new MonsterInfo(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
