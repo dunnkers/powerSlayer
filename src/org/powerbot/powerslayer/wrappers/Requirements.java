@@ -1,8 +1,11 @@
 package org.powerbot.powerslayer.wrappers;
 
 import org.powerbot.powerslayer.data.Quests;
+import org.powerbot.powerslayer.data.Quests.Quest;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.methods.CombatStyle;
+import org.powerbot.powerslayer.methods.SlayerEquip;
+import org.powerbot.powerslayer.methods.SlayerInventory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,31 +13,30 @@ import java.util.List;
 
 public class Requirements {
     List<SlayerEquipment> items = new ArrayList<SlayerEquipment>();
+	List<Quest> quests = new ArrayList<Quest>();
     Finisher finisher;
     Starter starter;
     CombatStyle style = null;
-
     boolean lightsource = false;
 
 	//TODO: Do we really need all these constructors?
-    public Requirements(SlayerEquipment[] itemArray, Quests.Quest[] questArray, Finisher finisher, Starter starter,
+    public Requirements(SlayerEquipment[] itemArray, Quest[] questArray, Finisher finisher, Starter starter,
                         CombatStyle style, boolean lightsource) {
         this.items.addAll(Arrays.asList(itemArray));
+	    this.quests.addAll(Arrays.asList(questArray));
         this.finisher = finisher;
         this.starter = starter;
         this.style = style;
     }
 
-    public Requirements(SlayerEquipment[] itemArray, Finisher finisher, Starter starter,
-    		CombatStyle style) {
+    public Requirements(SlayerEquipment[] itemArray, Finisher finisher, Starter starter, CombatStyle style) {
         this.items.addAll(Arrays.asList(itemArray));
         this.finisher = finisher;
         this.starter = starter;
         this.style = style;
     }
 
-    public Requirements (SlayerEquipment[] itemArray, Finisher finisher, Starter starter,
-                        boolean lightsource) {
+    public Requirements (SlayerEquipment[] itemArray, Finisher finisher, Starter starter, boolean lightsource) {
         this(itemArray, null, finisher, starter, null, lightsource);
     }
 
@@ -50,20 +52,16 @@ public class Requirements {
         this(itemArray, null, starter, null);
     }
 
-    public Requirements(CombatStyle style) {
-        this(null, null, null, style);
-    }
-
     public Requirements(SlayerEquipment[] itemArray) {
         this(itemArray, null, null, null);
     }
 
-    public Requirements(SlayerEquipment[] slayerEquipments, CombatStyle combatStyle) {
-		this (slayerEquipments, null, null, combatStyle);
-	}
-
 	public Requirements(boolean b) {
 		this (null, null, null, b);
+	}
+
+	public Requirements(Quest... quests) {
+		this(null, quests, null, null, null, false);
 	}
 
 	public SlayerEquipment[] getEquipment() {
@@ -87,4 +85,30 @@ public class Requirements {
     public boolean needsLightsource() {
         return lightsource;
     }
+
+	private boolean hasEquipment() {
+    	if (items.size() == 0)
+    		return true;
+    	for (SlayerEquipment currEquip : items) {
+    		if (!SlayerInventory.contains(currEquip) && !SlayerEquip.contains(currEquip))
+    			return false;
+    	}
+    	return true;
+    }
+
+    private boolean hasFinisher() {
+	    return finisher == null || SlayerInventory.hasEnough(finisher);
+    }
+
+    private boolean hasStarter() {
+	    return starter == null || SlayerInventory.hasEnough(starter);
+    }
+
+	private boolean finishedQuests() {
+		return quests.size() == 0 || Quests.isQuestCompleted(quests.toArray(new Quest[quests.size()]));
+	}
+
+	public boolean isSatisfied() {
+		return hasEquipment() && hasFinisher() && hasStarter() && finishedQuests();
+	}
 }

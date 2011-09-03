@@ -18,7 +18,7 @@ public class Quests {
 		QUEST_INTERFACE = 190, QUEST_LIST = 18, HIDE_FINISHED_BUTTON = 12, MOUSE_INTERFACE = 261, BUTTON_CHANGER = 6; 
 	private static ArrayList<Quest> completedQuests;
 	
-	public enum Quest {
+	public static enum Quest {
 		COOKS_ASSISTANT ("Cook's Assistant", 1, true),
 		DEMON_SLAYER ("Demon Slayer", 2, true),
 		DORICS_QUEST ("Doric's Quest", 3, true),

@@ -1,15 +1,17 @@
 package org.powerbot.powerslayer.data;
 
+import org.powerbot.powerslayer.data.Quests.Quest;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.methods.CombatStyle;
 import org.powerbot.powerslayer.methods.CombatStyle.Style;
 import org.powerbot.powerslayer.wrappers.*;
 import org.powerbot.powerslayer.wrappers.MonsterInfo.Weakness;
+import org.rsbot.script.methods.Calculations;
 import org.rsbot.script.wrappers.Tile;
 
 public class Monsters {
 
-	public enum Monster {
+	public static enum Monster {
 		// 	TODO Add Loots?
 		//	TODO: Add in Slayer levels for monsters that are part of a group
 		ABBERANT_SPECTRE
@@ -386,9 +388,8 @@ public class Monsters {
 		SKELETON
 			("Skeleton", new MonsterInfo(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.CRUSH, Weakness.UNDEAD}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
-		//TODO: Add in Missing My Mummy as Quest Req
 		SMALL_SCARAB
-			("Small scarab", new MonsterInfo(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}),
+			("Small scarab", new Requirements(Quest.MISSING_MY_MUMMY), new MonsterInfo(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.SLASH}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SPIDER
 			("Spider", new MonsterInfo(new CombatStyle (Style.MELEE), null),
@@ -458,9 +459,6 @@ public class Monsters {
 		private LocationProfile locationProfile;
 		private MonsterInfo info = null;
 
-		Monster(String[] names, Requirements Requirements, MonsterLocation... MonsterLocations) {
-			this (names, Requirements, null, MonsterLocations);
-		}
 
 		Monster(String[] names, Requirements Requirements, MonsterInfo info, MonsterLocation... monsterLocations) {
 			this.names = names;
@@ -469,6 +467,9 @@ public class Monsters {
 			this.info = info;
 		}
 
+		Monster(String[] names, Requirements Requirements, MonsterLocation... MonsterLocations) {
+			this (names, Requirements, null, MonsterLocations);
+		}
 
 		Monster(String[] names, MonsterInfo info, MonsterLocation... monsterLocations) {
 			this (names, null, info, monsterLocations);
@@ -516,7 +517,7 @@ public class Monsters {
 		}
 	}
 
-	public enum MonsterGroup {
+	public static enum MonsterGroup {
 		DAGANNOTH (Monster.DAGANNOTH, Monster.DAGANNOTH_GUARDIAN, Monster.DAGANNOTH_PRIME, Monster.DAGANNOTH_REX,
 		Monster.DAGANNOTH_SPAWN, Monster.DAGANNOTH_SUPREME),
 
@@ -542,25 +543,31 @@ public class Monsters {
 			Monster.ICE_TROLL_RUNT, Monster.MOUNTAIN_TROLL, Monster.TROLL_GENERAL),
 
 		WOLVES (Monster.DESERT_WOLF, Monster.DIRE_WOLF, Monster.FENRIS_WOLF, Monster.ICE_WOLF,
-			Monster.JUNGLE_WOLF, Monster.WOLF);
-
+			Monster.JUNGLE_WOLF, Monster.WOLF),
+		NULL();
 		Monster[] monsters;
-
-		MonsterGroup(Monster... monsters) {
-			this.monsters = monsters;
+		
+		MonsterGroup(Monster... Monsters) {
+			monsters = Monsters;
 		}
 
 		public Monster[] getMonsters() {
-			return this.monsters;
+			return monsters;
 		}
 
 		public String toString() {
 			return name().replace("_", " ");
 		}
 
-		//TODO: Write getBestMonster Method for Monster Groups
 		public Monster getBestMonster() {
-			return null;
+			Monster toReturn = null;
+			int distance = Integer.MAX_VALUE;
+			for(Monster mon : monsters) {
+				if(mon.getRequirements().isSatisfied())
+					if(Calculations.distanceTo(mon.getLocationProfile().getNearestLocation()) < distance)
+						toReturn = mon;
+			}
+			return toReturn;
 		}
 
 	}

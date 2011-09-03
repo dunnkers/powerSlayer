@@ -1,13 +1,14 @@
 package org.powerbot.powerslayer.abstracts;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.common.DMethodProvider;
-import org.powerbot.powerslayer.common.MethodBase;
 
 
 public abstract class State extends DMethodProvider {
 
-    public State(MethodBase methods) {
-        super(methods);
+	
+    public State(PowerSlayer parent) {
+    	super(parent);
     }
 
     public abstract int loop();

@@ -1,27 +1,36 @@
 package org.powerbot.powerslayer.common;
 
+import org.powerbot.powerslayer.PowerSlayer;
+import org.rsbot.script.internal.ScriptHandler;
+import org.rsbot.script.methods.Game;
 import org.rsbot.script.methods.Players;
 import org.rsbot.script.wrappers.*;
 
 import java.awt.*;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class DMethodProvider {
-    public MethodBase methods;
+    public PowerSlayer parent;
+    public interface Condition {
+		public boolean isTrue();
+	}
 
     /**
      * The logger instance
      */
-    public final Logger log;
+    public static Logger log;
+    public static ScriptHandler handler;
+    static Random r = new Random();
+    
 
-    public DMethodProvider(MethodBase methods) {
-        this.methods = methods;
-        log = Logger.getLogger(((methods != null && methods.parent != null) ?
-		        methods.parent.getClass().getName() + "-" : "") + getClass().getName());
+    public DMethodProvider(PowerSlayer Parent) {
+    	parent = Parent;
+        log = Logger.getLogger(((Parent != null) ? parent.getClass().getName() + "-" : "") + getClass().getName());
     }
 
-    public Player getMyPlayer() {
+    public static Player getMyPlayer() {
         return Players.getLocal();
     }
 
@@ -33,9 +42,9 @@ public abstract class DMethodProvider {
      * @param max The exclusive upper bound.
      * @return Random integer min <= n < max.
      */
-    public int random(int min, int max) {
+    public static int random(int min, int max) {
         int n = Math.abs(max - min);
-        return Math.min(min, max) + (n == 0 ? 0 : methods.random.nextInt(n));
+        return Math.min(min, max) + (n == 0 ? 0 : r.nextInt(n));
     }
 
     /**
@@ -46,9 +55,8 @@ public abstract class DMethodProvider {
      * @param max The exclusive upper bound.
      * @return Random double min <= n < max.
      */
-    public double random(double min, double max) {
-        return Math.min(min, max) + methods.random.nextDouble()
-                * Math.abs(max - min);
+    public static double random(double min, double max) {
+        return Math.min(min, max) + r.nextDouble()* Math.abs(max - min);
     }
 
     /**
@@ -108,7 +116,7 @@ public abstract class DMethodProvider {
      *
      * @param toSleep The time to sleep in milliseconds.
      */
-    public void sleep(int toSleep) {
+    public static void sleep(int toSleep) {
         try {
             long start = System.currentTimeMillis();
             Thread.sleep(toSleep);
@@ -128,7 +136,7 @@ public abstract class DMethodProvider {
      *
      * @param message Object to log.
      */
-    public void log(Object message) {
+    public static void log(Object message) {
         log.info(message.toString());
     }
 
@@ -138,8 +146,22 @@ public abstract class DMethodProvider {
      * @param color   The color of the font
      * @param message Object to log
      */
-    public void log(Color color, Object message) {
+    public static void log(Color color, Object message) {
         Object[] parameters = {color};
         log.log(Level.INFO, message.toString(), parameters);
     }
+    
+    //FIXME: WILL THIS WORK!!!
+    public static boolean waitIf (int threshold, Condition waitIf) {
+		int millis = threshold / 2;
+		while (millis > 50) {
+			millis = millis / 2;
+		}
+		for (int i = 0; i < 1 + (threshold / millis) && waitIf.isTrue(); i++) {
+			if (!Game.isLoggedIn() || i == threshold/millis || handler.isRunning()) 
+				return false;
+			sleep(millis);
+		}
+		return true;
+	}
 }

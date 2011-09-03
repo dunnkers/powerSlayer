@@ -1,12 +1,12 @@
 package org.powerbot.powerslayer.states;
 
+import org.powerbot.powerslayer.PowerSlayer;
 import org.powerbot.powerslayer.abstracts.GoToState;
-import org.powerbot.powerslayer.common.MethodBase;
 
 public class GoToMonsterState extends GoToState {
 	//TODO: Write State
-    public GoToMonsterState(MethodBase methods) {
-        super(methods);
+    public GoToMonsterState(PowerSlayer parent) {
+        super(parent);
     }
 
     public int loop() {

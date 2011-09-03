@@ -6,14 +6,20 @@ import org.rsbot.script.methods.tabs.Equipment;
 
 public class SlayerItems {
 
-	public static SlayerEquipment[] 
-	slayerHelmets = {
-		SlayerEquipment.Full_Slayer_Helmet_4charged5, SlayerEquipment.Full_Slayer_Helmet_4e5, SlayerEquipment.Full_Slayer_Helmet, 
-		SlayerEquipment.Slayer_Helmet_4charged5, SlayerEquipment.Slayer_Helmet_4e5, SlayerEquipment.Slayer_Helmet
-	},
-	grassWeapons = {
-		SlayerEquipment.LeafBladed_Spear, SlayerEquipment.LeafBladed_Sword, SlayerEquipment.Broad_Arrows, SlayerEquipment.BroadTipped_Bolts
-	};
+	public enum SlayerEquipmentGroup {
+		slayerHelmets(
+			SlayerEquipment.Full_Slayer_Helmet_4charged5, SlayerEquipment.Full_Slayer_Helmet_4e5, SlayerEquipment.Full_Slayer_Helmet,
+			SlayerEquipment.Slayer_Helmet_4charged5, SlayerEquipment.Slayer_Helmet_4e5, SlayerEquipment.Slayer_Helmet
+		),
+		grassWeapons(
+			SlayerEquipment.LeafBladed_Spear, SlayerEquipment.LeafBladed_Sword, SlayerEquipment.Broad_Arrows, SlayerEquipment.BroadTipped_Bolts
+		);
+
+		SlayerEquipment[] equipment;
+		SlayerEquipmentGroup(SlayerEquipment... equipment) {
+			this.equipment = equipment;
+		}
+	}
 
 	//TODO: Add in Chaos Shield, Gadderhammer, Keris, Balmung, and Cosmic Shield
 	//TODO: Add in 2-handed Item support & Optional support
@@ -71,18 +77,19 @@ public class SlayerItems {
 		private final int amount = 1;
 		private final Quest[] quests;
 
+
+		SlayerEquipment (int Price, Equipment.Slot Slot, int[] Requirements, int[] ItemIDs, Quest... Quests) {
+			price = Price;
+			slot = Slot;
+			requirements = Requirements;
+			itemIDs = ItemIDs;
+			quests = Quests;
+		}
+
 		SlayerEquipment (Equipment.Slot slot, int[] skillRequirements, int[] itemIDs, Quest... quests) {
 			this(-1, slot, skillRequirements, itemIDs, quests);
 		}
-
-		SlayerEquipment (int price, Equipment.Slot slot, int[] skillRequirements, int[] itemIDs, Quest... quests) {
-			this.price = price;
-			this.slot = slot;
-			this.requirements = skillRequirements;
-			this.itemIDs = itemIDs;
-			this.quests = quests;
-		}
-
+		
 		public boolean availableAtMaster() {
 			return price != -1;
 		}
@@ -136,14 +143,14 @@ public class SlayerItems {
 	}
 
 	//TODO: Update to cover Earmuffs and shit
-	private static SlayerEquipment[] checkGroups(SlayerEquipment currEquip) {
+	private static SlayerEquipmentGroup checkGroups(SlayerEquipment currEquip) {
 		// TODO Auto-generated method stub
 		String equipment = currEquip.getName();
 		if (equipment.contains("Helmet"))
-			return slayerHelmets;
+			return SlayerEquipmentGroup.slayerHelmets;
 		if (equipment.contains("Broad") || equipment.contains("Grass"))
-			return grassWeapons;
-		return new SlayerEquipment[] {get(equipment)};
+			return SlayerEquipmentGroup.grassWeapons;
+		return null;
 	}
 
 	
@@ -158,7 +165,7 @@ public class SlayerItems {
 	}
 
 	public static SlayerEquipment get(String itemName) {
-		for (SlayerEquipment currEquip: getAll()) {
+		for (SlayerEquipment currEquip : getAll()) {
 			if (itemName.equalsIgnoreCase(currEquip.getName()))
 				return currEquip;
 		}
@@ -168,22 +175,4 @@ public class SlayerItems {
 	public static SlayerEquipment[] getAll() {
 		return SlayerEquipment.values();
 	}
-
-	public static SlayerEquipment[] getAllValid(int itemID) {
-		for (SlayerEquipment currEquip: getAll()) {
-			for (int currInt: currEquip.getIDs())
-				if (currInt == itemID) 
-					return checkGroups(currEquip);
-		}
-		return null;
-	}
-
-	public static SlayerEquipment[] getAllValid(String itemName) {
-		for (SlayerEquipment currEquip: getAll()) {
-			if (currEquip.getName().equals(itemName)) 
-				return checkGroups(currEquip);
-		}
-		return null;
-	}
-
 }
