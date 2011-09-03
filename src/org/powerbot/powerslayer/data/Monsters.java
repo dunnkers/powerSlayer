@@ -203,6 +203,9 @@ public class Monsters {
 		HILL_GIANT
 			("Hill giant", new MonsterInfo(new CombatStyle (Style.MELEE), new Weakness[] {Weakness.STAB}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
+		HOBGOBLIN
+			("Hobgoblin", new MonsterInfo(new CombatStyle (Style.MELEE), new Weakness[] {Weakness.SLASH, Weakness.RANGE, Weakness.MAGIC}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		ICEFIEND
 			("Icefiend", new MonsterInfo(new CombatStyle (Style.MELEE, Style.MAGIC, Style.RANGE), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.CRUSH}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
