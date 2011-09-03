@@ -1,9 +1,6 @@
 package org.powerbot.powerslayer.methods;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 //TODO: Discuss movement/ rewriting
 public class CombatStyle {
@@ -17,27 +14,6 @@ public class CombatStyle {
             this.style[i + 1] = style[0];
         maxHits = new int[this.style.length];
         Arrays.fill(maxHits, -1);
-    }
-
-    public CombatStyle(Object... objects) {
-        Map<Style, Integer> styles = new HashMap<Style, Integer>();
-        for (int i = 0; i < objects.length; i++) {
-            if (i > 0 && objects[i] instanceof Integer
-                    && objects[i - 1] instanceof Style) {
-                styles.put((Style) objects[i - 1], (Integer) objects[i]);
-            } else if (objects[i] instanceof Style) {
-                styles.put((Style) objects[i], -1);
-            }
-        }
-        this.style = new Style[styles.size()];
-        this.maxHits = new int[styles.size()];
-        Set<Style> keys = styles.keySet();
-        int i = 0;
-        for (Style s : keys) {
-            this.style[i] = s;
-            maxHits[i] = styles.get(s);
-            i++;
-        }
     }
 
     public Style getStyle(int tier) {

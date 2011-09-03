@@ -26,21 +26,19 @@ public class SlayerMasters extends DMethodProvider {
 		}
 		return null;
 	}
-	
+
+	//TODO: Dan's method  (I have no clue where your going with this so i just wont touch it)
 	public boolean getTask(NPC SlayerMaster) {
-		if (Interfaces.getComponent(64, 4) != null)
-			return true;
-		return SlayerMaster.interact("Get-Task")?
-			super.waitIf(2000, new Condition() {
-				public boolean isTrue() {
-					return Interfaces.getComponent(64, 4).getText().equals("I need another assignment");
-				}
-			}) : false;
+		return Interfaces.getComponent(64, 4) != null || SlayerMaster.interact("Get-Task") && waitIf(2000, new Condition() {
+			public boolean isTrue() {
+				return Interfaces.getComponent(64, 4).getText().equals("I need another assignment");
+			}
+		});
 	}
 
 	//TODO: Overly complicated.  Make multiple methods
 	public static Task getTaskFromMaster(SlayerMaster master) {
-		NPC npc = getMaster();
+		NPC npc = getNearestMaster();
 		if (npc != null) {
 			if (npc.interact ("Get-Task")) {
 				long time = System.currentTimeMillis ();
@@ -71,33 +69,30 @@ public class SlayerMasters extends DMethodProvider {
 						String[] words = subString.split (" ");
 						if (words.length == 2) {
 							amount = Integer.parseInt(words[0]);
-							outer: for (Monster mon : Monster.values()) {
+							for (Monster mon : Monster.values()) {
 								if (mon.getNames() == null)
 									continue;
 								for (String name : mon.getNames()) {
 									if (words[1].equals(name)) {
 										monster = mon;
-										break outer;
+										return new Task (monster, amount, master);
 									}
 								}
 							}
-							if (monster == null) {
-								for (Monsters.MonsterGroup mg : Monsters.MonsterGroup.values ()) {
-									if (mg.toString ().equals (words[1])) {
-										monster = mg.getBestMonster();
-									}
+							for (Monsters.MonsterGroup mg : Monsters.MonsterGroup.values ()) {
+								if (mg.toString ().equals (words[1])) {
+									return new Task(mg, amount, master);
 								}
 							}
 						}
 					}
-					return new Task (monster, amount, master);
 				}
 			}
 		}
 		return null;
 	}
 
-	public static NPC getMaster() {
+	public static NPC getNearestMaster() {
 		for (SlayerMaster currMaster : SlayerMaster.values()) {
 			NPC master = NPCs.getNearest(currMaster.getNames());
 			if (master != null) 

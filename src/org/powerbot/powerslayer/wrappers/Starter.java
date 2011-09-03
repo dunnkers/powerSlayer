@@ -61,11 +61,11 @@ public class Starter {
 	
 	public static boolean use (NPC Monster) {
 		String starterName = PowerSlayer.currentTask.getRequirements().getStarter().getName();
-		if (Monster.equals(null) || Monster.isDead())
+		if (Monster == null || Monster.isDead())
 			return false;
 		for (int i = 0; i < 28; i++) {
 			Item currItem = Inventory.getItemAt(i);
-			if (currItem.equals(null))
+			if (currItem == null)
 				continue;
 			if (currItem.getName().equals(starterName)) {
 				currItem.click(true);

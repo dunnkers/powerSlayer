@@ -1,5 +1,6 @@
 package org.powerbot.powerslayer.data;
 
+import org.rsbot.script.methods.Players;
 import org.rsbot.script.methods.Skills;
 import org.rsbot.script.wrappers.Tile;
 
@@ -31,14 +32,17 @@ public enum SlayerMaster {
         combatLevel = CombatLevel;
         slayerLevel = SlayerLevel;
     }
-    
-    //FIXME: Add in combat level checker
+
     public boolean canUse() {
-    	return Skills.getLevel(Skills.SLAYER) >= slayerLevel;
+    	return Skills.getLevel(Skills.SLAYER) >= slayerLevel && Players.getLocal().getCombatLevel() >= combatLevel;
     }
 
     public int getCombatLevel() {
         return this.combatLevel;
+    }
+
+    public int getSlayerLevel() {
+        return this.slayerLevel;
     }
 
     public int[] getIDs() {
@@ -52,8 +56,5 @@ public enum SlayerMaster {
     public String[] getNames() {
         return this.name;
     }
-    
-    public int getSlayerLevel() {
-        return this.slayerLevel;
-    }
+
 }

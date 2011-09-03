@@ -1,20 +1,15 @@
 package org.powerbot.powerslayer.common;
 
-import java.awt.Color;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.powerbot.powerslayer.PowerSlayer;
-
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.methods.Game;
 import org.rsbot.script.methods.Players;
-import org.rsbot.script.wrappers.GameObject;
-import org.rsbot.script.wrappers.GroundItem;
-import org.rsbot.script.wrappers.NPC;
-import org.rsbot.script.wrappers.Player;
-import org.rsbot.script.wrappers.Tile;
+import org.rsbot.script.wrappers.*;
+
+import java.awt.*;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class DMethodProvider {
     public PowerSlayer parent;
@@ -162,7 +157,7 @@ public abstract class DMethodProvider {
 		while (millis > 50) {
 			millis = millis / 2;
 		}
-		for (int i = 0; i < (int) (1 + (threshold / millis)) && waitIf.isTrue(); i++) {
+		for (int i = 0; i < 1 + (threshold / millis) && waitIf.isTrue(); i++) {
 			if (!Game.isLoggedIn() || i == threshold/millis || handler.isRunning()) 
 				return false;
 			sleep(millis);

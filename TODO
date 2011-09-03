@@ -1,17 +1,10 @@
 FIXME
 
-1. Quest finished checking.  Add to requirements?
-2. Write method to find combat level
-3. Remove light-source from Requirements (must add shit to SlayerLocations)
-
 TODO
 
 
 Locations 
 (We will need to come to a agreement as some monsters have multiple locations).
-
-MonsterGroups
-1. Add getBestMonster() method to enum
 
 SlayerItems
 1. Add in more slayerItem groups (nosepeg, earmuffs, etc...)
@@ -21,12 +14,9 @@ SlayerItems
 Traveling
 Waiting for Quantum Step.  Must discuss
 
-Slayer masters
-1. Must add Slayer Master Locations
-
 Universal fighter & FighterState
 1. Add in Keris and Wolfbane
-2. Rewrite.... maybe
+2. Rewrite.... maybe.... probably (wait for RFighter to develop)
 Zalgo2462
 
 Monsters

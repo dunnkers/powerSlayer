@@ -1,6 +1,7 @@
 package org.powerbot.powerslayer.wrappers;
 
 import org.rsbot.script.methods.Calculations;
+import org.rsbot.script.methods.Players;
 import org.rsbot.script.wrappers.Tile;
 
 public class LocationProfile {
@@ -21,13 +22,17 @@ public class LocationProfile {
 		return null;
 	}
 
-	public Tile getNearestLocationFromTile(Tile tile) {
+	public Tile getNearestLocation(Tile tile) {
 		Tile closest = null;
 		for(MonsterLocation location : locations) {
 			if (closest == null || Calculations.distanceTo(location.getTile()) < Calculations.distanceTo(closest))
 				closest = location.getTile();
 		}
 		return closest;
+	}
+
+	public Tile getNearestLocation() {
+		return getNearestLocation(Players.getLocal().getLocation());
 	}
 
 	public MonsterLocation[] getMonsterLocations() {
