@@ -40,7 +40,9 @@ public enum SlayerMaster {
 	}
 
 	public boolean canUse() {
-		return Players.getLocal().getCombatLevel() >= getCombatLevel() && Skills.getLevel(Skills.SLAYER) >= slayerLevel;
+		return Players.getLocal().getCombatLevel() >= getCombatLevel() && 
+				Skills.getLevel(Skills.SLAYER) >= slayerLevel && 
+				quest != null ? Quests.isQuestCompleted(quest) : true;
 	}
 
 	public int getCombatLevel() {
