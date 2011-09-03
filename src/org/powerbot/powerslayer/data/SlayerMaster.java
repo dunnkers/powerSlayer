@@ -6,13 +6,13 @@ import org.rsbot.script.methods.Skills;
 import org.rsbot.script.wrappers.Tile;
 
 public enum SlayerMaster {
-	// TODO Add other slayer masters + locations
-	TURAEL(new String[] { "Turael", "Spria" }, new Tile(0, 0, 0), 3),
-	MAZCHNA(new String[] { "Mazchna", "Achtryn" }, new Tile(3510, 3509, 0), 20, 0, Quest.PRIEST_IN_PERIL),
+	// TODO Complete locations; Chaeldar and Kuradel
+	TURAEL(new String[] { "Turael", "Spria" }, new Tile(2930, 3535), 3),
+	MAZCHNA(new String[] { "Mazchna", "Achtryn" }, new Tile(3510, 3509), 20, 0, Quest.PRIEST_IN_PERIL),
 	VANNAKA(new String[] { "Vannaka" }, new Tile(3146, 9914, -1), 40),
 	CHAELDAR(new String[] { "Chaeldar" }, new Tile(0, 0), 70, 0, Quest.LOST_CITY),
-	SUMONA(new String[] { "Sumona" }, new Tile(0, 0), 85, 35, Quest.SMOKING_KILLS),
-	DURADEL(new String[] { "Duradel", "Lapalok" }, new Tile(0, 0), 100, 50, Quest.SHILO_VILLAGE),
+	SUMONA(new String[] { "Sumona" }, new Tile(3358, 2994), 85, 35, Quest.SMOKING_KILLS),
+	DURADEL(new String[] { "Duradel", "Lapalok" }, new Tile(2869, 2982, 1), 100, 50, Quest.SHILO_VILLAGE),
 	KURADEL(new String[] { "Kuradel" }, new Tile(0, 0), 110, 75);
 
 	private final Tile location;
