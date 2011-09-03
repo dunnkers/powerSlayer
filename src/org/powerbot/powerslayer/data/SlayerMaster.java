@@ -7,32 +7,62 @@ import org.rsbot.script.wrappers.Tile;
 
 public enum SlayerMaster {
 	// TODO Complete locations; Chaeldar and Kuradel
-	TURAEL(new String[] { "Turael", "Spria" }, new Tile(2930, 3535), 3),
-	MAZCHNA(new String[] { "Mazchna", "Achtryn" }, new Tile(3510, 3509), 20, 0, Quest.PRIEST_IN_PERIL),
-	VANNAKA(new String[] { "Vannaka" }, new Tile(3146, 9914, -1), 40),
-	CHAELDAR(new String[] { "Chaeldar" }, new Tile(0, 0), 70, 0, Quest.LOST_CITY),
-	SUMONA(new String[] { "Sumona" }, new Tile(3358, 2994), 85, 35, Quest.SMOKING_KILLS),
-	DURADEL(new String[] { "Duradel", "Lapalok" }, new Tile(2869, 2982, 1), 100, 50, Quest.SHILO_VILLAGE),
-	KURADEL(new String[] { "Kuradel" }, new Tile(0, 0), 110, 75);
+	TURAEL(new String[] { "Turael", "Spria" },
+			new Monsters[] {
+			
+			},
+			new Tile(2930, 3535), 3),
+	MAZCHNA(new String[] { "Mazchna", "Achtryn" },
+			new Monsters[] {
+			
+			},
+			new Tile(3510, 3509), 20, 0, Quest.PRIEST_IN_PERIL),
+	VANNAKA(new String[] { "Vannaka" },
+			new Monsters[] {
+			
+			},
+			new Tile(3146, 9914, -1), 40),
+	CHAELDAR(new String[] { "Chaeldar" },
+			new Monsters[] {
+			
+			},
+			new Tile(0, 0), 70, 0, Quest.LOST_CITY),
+	SUMONA(new String[] { "Sumona" },
+			new Monsters[] {
+			
+			},
+			new Tile(3358, 2994), 85, 35, Quest.SMOKING_KILLS),
+	DURADEL(new String[] { "Duradel", "Lapalok" },
+			new Monsters[] {
+			
+			},
+			new Tile(2869, 2982, 1), 100, 50, Quest.SHILO_VILLAGE),
+	KURADEL(new String[] { "Kuradel" },
+			new Monsters[] {
+			
+			},
+			new Tile(0, 0), 110, 75);
 
 	private final Tile location;
+	private final Monsters[] monsters;
 	private final String[] names;
 	private final int combatLevel;
 	private final int slayerLevel;
 	private final Quest quest;
 
-	private SlayerMaster(String[] name, Tile location, int combatLevel) {
-		this(name, location, combatLevel, 0);
+	private SlayerMaster(String[] name, Monsters[] monsters, Tile location, int combatLevel) {
+		this(name, monsters, location, combatLevel, 0);
 	}
 
-	private SlayerMaster(String[] name, Tile location, int combatLevel,
+	private SlayerMaster(String[] name, Monsters[] monsters, Tile location, int combatLevel,
 			int slayerLevel) {
-		this(name, location, combatLevel, slayerLevel, null);
+		this(name, monsters, location, combatLevel, slayerLevel, null);
 	}
 
-	private SlayerMaster(String[] name, Tile location, int combatLevel,
+	private SlayerMaster(String[] name, Monsters[] monsters, Tile location, int combatLevel,
 			int slayerLevel, Quest quest) {
 		this.names = name;
+		this.monsters = monsters;
 		this.location = location;
 		this.combatLevel = combatLevel;
 		this.slayerLevel = slayerLevel;
@@ -52,19 +82,27 @@ public enum SlayerMaster {
 				quest != null ? Quests.isQuestCompleted(quest) : true;
 	}
 
-	public int getCombatLevel() {
-		return this.combatLevel;
+	public Tile getLocation() {
+		return location;
 	}
 
-	public Tile getLocation() {
-		return this.location;
+	public Monsters[] getMonsters() {
+		return monsters;
 	}
 
 	public String[] getNames() {
-		return this.names;
+		return names;
+	}
+
+	public int getCombatLevel() {
+		return combatLevel;
 	}
 
 	public int getSlayerLevel() {
-		return this.slayerLevel;
+		return slayerLevel;
+	}
+
+	public Quest getQuest() {
+		return quest;
 	}
 }
