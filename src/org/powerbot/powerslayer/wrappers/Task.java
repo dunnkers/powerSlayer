@@ -5,10 +5,11 @@ import org.powerbot.powerslayer.data.Monsters.MonsterGroup;
 import org.powerbot.powerslayer.data.SlayerMaster;
 
 public class Task {
-    private Monster monster;
-	private MonsterGroup monsterGroup;
-	private int amount;
-	private SlayerMaster master;
+	
+    private final Monster monster;
+	private final MonsterGroup monsterGroup;
+	private final int amount;
+	private final SlayerMaster master;
 
     public Task(Monster monster, int amount, SlayerMaster master) {
         this.monster = monster;
@@ -40,4 +41,8 @@ public class Task {
     public Requirements getRequirements() {
         return monster.getRequirements();
     }
+
+	public MonsterGroup getMonsterGroup() {
+		return monsterGroup;
+	}
 }
