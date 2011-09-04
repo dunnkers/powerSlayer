@@ -28,8 +28,8 @@ public enum Banks {
     LLETYA (new Area (2351, 3161, 2354, 3164));
     // TODO add a lot more banks.
 
-    private Area area;
-    private boolean hasDepositBox = false;
+    private final Area area;
+    private final boolean hasDepositBox;
     
     private Banks(Area area) {
         this(area, false);
