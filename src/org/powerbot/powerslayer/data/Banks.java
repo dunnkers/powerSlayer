@@ -29,20 +29,23 @@ public enum Banks {
     // TODO add a lot more banks.
 
     private Area area;
-    private boolean isDepositBox = false;
+    private boolean hasDepositBox = false;
+    
+    private Banks(Area area) {
+        this(area, false);
+    }
 
-    private Banks(Area Area, boolean... DepositBox) {
-        area = Area;
-        if (DepositBox != null)
-        	isDepositBox = DepositBox[0];
+    private Banks(Area Area, boolean hasDepositBox) {
+        this.area = Area;
+        this.hasDepositBox = hasDepositBox;
     }
 
     public Area getArea() {
         return area;
     }
 
-    public boolean isDepositBox() {
-        return isDepositBox;
+    public boolean hasDepositBox() {
+        return hasDepositBox;
     }
 
     public int getPlane() {
