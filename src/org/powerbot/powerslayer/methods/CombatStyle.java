@@ -22,7 +22,7 @@ public class CombatStyle extends ArrayList<Style> {
 	 * @param styles The styles.
 	 * @return <tt>True</tt> if this CombatStyle contained all given styles.
 	 */
-	public boolean hasStyle(Style... styles) {
+	public boolean hasStyle(final Style... styles) {
 		if (styles == null || !(styles.length > 0)) {
 			return false;
 		}
