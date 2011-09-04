@@ -10,6 +10,7 @@ import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.methods.CombatStyle;
 import org.powerbot.powerslayer.methods.SlayerEquip;
 import org.powerbot.powerslayer.methods.SlayerInventory;
+import org.rsbot.script.methods.tabs.Equipment;
 
 public class Requirements {
     List<SlayerEquipment> items = new ArrayList<SlayerEquipment>();
@@ -90,7 +91,7 @@ public class Requirements {
     	if (items.size() == 0)
     		return true;
     	for (SlayerEquipment currEquip : items) {
-    		if (!SlayerInventory.contains(currEquip) && !SlayerEquip.contains(currEquip))
+    		if (!SlayerInventory.contains(currEquip) && !contains(currEquip))
     			return false;
     	}
     	return true;
@@ -110,5 +111,9 @@ public class Requirements {
 
 	public boolean isSatisfied() {
 		return hasEquipment() && hasFinisher() && hasStarter() && finishedQuests();
+	}
+	
+	private boolean contains(SlayerEquipment equip) {
+		return equip == null || Equipment.getItem(equip.equipSlot()).getName().equalsIgnoreCase(equip.getName());
 	}
 }
