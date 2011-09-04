@@ -143,6 +143,7 @@ public class SlayerItems {
 	}
 
 	//TODO: Update to cover Earmuffs and shit
+	@SuppressWarnings("unused")
 	private static SlayerEquipmentGroup checkGroups(SlayerEquipment currEquip) {
 		// TODO Auto-generated method stub
 		String equipment = currEquip.getName();
