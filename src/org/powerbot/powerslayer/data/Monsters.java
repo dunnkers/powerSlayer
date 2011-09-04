@@ -236,6 +236,9 @@ public class Monsters {
 		ICE_WOLF
 			("Ice wolf", new MonsterInfo(new CombatStyle(Style.MELEE), new Weakness[] {Weakness.MAGIC_FIRE}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
+		ICE_STRYKEWYRM
+			("Ice strykewyrm", new MonsterInfo(new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.MAGIC_FIRE}),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
 		INFERNAL_MAGE
 			("Infernal mage", new MonsterInfo(new CombatStyle (Style.MAGIC), new Weakness[] {Weakness.SLASH, Weakness.RANGE}),
 			new MonsterLocation (null, new Tile(3439, 3564, 1))),
@@ -425,7 +428,7 @@ public class Monsters {
 			("Steel dragon", null, new MonsterInfo(new CombatStyle(Style.MELEE, Style.RANGED_DRAGONFIRE), new Weakness[] {Weakness.MAGIC_FIRE, Weakness.CRUSH, Weakness.STAB}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		SUQAH
-			("Suquh", new MonsterInfo(new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.SLASH}),
+			("Suqah", new MonsterInfo(new CombatStyle(Style.MELEE, Style.MAGIC), new Weakness[] {Weakness.SLASH}),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		//FIXME: Range weakness applies only to lvl 110 Terror Dogs
 		TERROR_DOG
@@ -441,6 +444,9 @@ public class Monsters {
 		VAMPIRE
 			("Vampire", new Requirements(new SlayerEquipment[] {SlayerEquipment.Holy_Symbol}),
 			new MonsterInfo(new CombatStyle(Style.MELEE), null),
+			new MonsterLocation (null, new Tile(0, 0, 0))),
+		VYREWATCH
+			("Vyrewatch", new MonsterInfo(new CombatStyle(Style.MELEE), null),
 			new MonsterLocation (null, new Tile(0, 0, 0))),
 		WALL_BEAST
 			("Wall beast", new Requirements(new SlayerEquipment[] {SlayerEquipment.Slayer_Helmet, SlayerEquipment.Spiny_Helmet}),
