@@ -51,10 +51,6 @@ public enum Banks {
     public int getPlane() {
         return area.getPlane();
     }
-
-    public boolean containsTile(Tile tile) {
-        return area.contains(new Tile[] {tile});
-    }
 }
 /**
 public enum BankInfo {
