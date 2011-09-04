@@ -1,6 +1,5 @@
 package org.powerbot.powerslayer.methods;
 
-import java.util.Arrays;
 
 //TODO: Discuss movement/ rewriting
 public class CombatStyle {
