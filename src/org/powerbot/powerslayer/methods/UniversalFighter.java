@@ -156,53 +156,46 @@ public class UniversalFighter extends DMethodProvider {
 		 * @return 0 if the NPC was clicked, 1 if we walked to it, or -1 if nothing happened.
 		 */
 		public static int clickNPC(NPC npc, String action) {
+			if (npc == null) {
+				return -1;
+			}
 			for (int i = 0; i < 10; i++) {
-				if (isPartiallyOnScreen(npc.getModel())) {
-					Point p = getPointOnScreen(npc.getModel(), false);
-					if (p == null || !Calculations.isPointOnScreen(p)) {
-						continue;
-					}
-					Mouse.move(p, 0, 0);
-					String[] items = Menu.getItems();
-					if (items.length > 0 && items[0].contains(action)) {
-						Mouse.click(true);
-						Loot.itemWasClickedLast = false;
-						npcWasClickedLast = true;
-						lastClickedNPC = npc;
-						return 0;
-					} else if (Menu.contains(action)) {
-						Mouse.click(false);
-						sleep(random(100, 200));
-						for (int x = 0; x < 4; x++) {
-							if (!Menu.contains(action)) {
-								break;
-							}
-							if (Menu.click(action)) {
-								Loot.itemWasClickedLast = false;
-								npcWasClickedLast = true;
-								lastClickedNPC = npc;
-								return 0;
-							}
-						}
-					}
-				} else {
+				if (getPointOnScreen(npc.getModel(), true) == null) {
 					int angle = Camera.getCharacterAngle(npc);
 					if (Calculations.distanceTo(npc) < 10 && Math.abs(angle - Camera.getAngle()) > 20) {
 						Camera.setAngle(angle + random(-20, 20));
 					}
+					continue;
+				}
+				Point p = getPointOnScreen(npc.getModel(), false);
+				if (p == null || !Calculations.isPointOnScreen(p)) {
+					continue;
+				}
+				Mouse.move(p, 0, 0);
+				String[] items = Menu.getItems();
+				if (items.length > 0 && items[0].contains(action)) {
+					Mouse.click(true);
+					Loot.itemWasClickedLast = false;
+					npcWasClickedLast = true;
+					lastClickedNPC = npc;
+					return 0;
+				} else if (Menu.contains(action)) {
+					Mouse.click(false);
+					sleep(random(100, 200));
+					for (int x = 0; x < 4; x++) {
+						if (!Menu.contains(action)) {
+							break;
+						}
+						if (Menu.click(action)) {
+							Loot.itemWasClickedLast = false;
+							npcWasClickedLast = true;
+							lastClickedNPC = npc;
+							return 0;
+						}
+					}
 				}
 			}
 			return -1;
-		}
-
-		/**
-		 * Checks if a model is partially on screen.
-		 *
-		 * @param m The RSModel to check.
-		 * @return True if any point on the model is on screen.
-		 */
-		private static boolean isPartiallyOnScreen(GameModel m) {
-			return getPointOnScreen(m, true) != null;
 		}
 
 		/**
