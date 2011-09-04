@@ -13,9 +13,14 @@ public class CombatStyle {
 		this.styles = new ArrayList<Style>(Arrays.asList(styles));
 	}
 	
+	/**
+	 * Checks if this CombatStyle has all the given styles.
+	 * @param styles The styles.
+	 * @return <tt>True</tt> if this CombatStyle contained all given styles.
+	 */
 	public boolean hasStyle(Style... styles) {
 		if (styles == null || !(styles.length > 0)) {
-			
+			return false;
 		}
 		for (final Style style : styles) {
 			if (!this.styles.contains(style)) {
