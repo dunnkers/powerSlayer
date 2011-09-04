@@ -9,6 +9,7 @@ public class CombatStyle {
 
 	private final ArrayList<Style> styles;
 	
+	//FIXME: Is this right comparing to the previous constructor? -> The maxHits can be initialized somewhere else.
 	public CombatStyle(final Style... styles) {
 		this.styles = new ArrayList<Style>(Arrays.asList(styles));
 	}
