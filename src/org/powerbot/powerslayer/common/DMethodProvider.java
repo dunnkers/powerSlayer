@@ -16,7 +16,9 @@ import org.rsbot.script.wrappers.Player;
 import org.rsbot.script.wrappers.Tile;
 
 public abstract class DMethodProvider {
+	
     public PowerSlayer parent;
+    
     public interface Condition {
 		public boolean isTrue();
 	}
@@ -156,7 +158,7 @@ public abstract class DMethodProvider {
     }
     
     //FIXME: WILL THIS WORK!!!
-    public static boolean waitIf (int threshold, Condition waitIf) {
+    public static boolean waitIf(int threshold, Condition waitIf) {
 		int millis = threshold / 2;
 		while (millis > 50) {
 			millis = millis / 2;

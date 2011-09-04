@@ -39,7 +39,6 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 
 	private int tab = 1;
 
-
 	@Override
 	public boolean onRun() {
 		return true;
@@ -66,14 +65,16 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		return -1;
 	}
 
-	public void messageReceived(MessageEvent messageEvent) {
-		if(messageEvent.getMessage().equals("You can't reach that.")) {
+	@Override
+	public void messageReceived(final MessageEvent messageEvent) {
+		final String message = messageEvent.getMessage();
+		if(message.equals("You can't reach that.")) {
 			if(Loot.itemWasClickedLast && Loot.lastClickedItem != null) {
 				Tiles.addBadTile(Loot.lastClickedItem.getLocation());
 			} else if(SlayerNPCs.npcWasClickedLast && SlayerNPCs.lastClickedNPC != null) {
 				Tiles.addBadTile(SlayerNPCs.lastClickedNPC.getLocation());
 			}
-		} else if(messageEvent.getMessage().equals("You don't have any quick prayers selected.")) {
+		} else if(message.equals("You don't have any quick prayers selected.")) {
 			Potion.setQuickPrayer = false;
 			log("You must set your quick prayers to use prayer potions.");
 		}
@@ -115,7 +116,7 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		}
 	}
 
-	enum Skill {
+	private enum Skill {
 		ATTACK (Skills.ATTACK, "Attack", 1),
 		CONSTITUTION (Skills.CONSTITUTION, "Constitution", 4),
 		DEFENCE (Skills.DEFENSE, "Defence", 3),
@@ -124,9 +125,9 @@ public class PowerSlayer extends Script implements PaintListener, MouseListener,
 		SLAYER (Skills.SLAYER, "Slayer", 0),
 		STRENGTH (Skills.STRENGTH, "Strength", 2);
 
-		int skillID;
-		String skillName;
-		int index;
+		private final int skillID;
+		private final String skillName;
+		private final int index;
 
 		private Skill(int skillID, String skillName, int index) {
 			this.skillID = skillID;
