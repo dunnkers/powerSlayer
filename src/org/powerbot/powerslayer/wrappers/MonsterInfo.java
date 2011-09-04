@@ -5,7 +5,6 @@ import org.powerbot.powerslayer.methods.CombatStyle.Style;
 
 public class MonsterInfo {
     private boolean poison;
-    private boolean fire;
     private CombatStyle style;
     private Weakness[] weak;
 
@@ -30,12 +29,11 @@ public class MonsterInfo {
     public MonsterInfo(CombatStyle style, Weakness[] weak, boolean poison) {
         this.style = style;
         this.weak = weak;
-        this.fire = this.style.hasStyle(Style.DRAGONFIRE) || this.style.hasStyle(Style.RANGED_DRAGONFIRE);
         this.poison = poison;
     }
 
     public boolean dragonFire() {
-        return fire;
+        return style.hasStyle(Style.DRAGONFIRE) || style.hasStyle(Style.RANGED_DRAGONFIRE);
     }
 
     public CombatStyle getStyle() {
