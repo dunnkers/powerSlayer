@@ -8,7 +8,6 @@ import org.powerbot.powerslayer.data.Quests;
 import org.powerbot.powerslayer.data.Quests.Quest;
 import org.powerbot.powerslayer.data.SlayerItems.SlayerEquipment;
 import org.powerbot.powerslayer.methods.CombatStyle;
-import org.powerbot.powerslayer.methods.SlayerEquip;
 import org.powerbot.powerslayer.methods.SlayerInventory;
 import org.rsbot.script.methods.tabs.Equipment;
 
