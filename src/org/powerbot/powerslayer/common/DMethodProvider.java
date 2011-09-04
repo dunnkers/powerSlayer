@@ -1,15 +1,19 @@
 package org.powerbot.powerslayer.common;
 
+import java.awt.Color;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.powerbot.powerslayer.PowerSlayer;
 import org.rsbot.script.internal.ScriptHandler;
 import org.rsbot.script.methods.Game;
 import org.rsbot.script.methods.Players;
-import org.rsbot.script.wrappers.*;
-
-import java.awt.*;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.rsbot.script.wrappers.GameObject;
+import org.rsbot.script.wrappers.GroundItem;
+import org.rsbot.script.wrappers.NPC;
+import org.rsbot.script.wrappers.Player;
+import org.rsbot.script.wrappers.Tile;
 
 public abstract class DMethodProvider {
     public PowerSlayer parent;

@@ -1,5 +1,20 @@
 package org.powerbot.powerslayer;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
 import org.powerbot.powerslayer.abstracts.State;
 import org.powerbot.powerslayer.data.SlayerMaster;
 import org.powerbot.powerslayer.methods.UniversalFighter.Loot;
@@ -13,14 +28,6 @@ import org.rsbot.script.ScriptManifest;
 import org.rsbot.script.internal.event.MessageListener;
 import org.rsbot.script.internal.event.PaintListener;
 import org.rsbot.script.methods.Skills;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 
 @ScriptManifest(authors = {"Powerbot Scripters Team"}, name = "Power Slayer", version = 1.00, description = "The best universal slayer bot!")
 public class PowerSlayer extends Script implements PaintListener, MouseListener, MessageListener {
