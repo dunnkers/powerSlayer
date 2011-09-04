@@ -72,11 +72,7 @@ public class UniversalFighter extends DMethodProvider {
 			public void run() {
 				switch (random(0, 4)) {
 				case 0:
-					Camera.setAngle(Camera.getAngle() + random(-100, 100));
-					break;
 				case 1:
-					Camera.setAngle(Camera.getAngle() + random(-100, 100));
-					break;
 				case 2:
 					Camera.setAngle(Camera.getAngle() + random(-100, 100));
 					break;
