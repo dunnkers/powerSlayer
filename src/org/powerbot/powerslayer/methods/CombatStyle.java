@@ -3,15 +3,17 @@ package org.powerbot.powerslayer.methods;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.powerbot.powerslayer.data.Style;
+
 
 //TODO: Discuss movement/ rewriting
-public class CombatStyle {
+public class CombatStyle extends ArrayList<Style> {
 
-	private final ArrayList<Style> styles;
+	//private final ArrayList<Style> styles;
 	
 	//FIXME: Is this right comparing to the previous constructor? -> The maxHits can be initialized somewhere else.
 	public CombatStyle(final Style... styles) {
-		this.styles = new ArrayList<Style>(Arrays.asList(styles));
+		this.addAll(new ArrayList<Style>(Arrays.asList(styles)));
 	}
 	
 	/**
@@ -24,22 +26,14 @@ public class CombatStyle {
 			return false;
 		}
 		for (final Style style : styles) {
-			if (!this.styles.contains(style)) {
+			if (!this.contains(style)) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public enum Style {
-		MELEE,
-		MAGIC,
-		RANGE,
-		DRAGONFIRE,
-		RANGED_DRAGONFIRE,
-		MAGICAL_MELEE,
-		MAGICAL_RANGE
-	}
+
 	
 	/*private final Style[] styles;
 	 * private final int[] maxHits;

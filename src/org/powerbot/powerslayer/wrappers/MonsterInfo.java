@@ -1,7 +1,7 @@
 package org.powerbot.powerslayer.wrappers;
 
+import org.powerbot.powerslayer.data.Style;
 import org.powerbot.powerslayer.methods.CombatStyle;
-import org.powerbot.powerslayer.methods.CombatStyle.Style;
 
 public class MonsterInfo {
     private boolean poison;
